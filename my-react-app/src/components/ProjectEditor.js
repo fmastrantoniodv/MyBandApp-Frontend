@@ -1,42 +1,45 @@
 import React, { useContext } from "react";
 import ProjectContext from "../contexts/ProjectContext";
-import Waveform from "./AudioWaveformRender/Waveform";
 import Button from "./Button";
 import CreateWaveform from "./CreateAudioWaveform/CreateWaveform";
-import AudioChannel from "../class/AudioClass/AudioChannel";
 
 
 export default function ProjectEditor ({ params }) {
-    console.log('entré al componente ProjectEditor')
+    console.log('Entré al componente ProjectEditor')
+
+    //Obtengo el projectContext
     const context = useContext(ProjectContext);
-    console.log('context:')
+    console.log('contextProject:')
     console.log(context.soundsProject.sounds)
     
-    const playProject = (currentTime) => {
-        /*
-         const interval = setInterval(() => {
-             if(this.state.playing === true){
-             this.setState({currentTime: this.state.currentTime + 1})
-             }
-         },1)
-         */
-         //this.sounds.forEach(sound => sound.play());
-         console.log('play')
-         context.wavesurferObj.map(sound =>{
-            return console.log(sound)
-         })
-         
-     }
-     
-     const wavesurferObj = [];
-    context.soundsProject.sounds.map(sound => {
-        console.log('sounds.sounds.map ')
-        console.log(sound.src)
-        wavesurferObj.push(new CreateWaveform(sound.src))
-})
+    //Inicialzo el array de objetos wavesurfer
+    const wavesurferObj = [];
 
+    //Cargo el array con los waveforms
+    context.soundsProject.sounds.map(sound => {
+        wavesurferObj.push(new CreateWaveform(sound.src))
+    })
+        
+    const playProject = (currentTime) => {
+         console.log('Play')
+         wavesurferObj.map(sample => {
+            return console.log(sample[0].play())
+         })
+     }
     
-    //console.log(wavesurferObj)
+    const stopProject = (currentTime) => {
+        console.log('Stop')
+        wavesurferObj.map(sample => {
+           return console.log(sample[0].stop())
+        })
+    }
+
+    const pauseProject = (currentTime) => {
+        console.log('Pause')
+        wavesurferObj.map(sample => {
+           return console.log(sample[0].pause())
+        })
+    }
     
     return (
         <>
@@ -44,8 +47,8 @@ export default function ProjectEditor ({ params }) {
             
         <div className='projectControls' >
                 <Button textButton='Play' onClickButton={() => playProject()}></Button>
-                <Button textButton='Stop' onClickButton={() => {this.stopProject()}}></Button>
-                <Button textButton='Pause' onClickButton={() => {this.pauseProject()}}></Button>
+                <Button textButton='Stop' onClickButton={() => stopProject()}></Button>
+                <Button textButton='Pause' onClickButton={() => pauseProject()}></Button>
                 <span style={{marginLeft: '20px'}}>
                     {
                         //formatTiempo(this.state.currentTime)
