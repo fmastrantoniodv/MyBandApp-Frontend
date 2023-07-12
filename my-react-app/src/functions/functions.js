@@ -2,8 +2,10 @@ import axios from 'axios'
 
 const HolaMundo = async (state) => {
     console.log("consumo la api GET");
-    const peticion = await axios.get('http://localhost:3100/api/users');
-    state(peticion.data.users);
+    //const peticion = await axios.get('http://localhost:3100/api/users');
+    var peticionChoclo = ["Juancito","Pepito"];
+    //state(peticion.data.users);
+    state(peticionChoclo);
 }
 
 const GuardarUser = (state) => {
@@ -14,16 +16,17 @@ const GuardarUser = (state) => {
     };
     
     const peticion = axios.post('http://localhost:3100/api/users', jsonConNombre)
-    .then(console.log(res.data))
+    .then(console.log('aloja'))
     .catch(function (error) {
-        console.log(error);
-      });
-      
-    state(peticion);
+      console.log(error);
+    });
+    /*
+    */
+//   state(peticion);
 }
 
 
-export {
+export default {
     HolaMundo,
     GuardarUser
 }
