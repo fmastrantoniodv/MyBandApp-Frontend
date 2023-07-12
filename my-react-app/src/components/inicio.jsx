@@ -4,8 +4,6 @@ import '../components/studio';
 import AudioGroup from '../class/AudioClass/AudioGroup';
 import ProjectContext from '../contexts/ProjectContext';
 import ProjectEditor from './ProjectEditor';
-import Waveform from './AudioWaveformRender/Waveform';
-import CreateWaveform from './CreateAudioWaveform/CreateWaveform';
 
 const Inicio = () => {
       const sounds = {
@@ -43,7 +41,7 @@ const Inicio = () => {
             </AudioGroup>
             */
           }
-            <ProjectEditor></ProjectEditor>
+            <ProjectEditor/>
           </ProjectContext.Provider>
         </div>
         

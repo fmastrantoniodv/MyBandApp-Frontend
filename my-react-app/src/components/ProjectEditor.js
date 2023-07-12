@@ -20,21 +20,21 @@ export default function ProjectEditor ({ params }) {
         wavesurferObj.push(new CreateWaveform(sound.src))
     })
         
-    const playProject = (currentTime) => {
+    const playProject = () => {
          console.log('Play')
          wavesurferObj.map(sample => {
             return console.log(sample[0].play())
          })
      }
     
-    const stopProject = (currentTime) => {
+    const stopProject = () => {
         console.log('Stop')
         wavesurferObj.map(sample => {
            return console.log(sample[0].stop())
         })
     }
 
-    const pauseProject = (currentTime) => {
+    const pauseProject = () => {
         console.log('Pause')
         wavesurferObj.map(sample => {
            return console.log(sample[0].pause())
