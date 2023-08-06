@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useRef } from 'react';
 import '../../App.css';
-import '../../components/studio';
+import '../../views/studio';
 
 function VolumeController( {sampleSource} ) {
     const [isDragging, setIsDragging] = useState(false);

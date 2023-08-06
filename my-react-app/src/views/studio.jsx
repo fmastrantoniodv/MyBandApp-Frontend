@@ -1,11 +1,12 @@
 import React from 'react';
 import '../App.css';
-import '../components/studio';
-import AudioGroup from '../class/AudioClass/AudioGroup';
+import './studio';
 import ProjectContext from '../contexts/ProjectContext';
-import ProjectEditor from './ProjectEditor';
+import ProjectEditor from '../components/ProjectEditor';
+import CreateWaveform from "../components/CreateAudioWaveform/CreateWaveform";
 
-const Inicio = () => {
+const Studio = () => {
+      //TODO: Obtener información de la BD con el ID del proyecto
       const sounds = {
       sounds: [
         {
@@ -22,25 +23,26 @@ const Inicio = () => {
         }
       ]
     }
-    
-                  
+      
+      const sampleList = [];
+
+      sounds.sounds.map(sound => {
+        var sampleObj = {
+          name: sound.id,
+          waveform: new CreateWaveform(sound, sound.id)
+        }
+        console.log(sampleObj.waveform)
+        sampleList.push(sampleObj)
+      })
+
     return(
         <>
         <div className='container'>
           <ProjectContext.Provider value={{
             name: 'firstProject',
-            soundsProject: sounds,
-            wavesurferObj: []
+            sampleList: sampleList
             }
             }>
-
-            {
-/*
-            <AudioGroup sounds={sounds}>
-              
-            </AudioGroup>
-            */
-          }
             <ProjectEditor/>
           </ProjectContext.Provider>
         </div>
@@ -49,4 +51,4 @@ const Inicio = () => {
     )
 }
 
-export default Inicio;
+export default Studio;

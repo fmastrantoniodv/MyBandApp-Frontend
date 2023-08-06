@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import '../../App.css';
-import '../../components/studio';
+import '../../views/studio';
 import { Howl, Howler} from 'howler';
 import Button from '../../components/Button.js';
 import AudioChannel from './AudioChannel';

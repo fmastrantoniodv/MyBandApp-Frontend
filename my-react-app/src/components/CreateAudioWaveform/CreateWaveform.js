@@ -1,15 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 
-const CreateWaveform = (audioUrl) => {
+const CreateWaveform = (sound, soundName) => {
     const waveformRef = useRef(null);
     const [waveformComponent, setWaveformComponent] = useState(null)
-    console.log('Entro a CreateWaveForm')
 
     useEffect(() => {
       const wavesurfer = WaveSurfer.create({
-        //container: waveformRef.current,
-        container: '#spectro',
+        container: '#'+soundName,
         waveColor: 'black',
         progressColor: 'black',
         responsive: true,
@@ -18,19 +16,12 @@ const CreateWaveform = (audioUrl) => {
         cursorWidth: '2px',
         sampleRate: 4800
       });
-      console.log('pase por el useEffect del Waveform: '+audioUrl)
-      wavesurfer.load(audioUrl);
+      wavesurfer.load(sound.src);
       setWaveformComponent(wavesurfer)
       return () => wavesurfer.destroy();
-    }, [audioUrl]);
+    }, []);
 
-    return [waveformComponent, 
-    <div ref={waveformRef}
-      style={{
-        //width: sampleDuration/10+'px',
-        border: 'solid #333333 1px',
-        width: '20%',
-        height: '111px'}}
-        />]
-  }  
+    return waveformComponent;
+  }
+
   export default CreateWaveform;
