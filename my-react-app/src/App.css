@@ -139,10 +139,29 @@ justify-content: flex-end;
   border-radius: 20%;
 }
 
+.MButton-active{
+  /* Botton Mute */
+  width: 20px;
+  background-color: #cbcbcb;
+  padding: 3px;
+  font-weight: bold;
+  border-radius: 20%;
+}
+
+
 .SButton{
   /* Botton Solo */
   width: 20px;
   background-color: #29ace9;
+  padding: 3px;
+  font-weight: bold;
+  border-radius: 20%;
+}
+
+.SButton-active{
+  /* Botton Solo */
+  width: 20px;
+  background-color: #cbcbcb;
   padding: 3px;
   font-weight: bold;
   border-radius: 20%;

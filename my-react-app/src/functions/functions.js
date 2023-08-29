@@ -25,8 +25,12 @@ const GuardarUser = (state) => {
 //   state(peticion);
 }
 
+function formatUpperFirstCase( param ){
+  return param.charAt(0).toUpperCase()+param.substring(1);
+}
 
 export default {
     HolaMundo,
-    GuardarUser
+    GuardarUser,
+    formatUpperFirstCase
 }

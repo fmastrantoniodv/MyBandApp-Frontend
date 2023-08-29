@@ -1,30 +1,50 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import '../views/studio';
 import Button from './Button.js';
 import VolumeController from './VolumeController/VolumeController';
 import ProjectContext from "../contexts/ProjectContext";
+import { useAudioContext } from "../contexts/ProjectContext"
 
-const AudioTrackControls = (sample, sampleName) => {
-    const context = useContext(ProjectContext);
-    console.log('AudioTrackControls')
-    console.log(sampleName)
+const AudioTrackControls = (sample, audioElement) => {
+    const { dataContext, updateContext } = useContext(ProjectContext);
+    const sampleName = sample.sample.name;
     const [volume, setVolume] = useState(0.7)
     const [muted, setMuted] = useState(false)
+    const [buttonState, setButtonState] = useState({ mute: false, solo: false, record: false})
+    const audioContext = useAudioContext();
+    
+    /*
+    useEffect(() => {
+        createGainNode(audioElement)
+      }, [audioContext]);
+    */
 
+    const createGainNode = (audioElement) => {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const source = audioContext.createMediaElementSource(audioElement);
+        const gainNode = audioContext.createGain();
+        source.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+    
+        //audioRefs.push(gainNode);
+        
+      }
+    
     const muteChannel = () => {
-        muted === true ? setMuted(false) : setMuted(true)
-        this.props.sample.mute(this.state.muted)
+        sample.sample.onMute()
+        buttonState.mute ? setButtonState({mute: false}) : setButtonState({mute: true})
     }
 
     const soloChannel = () => {
-        console.log('solo')
+        sample.sample.onSolo()
+        buttonState.solo ? setButtonState({solo: false}) : setButtonState({solo: true})
     }
 
     return (
         <>
             <div className='audioControlsChannel'>
                 <div className='audioControlsSample'>
-                    <span className='displayName'>{sample.name}</span>
+                    <span className='displayName'>{formatUpperFirstCase(sampleName)}</span>
                 </div>
                 <div className='audioControlsEQ'></div>
                 <div className='audioControlsVolume'>
@@ -32,14 +52,18 @@ const AudioTrackControls = (sample, sampleName) => {
                 <VolumeController sampleSource={sample}></VolumeController>
                 </div>
                 <div className='audioControlsOutputRouterButtons'>
-                    <Button textButton='M' onClickButton={() => {muteChannel()}}/>
-                    <Button textButton='S' onClickButton={soloChannel()}/>
-                    <Button textButton='R' onClickButton={() => {}}/>
+                    <Button textButton='M' state={buttonState.mute} onClickButton={() => muteChannel()}/>
+                    <Button textButton='S' state={buttonState.solo} onClickButton={() => soloChannel()}/>
+                    <Button textButton='R' state={buttonState.record} onClickButton={() => {}}/>
                 </div>
                 <br />
             </div>
         </>
     )
 } 
+
+function formatUpperFirstCase( param ){
+    return param.charAt(0).toUpperCase()+param.substring(1);
+  }
 
 export default AudioTrackControls;

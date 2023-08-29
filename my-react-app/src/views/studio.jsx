@@ -1,49 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../App.css';
 import './studio';
 import ProjectContext from '../contexts/ProjectContext';
 import ProjectEditor from '../components/ProjectEditor';
-import CreateWaveform from "../components/CreateAudioWaveform/CreateWaveform";
+
 
 const Studio = () => {
       //TODO: Obtener información de la BD con el ID del proyecto
-      const sounds = {
-      sounds: [
-        {
-          id: 'kick',
-          src: '../samples/kick.mp3'
-        },
-        {
-          id: 'clap',
-          src: '../samples/clap.mp3'
-        },
-        {
-          id: 'shake',
-          src: '../samples/shake.mp3'
-        }
-      ]
-    }
-      
-      const sampleList = [];
-
-      sounds.sounds.map(sound => {
-        var sampleObj = {
-          name: sound.id,
-          waveform: new CreateWaveform(sound, sound.id)
-        }
-        console.log(sampleObj.waveform)
-        sampleList.push(sampleObj)
+      const [sounds, setSounds] = useState({
+        sounds: [
+          {
+            id: 'kick',
+            src: '../samples/kick.mp3'
+          },
+          {
+            id: 'clap',
+            src: '../samples/clap.mp3'
+          },
+          {
+            id: 'shake',
+            src: '../samples/shake.mp3'
+          }
+        ]
       })
+      const [dataContext, setDataContext] = useState({
+        projectName: 'firstProject',
+        //sampleList: sampleList,
+        //audioContext: audioContext,
+        soundsList: sounds
+        }); // El estado del contexto
 
+      const updateContext = newData => {
+        setDataContext(prevData => ({ ...prevData, ...newData }));
+        console.log('Context update')
+        console.log(newData)
+      };
+      
     return(
         <>
         <div className='container'>
-          <ProjectContext.Provider value={{
-            name: 'firstProject',
-            sampleList: sampleList
-            }
-            }>
-            <ProjectEditor/>
+          <ProjectContext.Provider value={{ dataContext, updateContext }}>
+            <ProjectEditor />
           </ProjectContext.Provider>
         </div>
         
