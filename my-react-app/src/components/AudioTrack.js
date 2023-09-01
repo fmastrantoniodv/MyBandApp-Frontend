@@ -8,7 +8,9 @@ export default function AudioTrack ({ sample }) {
   const audioContext = useAudioContext();
   const [audioElement, setAudioElement] = useState(null);
   const [sourceAudio, setSourceAudio] = useState(null);
-
+  var anchoVentana = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  console.log(anchoVentana)
+  var audioSpritesWith = anchoVentana - 400;
   useEffect(() => {
     //const audioFile = `../samples/${sample.name}.mp3`;
     //loadAudioFromFile(audioFile)
@@ -23,8 +25,16 @@ export default function AudioTrack ({ sample }) {
                 <div className='channelSprites' style={{
                     width: '100%'
                     }}>
-                    <div className='spritesContainer'>
-                    <div id={sample.name}></div>
+                    <div className='spritesContainer'
+                    style={{
+                      width: '50%'
+                    }}
+                    >
+                    <div id={sample.name}
+                    style={{
+                     // width: '900px'
+                    }}
+                    ></div>
                     </div>
                 </div>    
             </div>        

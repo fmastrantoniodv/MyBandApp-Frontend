@@ -9,7 +9,9 @@ const CreateWaveform = (sound, soundName, audioContext) => {
       const audio = new Audio()
       audio.controls = true
       audio.src = sound.src
-
+      var anchoVentana = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+      let totalWidthSize = anchoVentana - 400;
+      console.log(parseInt(totalWidthSize))
       const wavesurfer = WaveSurfer.create({
         container: '#'+soundName,
         waveColor: 'black',
@@ -21,7 +23,10 @@ const CreateWaveform = (sound, soundName, audioContext) => {
         sampleRate: 4800,
         audioContext: audioContext,
         key: soundName,
-        minPxPerSec: 100
+        fillParent: true,
+        minPxPerSec: 10,
+        hideScrollbar: true,
+        height: 108
       });
       wavesurfer.load(audio);
       setWaveformComponent(wavesurfer)

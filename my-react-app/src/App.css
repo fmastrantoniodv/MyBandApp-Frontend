@@ -7,8 +7,12 @@
 }
 
 .spritesContainer{
+  background-color: #fff;
   position: absolute;
   width: 100%;
+  border: solid #000000;
+  overflow-x: hidden;
+  height: 108px;
 }
 
 
@@ -111,7 +115,7 @@ justify-content: flex-end;
 }
 
 .channelSprites{
-  background-color: #fff;
+  background-color: #eeeaea;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -128,6 +132,7 @@ justify-content: flex-end;
   flex-direction: row;
   width: 100vw;
   height: 100%;
+  overflow: hidden;
 }
 
 .MButton{
