@@ -10,7 +10,7 @@ const AudioTrackControls = (sample, audioElement) => {
     const sampleName = sample.sample.name;
     const [volume, setVolume] = useState(0.7)
     const [muted, setMuted] = useState(false)
-    const [buttonState, setButtonState] = useState({ mute: false, solo: false, record: false})
+    const [buttonState, setButtonState] = useState({ mute: false, solo: false, rec: false})
     const audioContext = useAudioContext();
     
     /*
@@ -40,6 +40,10 @@ const AudioTrackControls = (sample, audioElement) => {
         buttonState.solo ? setButtonState({solo: false}) : setButtonState({solo: true})
     }
 
+    const recChannel = () => {
+        buttonState.rec ? setButtonState({rec: false}) : setButtonState({rec: true})
+    }
+
     return (
         <>
             <div className='audioControlsChannel'>
@@ -47,14 +51,15 @@ const AudioTrackControls = (sample, audioElement) => {
                     <span className='displayName'>{formatUpperFirstCase(sampleName)}</span>
                 </div>
                 <div className='audioControlsEQ'></div>
+
                 <div className='audioControlsVolume'>
-                
                 <VolumeController sampleSource={sample}></VolumeController>
                 </div>
+
                 <div className='audioControlsOutputRouterButtons'>
                     <Button textButton='M' state={buttonState.mute} onClickButton={() => muteChannel()}/>
                     <Button textButton='S' state={buttonState.solo} onClickButton={() => soloChannel()}/>
-                    <Button textButton='R' state={buttonState.record} onClickButton={() => {}}/>
+                    <Button textButton='R' state={buttonState.rec} onClickButton={() => recChannel()}/>
                 </div>
                 <br />
             </div>

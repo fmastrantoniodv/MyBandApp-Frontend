@@ -17,19 +17,17 @@ function VolumeController( {sampleSource} ) {
     }
 
     function handleMouseMove(event) {
-    if (isDragging) {
-        const deltaY = event.clientY - startPosition;
-        const newPosition = Math.max(0, Math.min(100, position + deltaY / 0.7));
-        
-        setPosition(newPosition);
-        setStartPosition(event.clientY);
-        setPointerValue(pointerValue + event.movementY);
-        console.log(pointerValue);
-        var unity = 100 / 65;
-        setVolumeValue(1-(unity/100*pointerValue));
-        sampleSource.volume(volumeValue);
-        console.log(sampleSource._volume);
-    }
+        if (isDragging) {
+            const deltaY = event.clientY - startPosition;
+            const newPosition = Math.max(0, Math.min(100, position + deltaY / 0.7));
+            
+            setPosition(newPosition);
+            setStartPosition(event.clientY);
+            setPointerValue(pointerValue + event.movementY);
+            var unity = 100 / 65;
+            setVolumeValue(1-(unity/100*pointerValue));
+            sampleSource.sample.waveform.setVolume(volumeValue);
+        }
     }
 
     function handleMouseUp() {

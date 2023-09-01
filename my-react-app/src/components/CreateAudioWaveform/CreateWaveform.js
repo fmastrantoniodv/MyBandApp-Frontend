@@ -20,14 +20,15 @@ const CreateWaveform = (sound, soundName, audioContext) => {
         cursorWidth: '2px',
         sampleRate: 4800,
         audioContext: audioContext,
-        key: soundName
+        key: soundName,
+        minPxPerSec: 100
       });
-
       wavesurfer.load(audio);
       setWaveformComponent(wavesurfer)
       return () => wavesurfer.destroy();
     }, []);
-
+    console.log('CreateWaveForm.WaveSurferComponente')
+    console.log(waveformComponent)
     return waveformComponent;
   }
 

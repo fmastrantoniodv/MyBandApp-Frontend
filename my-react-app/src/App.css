@@ -176,6 +176,16 @@ justify-content: flex-end;
   border-radius: 20%;
 }
 
+.RButton-active{
+  /* Botton Rec */
+  width: 20px;
+  background-color: #cbcbcb;
+  padding: 3px;
+  font-weight: bold;
+  border-radius: 20%;
+}
+
+
 .faderContainer{
   display: flex;
   flex-direction: column;
