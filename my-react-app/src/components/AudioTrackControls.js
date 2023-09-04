@@ -4,6 +4,7 @@ import Button from './Button.js';
 import VolumeController from './VolumeController/VolumeController';
 import ProjectContext from "../contexts/ProjectContext";
 import { useAudioContext } from "../contexts/ProjectContext"
+import EQController from "./EQController"
 
 const AudioTrackControls = (sample, audioElement) => {
     const { dataContext, updateContext } = useContext(ProjectContext);
@@ -51,7 +52,7 @@ const AudioTrackControls = (sample, audioElement) => {
                     <span className='displayName'>{formatUpperFirstCase(sampleName)}</span>
                 </div>
                 <div className='audioControlsEQ'></div>
-
+                
                 <div className='audioControlsVolume'>
                 <VolumeController sampleSource={sample}></VolumeController>
                 </div>

@@ -15,19 +15,12 @@ export default function ProjectEditor () {
     const [elapsedTime, setElapsedTime] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
 
-    
-    const audioContext = new AudioContext();
-    audioContext.suspend()
-    const out = audioContext.destination;
-
-    let masterGain = audioContext.createGain();
-    masterGain.connect(out)
-    
     const sounds = dataContext.soundsList;
     const sampleList = [];
     
     sounds.sounds.map(sound => {
-      var waveform = new CreateWaveform(sound, sound.id, audioContext)
+      var waveform = new CreateWaveform(sound, sound.id)
+      console.log(waveform)
       var sampleObj = {
         name: sound.id,
         waveform: waveform,
@@ -58,12 +51,9 @@ export default function ProjectEditor () {
     })   
         
     useEffect(() => {
-      console.log('useEffectProjectEditor')
-      console.log(sampleList)
       updateContext({  
-        sampleList: sampleList,
-        audioContext: audioContext
-      }) 
+        sampleList: sampleList
+      })
       return () => {
       };
     }, []);
@@ -74,8 +64,6 @@ export default function ProjectEditor () {
          sampleList.map(sample => {
             return sample.waveform.play()
          })
-         audioContext.resume()
-         console.log(audioContext)
      }
     
     const stopProject = () => {
@@ -83,7 +71,6 @@ export default function ProjectEditor () {
         sampleList.map(sample => {
            return sample.waveform.stop()
         })
-        audioContext.suspend()
     }
 
     const pauseProject = () => {
@@ -107,7 +94,6 @@ export default function ProjectEditor () {
     };
   
     const changeZoom = ( number ) => {
-      console.log(number)
       sampleList.map(sample => {
         sample.waveform.zoom(number[1])
       })

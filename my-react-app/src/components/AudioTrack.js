@@ -9,7 +9,6 @@ export default function AudioTrack ({ sample }) {
   const [audioElement, setAudioElement] = useState(null);
   const [sourceAudio, setSourceAudio] = useState(null);
   var anchoVentana = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-  console.log(anchoVentana)
   var audioSpritesWith = anchoVentana - 400;
   useEffect(() => {
     //const audioFile = `../samples/${sample.name}.mp3`;
