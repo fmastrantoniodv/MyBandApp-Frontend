@@ -14,46 +14,52 @@ export default function ProjectEditor () {
     const [currentTime, setCurrentTime] = useState(0)
     const [elapsedTime, setElapsedTime] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
+    const [sampleListLoad, setSampleListLoad] = useState(false)
 
     const sounds = dataContext.soundsList;
     const sampleList = [];
     
-    sounds.sounds.map(sound => {
-      var waveform = new CreateWaveform(sound, sound.id)
-      console.log(waveform)
-      var sampleObj = {
-        name: sound.id,
-        waveform: waveform,
-        solo: false,
-        onSolo: () => {
-            sampleList.map(sample => {
-              if(sampleObj.solo === false){
-                if(sample.name === sound.id){
-                  sample.waveform.setMute(false)
+    function createSampleObjects(){
+      sounds.sounds.map(sound => {
+        var waveform = new CreateWaveform(sound, sound.id)
+        var sampleObj = {
+          name: sound.id,
+          waveform: waveform,
+          solo: false,
+          onSolo: () => {
+              sampleList.map(sample => {
+                if(sampleObj.solo === false){
+                  if(sample.name === sound.id){
+                    sample.waveform.setMute(false)
+                  }else{
+                    sample.waveform.setMute(true)
+                  }
                 }else{
-                  sample.waveform.setMute(true)
+                  sample.waveform.setMute(false)
                 }
-              }else{
-                sample.waveform.setMute(false)
-              }
-            })
-            sampleObj.solo == false ? sampleObj.solo = true : sampleObj.solo = false
-            console.log('Solo '+sound.id+' = '+sampleObj.solo)
-        },
-        muted: false,
-        onMute: () => {
-          sampleObj.muted === false ? sampleObj.waveform.setMute(true) : sampleObj.waveform.setMute(false);
-          sampleObj.muted == false ? sampleObj.muted = true : sampleObj.muted = false
-          console.log('Mute '+sound.id+' = '+sampleObj.muted)
+              })
+              sampleObj.solo == false ? sampleObj.solo = true : sampleObj.solo = false
+              console.log('Solo '+sound.id+' = '+sampleObj.solo)
+          },
+          muted: false,
+          onMute: () => {
+            sampleObj.muted === false ? sampleObj.waveform.setMute(true) : sampleObj.waveform.setMute(false);
+            sampleObj.muted == false ? sampleObj.muted = true : sampleObj.muted = false
+            console.log('Mute '+sound.id+' = '+sampleObj.muted)
+          }
         }
-      }
-      sampleList.push(sampleObj)
-    })   
-        
+        sampleList.push(sampleObj)
+      })   
+      
+    }
+    
+    createSampleObjects()
     useEffect(() => {
-      updateContext({  
-        sampleList: sampleList
-      })
+      /*
+        updateContext({  
+          sampleList: sampleList
+        })
+      */
       return () => {
       };
     }, []);

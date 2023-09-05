@@ -4,16 +4,16 @@ import Button from './Button.js';
 import VolumeController from './VolumeController/VolumeController';
 import ProjectContext from "../contexts/ProjectContext";
 import { useAudioContext } from "../contexts/ProjectContext"
-import EQController from "./EQController"
+import EQControls from "./EQControls"
 
-const AudioTrackControls = (sample, audioElement) => {
-    const { dataContext, updateContext } = useContext(ProjectContext);
+const AudioTrackControls = (sample) => {
     const sampleName = sample.sample.name;
-    const [volume, setVolume] = useState(0.7)
-    const [muted, setMuted] = useState(false)
     const [buttonState, setButtonState] = useState({ mute: false, solo: false, rec: false})
-    const audioContext = useAudioContext();
-    
+    const audioTrackCtx = new AudioContext();
+
+    console.log(audioTrackCtx)
+    console.log(sample.sample.waveform.backend)
+    // console.log(sample.sample.waveform.backend)
     /*
     useEffect(() => {
         createGainNode(audioElement)
@@ -28,12 +28,12 @@ const AudioTrackControls = (sample, audioElement) => {
         gainNode.connect(audioContext.destination);
     
         //audioRefs.push(gainNode);
-        
       }
     
     const muteChannel = () => {
         sample.sample.onMute()
         buttonState.mute ? setButtonState({mute: false}) : setButtonState({mute: true})
+        console.log(sample.sample.waveform.backend.ac) 
     }
 
     const soloChannel = () => {
@@ -52,7 +52,7 @@ const AudioTrackControls = (sample, audioElement) => {
                     <span className='displayName'>{formatUpperFirstCase(sampleName)}</span>
                 </div>
                 <div className='audioControlsEQ'></div>
-                
+                <EQControls audioContext={ audioTrackCtx }/>
                 <div className='audioControlsVolume'>
                 <VolumeController sampleSource={sample}></VolumeController>
                 </div>
