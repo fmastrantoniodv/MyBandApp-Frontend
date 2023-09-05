@@ -25,15 +25,26 @@ const CreateWaveform = (sound, soundName) => {
         hideScrollbar: true,
         height: 108
       });
+
       wavesurfer.load(audio);
 
+      const audioContext = new AudioContext()
+
+      const source = audioContext.createMediaElementSource(audio)
+
+      wavesurfer.audioCtx = audioContext;
+      wavesurfer.source = source;
+
       setWaveformComponent(wavesurfer)
+
       return () => {
         wavesurfer.destroy()
       };
     }, []);
-    
+
     return waveformComponent;
   }
+
+
 
   export default CreateWaveform;

@@ -1,32 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-function EQControls({ audioContext }) {
+function EQControls({ waveformObj }) {
+
   // Estado para almacenar las frecuencias de corte de los filtros
-  const [lowFrequency, setLowFrequency] = useState(200);
-  const [midFrequency, setMidFrequency] = useState(1000);
-  const [highFrequency, setHighFrequency] = useState(5000);
+  const [lowFrequency, setLowFrequency] = useState(0);
+  const [midFrequency, setMidFrequency] = useState(0);
+  const [highFrequency, setHighFrequency] = useState(0);
+
+  //console.log(waveformObj.source)
+
+  console.log({
+    lowFrequency: lowFrequency,
+    midFrequency: midFrequency,
+    highFrequency: highFrequency
+  })
 
   // Función para aplicar los filtros de sonido
   const applyFilters = () => {
     // Crear filtros de tipo BiquadFilterNode
-    const lowFilter = audioContext.createBiquadFilter();
-    const midFilter = audioContext.createBiquadFilter();
-    const highFilter = audioContext.createBiquadFilter();
+    const lowFilter = waveformObj.audioCtx.createBiquadFilter();
+    const midFilter = waveformObj.audioCtx.createBiquadFilter();
+    const highFilter = waveformObj.audioCtx.createBiquadFilter();
 
     // Configurar los filtros
+    // BAJOS
     lowFilter.type = 'lowshelf';
-    lowFilter.frequency.value = lowFrequency;
+    lowFilter.frequency.value = 500;
+    lowFilter.gain.value = lowFrequency;
+
+    // MEDIOS
     midFilter.type = 'peaking';
-    midFilter.frequency.value = midFrequency;
+    midFilter.frequency.value = 1600;
+    midFilter.gain.value = midFrequency;
+
+    // AGUDOS
     highFilter.type = 'highshelf';
-    highFilter.frequency.value = highFrequency;
+    highFilter.frequency.value = 10000;
+    highFilter.gain.value = highFrequency;
 
     // Conectar los filtros en serie
+    waveformObj.source.connect(lowFilter)
     lowFilter.connect(midFilter);
     midFilter.connect(highFilter);
 
     // Conectar la entrada y la salida del componente
-    lowFilter.connect(audioContext.destination);
+    lowFilter.connect(waveformObj.audioCtx.destination);
 
     // Devolver la función para desconectar los filtros
     return () => {
@@ -50,13 +68,13 @@ function EQControls({ audioContext }) {
   };
 
   // Aplicar los filtros cuando cambian las frecuencias de corte
-  React.useEffect(() => {
+  useEffect(() => {
     const disconnectFilters = applyFilters();
     return () => {
       // Desconectar los filtros cuando el componente se desmonta
       disconnectFilters();
     };
-  }, [lowFrequency, midFrequency, highFrequency, audioContext]);
+  }, [lowFrequency, midFrequency, highFrequency, waveformObj.audioCtx]);
 
   return (
     <div style={{
@@ -69,8 +87,8 @@ function EQControls({ audioContext }) {
         <input
         style={{width: '50%'}}
           type="range"
-          min="20"
-          max="2000"
+          min="-40"
+          max="40"
           step="10"
           value={lowFrequency}
           onChange={handleLowFrequencyChange}
@@ -81,8 +99,8 @@ function EQControls({ audioContext }) {
         <input
         style={{width: '50%'}}
           type="range"
-          min="200"
-          max="5000"
+          min="-40"
+          max="40"
           step="10"
           value={midFrequency}
           onChange={handleMidFrequencyChange}
@@ -93,8 +111,8 @@ function EQControls({ audioContext }) {
         <input
         style={{width: '50%'}}
           type="range"
-          min="1000"
-          max="20000"
+          min="-40"
+          max="40"
           step="10"
           value={highFrequency}
           onChange={handleHighFrequencyChange}

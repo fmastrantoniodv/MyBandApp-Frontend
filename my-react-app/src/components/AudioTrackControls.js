@@ -5,15 +5,12 @@ import VolumeController from './VolumeController/VolumeController';
 import ProjectContext from "../contexts/ProjectContext";
 import { useAudioContext } from "../contexts/ProjectContext"
 import EQControls from "./EQControls"
+import CreateWaveform from './CreateAudioWaveform/CreateWaveform';
 
 const AudioTrackControls = (sample) => {
     const sampleName = sample.sample.name;
     const [buttonState, setButtonState] = useState({ mute: false, solo: false, rec: false})
-    const audioTrackCtx = new AudioContext();
-
-    console.log(audioTrackCtx)
-    console.log(sample.sample.waveform.backend)
-    // console.log(sample.sample.waveform.backend)
+    
     /*
     useEffect(() => {
         createGainNode(audioElement)
@@ -45,6 +42,10 @@ const AudioTrackControls = (sample) => {
         buttonState.rec ? setButtonState({rec: false}) : setButtonState({rec: true})
     }
 
+    if(sample.sample.waveform.audioCtx === undefined){
+        return <span>loading</span>
+    }
+
     return (
         <>
             <div className='audioControlsChannel'>
@@ -52,7 +53,7 @@ const AudioTrackControls = (sample) => {
                     <span className='displayName'>{formatUpperFirstCase(sampleName)}</span>
                 </div>
                 <div className='audioControlsEQ'></div>
-                <EQControls audioContext={ audioTrackCtx }/>
+                <EQControls waveformObj={ sample.sample.waveform }/>
                 <div className='audioControlsVolume'>
                 <VolumeController sampleSource={sample}></VolumeController>
                 </div>
