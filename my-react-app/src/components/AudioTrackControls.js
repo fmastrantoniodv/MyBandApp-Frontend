@@ -13,24 +13,13 @@ const AudioTrackControls = (sample) => {
     
     /*
     useEffect(() => {
-        createGainNode(audioElement)
+        
       }, [audioContext]);
     */
-
-    const createGainNode = (audioElement) => {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const source = audioContext.createMediaElementSource(audioElement);
-        const gainNode = audioContext.createGain();
-        source.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-    
-        //audioRefs.push(gainNode);
-      }
     
     const muteChannel = () => {
         sample.sample.onMute()
         buttonState.mute ? setButtonState({mute: false}) : setButtonState({mute: true})
-        console.log(sample.sample.waveform.backend.ac) 
     }
 
     const soloChannel = () => {

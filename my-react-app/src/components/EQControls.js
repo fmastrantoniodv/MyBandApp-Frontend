@@ -7,29 +7,19 @@ function EQControls({ waveformObj }) {
   const [midFrequency, setMidFrequency] = useState(0);
   const [highFrequency, setHighFrequency] = useState(0);
 
-  //console.log(waveformObj.source)
-
-  console.log({
-    lowFrequency: lowFrequency,
-    midFrequency: midFrequency,
-    highFrequency: highFrequency
-  })
-
   // Función para aplicar los filtros de sonido
   const applyFilters = () => {
     // Crear filtros de tipo BiquadFilterNode
-    console.log('EQControls')
-    console.log(waveformObj.audioCtx)
     const lowFilter = waveformObj.audioCtx.createBiquadFilter();
     const midFilter = waveformObj.audioCtx.createBiquadFilter();
     const highFilter = waveformObj.audioCtx.createBiquadFilter();
 
-    console.log(lowFilter)
+
     // Configurar los filtros
     // BAJOS
-    lowFilter.type = 'highpass';
-    lowFilter.frequency.value = lowFrequency;
-    lowFilter.gain.value = 1500;
+    lowFilter.type = 'lowshelf';
+    lowFilter.frequency.value = 500;
+    lowFilter.gain.value = lowFrequency;
 
     // MEDIOS
     midFilter.type = 'peaking';
@@ -47,7 +37,7 @@ function EQControls({ waveformObj }) {
     midFilter.connect(highFilter);
 
     // Conectar la entrada y la salida del componente
-    lowFilter.connect(waveformObj.audioCtx.destination);
+    highFilter.connect(waveformObj.audioCtx.destination);
 
     // Devolver la función para desconectar los filtros
     return () => {
@@ -90,8 +80,8 @@ function EQControls({ waveformObj }) {
         <input
         style={{width: '50%'}}
           type="range"
-          min="0"
-          max="24000"
+          min="-30"
+          max="10"
           step="10"
           value={lowFrequency}
           onChange={handleLowFrequencyChange}
@@ -102,8 +92,8 @@ function EQControls({ waveformObj }) {
         <input
         style={{width: '50%'}}
           type="range"
-          min="-40"
-          max="40"
+          min="-30"
+          max="10"
           step="10"
           value={midFrequency}
           onChange={handleMidFrequencyChange}
@@ -114,8 +104,8 @@ function EQControls({ waveformObj }) {
         <input
         style={{width: '50%'}}
           type="range"
-          min="-40"
-          max="40"
+          min="-30"
+          max="10"
           step="10"
           value={highFrequency}
           onChange={handleHighFrequencyChange}

@@ -28,13 +28,18 @@ export default function ProjectEditor () {
           solo: false,
           onSolo: () => {
               sampleList.map(sample => {
+                //Valida si el el atributo de este objeto está en false
                 if(sampleObj.solo === false){
+                  //Valida si el sample indexado es el mismo que el clickeado
                   if(sample.name === sound.id){
+                    //Es el mismo = setea que NO esté muteado
                     sample.waveform.setMute(false)
                   }else{
+                    //No es el mismo = setea que SI esté muteado
                     sample.waveform.setMute(true)
                   }
                 }else{
+                  //el atributo de el sampleObj está en true, lo cambia a false
                   sample.waveform.setMute(false)
                 }
               })

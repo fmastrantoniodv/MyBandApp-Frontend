@@ -8,7 +8,7 @@ function VolumeController( {sampleSource} ) {
     const [startPosition, setStartPosition] = useState(null);
     const [position, setPosition] = useState(10);
     const [pointerValue, setPointerValue] = useState(10);
-    const [volumeValue, setVolumeValue] = useState(10);
+    const [volumeValue, setVolumeValue] = useState(1);
     const divRef = useRef(null);
 
     function handleMouseDown(event) {
