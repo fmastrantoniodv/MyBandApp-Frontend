@@ -10,6 +10,9 @@ const CreateWaveform = (sound, soundName) => {
       audio.controls = true
       audio.src = sound.src
 
+      const audioCtx = new AudioContext();
+      const source = audioCtx.createMediaElementSource(audio);
+
       const wavesurfer = WaveSurfer.create({
         container: '#'+soundName,
         waveColor: 'black',
@@ -23,17 +26,18 @@ const CreateWaveform = (sound, soundName) => {
         fillParent: true,
         minPxPerSec: 10,
         hideScrollbar: true,
-        height: 108
+        height: 108,
+        mediaControls: true,
+        mediaType: 'audio',
+        audioContext: audioCtx,
+        backend: 'MediaElement'
       });
+
+      wavesurfer.audioCtx = audioCtx;
+      wavesurfer.source = source
 
       wavesurfer.load(audio);
 
-      const audioContext = new AudioContext()
-
-      const source = audioContext.createMediaElementSource(audio)
-
-      wavesurfer.audioCtx = audioContext;
-      wavesurfer.source = source;
 
       setWaveformComponent(wavesurfer)
 

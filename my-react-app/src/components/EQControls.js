@@ -18,15 +18,18 @@ function EQControls({ waveformObj }) {
   // Función para aplicar los filtros de sonido
   const applyFilters = () => {
     // Crear filtros de tipo BiquadFilterNode
+    console.log('EQControls')
+    console.log(waveformObj.audioCtx)
     const lowFilter = waveformObj.audioCtx.createBiquadFilter();
     const midFilter = waveformObj.audioCtx.createBiquadFilter();
     const highFilter = waveformObj.audioCtx.createBiquadFilter();
 
+    console.log(lowFilter)
     // Configurar los filtros
     // BAJOS
-    lowFilter.type = 'lowshelf';
-    lowFilter.frequency.value = 500;
-    lowFilter.gain.value = lowFrequency;
+    lowFilter.type = 'highpass';
+    lowFilter.frequency.value = lowFrequency;
+    lowFilter.gain.value = 1500;
 
     // MEDIOS
     midFilter.type = 'peaking';
@@ -87,8 +90,8 @@ function EQControls({ waveformObj }) {
         <input
         style={{width: '50%'}}
           type="range"
-          min="-40"
-          max="40"
+          min="0"
+          max="24000"
           step="10"
           value={lowFrequency}
           onChange={handleLowFrequencyChange}
