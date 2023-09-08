@@ -23,27 +23,18 @@ const Studio = () => {
           }
         ]
       })
+      
       const [dataContext, setDataContext] = useState({
         projectName: 'firstProject',
-        //sampleList: sampleList,
-        //audioContext: audioContext,
         soundsList: sounds
         }); // El estado del contexto
 
-      const updateContext = newData => {
-        setDataContext(prevData => ({ ...prevData, ...newData }));
-        console.log('Context update')
-        console.log(newData)
-      };
-      
+
     return(
         <>
-        <div className='container'>
-          <ProjectContext.Provider value={{ dataContext, updateContext }}>
-            <ProjectEditor />
-          </ProjectContext.Provider>
-        </div>
-        
+          <div className='container'>
+            <ProjectEditor dataContext={dataContext}/>
+          </div>
         </>
     )
 }

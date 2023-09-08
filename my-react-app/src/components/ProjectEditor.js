@@ -1,74 +1,82 @@
 import React, { useContext, useEffect, useState } from "react";
-import ProjectContext from "../contexts/ProjectContext";
 import Button from "./Button";
 import AudioTrack from "./AudioTrack";
 import CreateWaveform from "../components/CreateAudioWaveform/CreateWaveform";
-import { AudioProvider } from "../contexts/AudioContextProvider";
-import Timer from "./Timer";
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 
-export default function ProjectEditor () {
-    //Obtengo el projectContext
-    const { dataContext, updateContext } = useContext(ProjectContext);
-    const [currentTime, setCurrentTime] = useState(0)
-    const [elapsedTime, setElapsedTime] = useState(0);
-    const [isRunning, setIsRunning] = useState(false);
-    const [sampleListLoad, setSampleListLoad] = useState(false)
-
+export default function ProjectEditor ({ dataContext }) {
     const sounds = dataContext.soundsList;
     const sampleList = [];
+    const soundsStatesList = []
     
+
+    useEffect(() => {
+      console.log('[ProjectEditor].[useEffect]')
+      console.log(sampleList)
+    }, [sampleList]);
+
+    createSampleObjects()
+
     function createSampleObjects(){
       sounds.sounds.map(sound => {
         var waveform = new CreateWaveform(sound, sound.id)
+
         var sampleObj = {
           name: sound.id,
           waveform: waveform,
-          solo: false,
-          onSolo: () => {
-              sampleList.map(sample => {
-                //Valida si el el atributo de este objeto está en false
-                if(sampleObj.solo === false){
-                  //Valida si el sample indexado es el mismo que el clickeado
-                  if(sample.name === sound.id){
-                    //Es el mismo = setea que NO esté muteado
-                    sample.waveform.setMute(false)
-                  }else{
-                    //No es el mismo = setea que SI esté muteado
-                    sample.waveform.setMute(true)
-                  }
-                }else{
-                  //el atributo de el sampleObj está en true, lo cambia a false
-                  sample.waveform.setMute(false)
-                }
-              })
-              sampleObj.solo == false ? sampleObj.solo = true : sampleObj.solo = false
-              console.log('Solo '+sound.id+' = '+sampleObj.solo)
+          soundStates: {
+            solo: false,
+            muted: false,
+            rec: false
           },
-          muted: false,
-          onMute: () => {
-            sampleObj.muted === false ? sampleObj.waveform.setMute(true) : sampleObj.waveform.setMute(false);
-            sampleObj.muted == false ? sampleObj.muted = true : sampleObj.muted = false
-            console.log('Mute '+sound.id+' = '+sampleObj.muted)
-          }
+          onSolo: () => handleChannelStatesOnSolo(sampleObj),
+          onMute: () => handleChannelStatesOnMute(sampleObj)
         }
         sampleList.push(sampleObj)
+        soundsStatesList.push(sampleObj.soundStates)
       })   
       
     }
-    
-    createSampleObjects()
-    useEffect(() => {
-      /*
-        updateContext({  
-          sampleList: sampleList
-        })
-      */
-      return () => {
-      };
-    }, []);
 
+    const handleChannelStatesOnMute = (sampleObj) => {
+        
+        if(sampleObj.soundStates.muted === false){    
+          sampleObj.waveform.setMute(true) 
+          sampleObj.soundStates.muted = true
+        }else{
+          sampleObj.waveform.setMute(false)
+          sampleObj.soundStates.muted = false
+        }
+        console.log('Mute '+sampleObj.name+' = '+sampleObj.soundStates.muted)
+    }
+
+    const handleChannelStatesOnSolo = (sampleParam) => {
+      if(sampleParam.soundStates.solo === true){
+        restartStates()
+      }else{
+        let resp = sampleList.findIndex(value => value.name === sampleParam.name)
+        sampleList[resp].soundStates = {solo: true, muted: false, rec: false}
+        sampleList[resp].waveform.setMute(false)
+        sampleList.map(samplesOfList => {
+          if(samplesOfList.name !== sampleParam.name){
+            samplesOfList.soundStates = {solo: false, muted: true, rec: false}
+            samplesOfList.waveform.setMute(true)
+          }
+        })
+      }
+      
+      console.log('Solo '+sampleParam.name+' = '+sampleParam.soundStates.solo)
+    }
+
+    const restartStates = () => {
+      sampleList.map(sample => {
+        sample.waveform.setMute(false)
+        sample.soundStates.solo = false
+        sample.soundStates.muted = false
+        sample.soundStates.rec = false
+      })
+    }
 
     const playProject = () => {
          console.log('Play')
@@ -91,18 +99,6 @@ export default function ProjectEditor () {
            return sample.waveform.pause()
         })
     }
-      
-    const handlePlay = () => {
-      if (!isRunning) {
-        setIsRunning(true);
-      }
-    };
-  
-    const handleStop = () => {
-      if (isRunning) {
-        setIsRunning(false);
-      }
-    };
   
     const changeZoom = ( number ) => {
       sampleList.map(sample => {
@@ -112,23 +108,16 @@ export default function ProjectEditor () {
 
     return (
         <>
-            <h1>{dataContext.projectName}</h1>
-            <div className='projectControls' >
-                <Button textButton='Play' onClickButton={() => playProject()}></Button>
-                <Button textButton='Stop' onClickButton={() => stopProject()}></Button>
-                <Button textButton='Pause' onClickButton={() => pauseProject()}></Button>
-                <Timer isRunning={isRunning} elapsedTime={elapsedTime} />
-                <div style={{
-                  width: '100px',
-                  marginBottom: '10px'
-                  }}>
-                    <div style={{
-                      paddingBottom: '10px'
-                    }}>
+          <h1>{dataContext.projectName}</h1>
+
+          <div className='projectControls' >
+              <Button textButton='Play' onClickButton={() => playProject()}></Button>
+              <Button textButton='Stop' onClickButton={() => stopProject()}></Button>
+              <Button textButton='Pause' onClickButton={() => pauseProject()}></Button>
+              <div style={{ width: '100px', marginBottom: '10px' }}>
+                  <div style={{ paddingBottom: '10px' }}>
                     <span>Zoom</span>
-                    <div style={{
-                      marginTop: '10px'
-                    }}>
+                    <div style={{ marginTop: '10px' }}>
                       <RangeSlider
                         className="single-thumb"
                         defaultValue={[0, 1600]}
@@ -138,18 +127,17 @@ export default function ProjectEditor () {
                         max={1600}
                         />
                     </div>
-                    </div>
-                </div>
-            </div>
-            <AudioProvider>
-            <div className="tracksContainer">
-                {   
-                    sampleList.map(sample => {
-                        return <AudioTrack key={sample.name} sample={sample}/>
-                        })
-                }
-            </div>
-            </AudioProvider>
+                  </div>
+              </div>
+          </div>
+        
+          <div className="tracksContainer">
+              {
+                sampleList.map(sample => {
+                  return <AudioTrack key={sample.name} sample={sample}/>
+                })
+              }
+          </div>
         </>
         )
 }

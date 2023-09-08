@@ -144,7 +144,7 @@ justify-content: flex-end;
   border-radius: 20%;
 }
 
-.MButton-active{
+.MButton-press{
   /* Botton Mute */
   width: 20px;
   background-color: #cbcbcb;
@@ -163,7 +163,7 @@ justify-content: flex-end;
   border-radius: 20%;
 }
 
-.SButton-active{
+.SButton-press{
   /* Botton Solo */
   width: 20px;
   background-color: #cbcbcb;
@@ -181,7 +181,7 @@ justify-content: flex-end;
   border-radius: 20%;
 }
 
-.RButton-active{
+.RButton-press{
   /* Botton Rec */
   width: 20px;
   background-color: #cbcbcb;
