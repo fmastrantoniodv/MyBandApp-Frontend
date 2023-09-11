@@ -4,12 +4,13 @@ import AudioTrack from "./AudioTrack";
 import CreateWaveform from "../components/CreateAudioWaveform/CreateWaveform";
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
+import {AudioTracksCtxProvider} from "../contexts/AudioTracksContext";
+import AudioTracksContext from "../contexts/AudioTracksContext";
 
 export default function ProjectEditor ({ dataContext }) {
     const sounds = dataContext.soundsList;
     const sampleList = [];
-    const soundsStatesList = []
-    
+    const {tracks, setTracks} = useContext(AudioTracksContext)
 
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect]')
@@ -34,7 +35,6 @@ export default function ProjectEditor ({ dataContext }) {
           onMute: () => handleChannelStatesOnMute(sampleObj)
         }
         sampleList.push(sampleObj)
-        soundsStatesList.push(sampleObj.soundStates)
       })   
       
     }
@@ -75,7 +75,15 @@ export default function ProjectEditor ({ dataContext }) {
         sample.soundStates.solo = false
         sample.soundStates.muted = false
         sample.soundStates.rec = false
+        refreshTracksStatesContext()
       })
+
+    }
+
+    const refreshTracksStatesContext = () => {
+      console.log('refreshTracksStatesContext')
+      //let newStates = soundsStatesList.find(value => value.name === sampleParam.name)
+      //console.log(newStates)
     }
 
     const playProject = () => {
@@ -130,14 +138,15 @@ export default function ProjectEditor ({ dataContext }) {
                   </div>
               </div>
           </div>
-        
-          <div className="tracksContainer">
-              {
-                sampleList.map(sample => {
-                  return <AudioTrack key={sample.name} sample={sample}/>
-                })
-              }
-          </div>
+          <AudioTracksCtxProvider>
+            <div className="tracksContainer">
+                {
+                  sampleList.map(sample => {
+                    return <AudioTrack key={sample.name} sample={sample}/>
+                  })
+                }
+            </div>
+          </AudioTracksCtxProvider>
         </>
         )
 }

@@ -1,15 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
 import AudioTrackControls from "./AudioTrackControls";
+import AudioTracksContext from "../contexts/AudioTracksContext";
 
 export default function AudioTrack ({ sample }) {
-  const [soloState, setSoloState] = useState(false)
+  const {tracks, setTracks} = useContext(AudioTracksContext)
   
   useEffect(() => {
     console.log('[AudioTrack].[useEffect]')
+    console.log('sample value: ')
     console.log(sample)
     
-    if(sample !== undefined){
-      setSoloState(sample.soundStates.solo)
+    const tracksArray = tracks;
+    
+    if(tracksArray.find(value => value.id === sample.name) === undefined){
+      const newRowToContext = { id: sample.name, states: sample.soundStates }
+      tracksArray.push(newRowToContext)
+      setTracks(tracksArray)
     }
     
   }, []);
@@ -19,7 +25,7 @@ export default function AudioTrack ({ sample }) {
         <>  
             <div className='channelContainer'>
               <div className='channelControls'>
-                <AudioTrackControls sample={sample} soloState={soloState}/>
+                <AudioTrackControls sample={sample}/>
               </div>
               <div className='channelSprites' style={{ width: '100%' }}>
                 <div className='spritesContainer' style={{ width: '50%' }}>

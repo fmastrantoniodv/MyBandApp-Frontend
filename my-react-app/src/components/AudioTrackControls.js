@@ -3,18 +3,26 @@ import '../views/studio';
 import Button from './Button.js';
 import VolumeController from './VolumeController/VolumeController';
 import EQControls from "./EQControls"
+import AudioTracksContext from '../contexts/AudioTracksContext';
 
-const AudioTrackControls = (sample, soloState) => {
+const AudioTrackControls = (sample) => {
     const sampleName = formatUpperFirstCase(sample.sample.name);
     const [btnMuteState, setBtnMuteState] = useState(false)
     const [btnSoloState, setBtnSoloState] = useState(false)
     const [btnRecState, setBtnRecState] = useState(false)
+    const {tracks, setTracks} = useContext(AudioTracksContext)
 
+    
     useEffect(() => {
         console.log('[AudioTrackControls].[useEffect]')
-        console.log(sample.sample.soundStates)
-        actualizarButtonsStates(sample.sample.soundStates)
-    }, [soloState]);
+        console.log(tracks)
+        const contextObject = tracks.find(value => value.id === sample.sample.name)
+    
+        if(contextObject !== undefined){
+            actualizarButtonsStates(contextObject.states)
+        }
+    
+    }, [sample, tracks.states]);
 
     const actualizarButtonsStates = (soundStates) => {
         setBtnMuteState(soundStates.muted)
@@ -24,16 +32,28 @@ const AudioTrackControls = (sample, soloState) => {
     
     const muteChannel = () => {
         sample.sample.onMute()
-        actualizarButtonsStates(sample.sample.soundStates)
+        updateStatesOnAction()
     }
 
     const soloChannel = () => {
         sample.sample.onSolo()
-        actualizarButtonsStates(sample.sample.soundStates)
+        updateStatesOnAction()
     }
 
     const recChannel = () => {
         //buttonState.rec ? setButtonState({rec: false}) : setButtonState({rec: true})
+    }
+
+    const updateStatesOnAction = () => {
+        const updateStateValue = tracks.map((fila) => {
+            if (fila.id === sample.sample.name) {
+                return { ...fila, states: sample.sample.soundStates}; // Editar los estados
+            }
+            return fila;
+          });
+      
+          // Actualizar el estado con el nuevo array que contiene los cambios
+          setTracks(updateStateValue);
     }
 
     if(sample.sample.waveform.audioCtx === undefined){
