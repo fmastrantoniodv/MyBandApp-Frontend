@@ -5,7 +5,8 @@ const CreateWaveform = (sound, soundName, containerRef) => {
     const [waveformComponent, setWaveformComponent] = useState(null)
 
     useEffect(() => {
-      console.log('[CreateWaveform].[useEffect]')
+      console.log(`[CreateWaveform].[useEffect].[sample=${sound}`)
+      
       if (!containerRef.current) return
 
       const audio = new Audio()

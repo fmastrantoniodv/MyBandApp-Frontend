@@ -7,9 +7,7 @@ export default function ListOfChannels ({ sampleList }) {
     
     useEffect(() => {
         const channelsArray = channelsStates
-        console.log('[ListOfChannels].[useEffect]')
-        console.log('sample value: ')
-        console.log(sampleList)
+        console.log(`[ListOfChannels].[useEffect].[sampleList=${sampleList}`)
         sampleList.map(sample => {
             const newRowToContext = { id: sample.name, states: sample.soundStates }
             if(channelsArray.find(value => value.id === newRowToContext.id) === undefined)
