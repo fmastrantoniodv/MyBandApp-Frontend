@@ -1,11 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 
-const CreateWaveform = (sound, soundName) => {
-
+const CreateWaveform = (sound, soundName, containerRef) => {
     const [waveformComponent, setWaveformComponent] = useState(null)
 
     useEffect(() => {
+      console.log('[CreateWaveform].[useEffect]')
+      if (!containerRef.current) return
+
       const audio = new Audio()
       audio.controls = true
       audio.src = sound.src
@@ -14,7 +16,9 @@ const CreateWaveform = (sound, soundName) => {
       const source = audioCtx.createMediaElementSource(audio);
 
       const wavesurfer = WaveSurfer.create({
-        container: '#'+soundName,
+        //container: '#'+soundName,
+        //container: refContainer.current,
+        container: containerRef.current,
         waveColor: 'black',
         progressColor: 'black',
         responsive: true,
@@ -35,20 +39,16 @@ const CreateWaveform = (sound, soundName) => {
 
       wavesurfer.audioCtx = audioCtx;
       wavesurfer.source = source
-
       wavesurfer.load(audio);
-
 
       setWaveformComponent(wavesurfer)
 
       return () => {
         wavesurfer.destroy()
       };
-    }, []);
+    }, [containerRef]);
 
     return waveformComponent;
   }
-
-
 
   export default CreateWaveform;

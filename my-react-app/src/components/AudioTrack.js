@@ -1,38 +1,62 @@
 import React, { useContext, useEffect, useState } from "react";
 import AudioTrackControls from "./AudioTrackControls";
-import AudioTracksContext from "../contexts/AudioTracksContext";
 
-export default function AudioTrack ({ sample }) {
-  const {tracks, setTracks} = useContext(AudioTracksContext)
-  
+export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleChannelStatesOnMute, states }) {
+  const [muteState, setMuteState] = useState(false)
+  const [soloState, setSoloState] = useState(false)
+  const [recState, setRecState] = useState(false)
+
   useEffect(() => {
     console.log('[AudioTrack].[useEffect]')
     console.log('sample value: ')
     console.log(sample)
-    
-    const tracksArray = tracks;
-    
-    if(tracksArray.find(value => value.id === sample.name) === undefined){
-      const newRowToContext = { id: sample.name, states: sample.soundStates }
-      tracksArray.push(newRowToContext)
-      setTracks(tracksArray)
-    }
-    
-  }, []);
+    console.log('sample.waveform value: ')
+    console.log(sample.waveform)
 
+    console.log('states value: ')
+    console.log(states)
+  }, [states]);
 
-    return (
-        <>  
+  const onClickMute = () => {
+    handleChannelStatesOnMute(sample)
+  }
+
+  const updatedStates = () => {
+    setMuteState()
+    setSoloState()
+    setRecState()
+  }
+
+  const onClickSolo = () => {
+    handleChannelStatesOnSolo(sample)
+  }
+
+  return (
+          <>  
             <div className='channelContainer'>
               <div className='channelControls'>
-                <AudioTrackControls sample={sample}/>
+                <AudioTrackControls 
+                  sample={sample} 
+                  onClickMute={onClickMute} 
+                  onClickSolo={onClickSolo}
+                  /*
+                  btnMuteState={states.find(value => value.id === sample.name)}
+                  btnSoloState={states.find(value => value.id === sample.name)}
+                  btnRecState={states.find(value => value.id === sample.name)}
+                  
+                  <div id={sample.name} />
+                  */
+                  />
               </div>
               <div className='channelSprites' style={{ width: '100%' }}>
                 <div className='spritesContainer' style={{ width: '50%' }}>
-                  <div id={sample.name} />
+                  <div 
+                  ref={sample.containerRef}
+                  //id={sample.name}
+                  ></div>
                 </div>
               </div>
             </div>        
-        </>
+          </>
         )
 }

@@ -1,16 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import Button from "./Button";
-import AudioTrack from "./AudioTrack";
 import CreateWaveform from "../components/CreateAudioWaveform/CreateWaveform";
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
-import {AudioTracksCtxProvider} from "../contexts/AudioTracksContext";
-import AudioTracksContext from "../contexts/AudioTracksContext";
+import ListOfChannels from "./ListOfChannels"
 
 export default function ProjectEditor ({ dataContext }) {
     const sounds = dataContext.soundsList;
     const sampleList = [];
-    const {tracks, setTracks} = useContext(AudioTracksContext)
 
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect]')
@@ -21,8 +18,8 @@ export default function ProjectEditor ({ dataContext }) {
 
     function createSampleObjects(){
       sounds.sounds.map(sound => {
-        var waveform = new CreateWaveform(sound, sound.id)
-
+        var containerRef = useRef()
+        var waveform = new CreateWaveform(sound, sound.id, containerRef)
         var sampleObj = {
           name: sound.id,
           waveform: waveform,
@@ -31,59 +28,10 @@ export default function ProjectEditor ({ dataContext }) {
             muted: false,
             rec: false
           },
-          onSolo: () => handleChannelStatesOnSolo(sampleObj),
-          onMute: () => handleChannelStatesOnMute(sampleObj)
+          containerRef: containerRef
         }
         sampleList.push(sampleObj)
-      })   
-      
-    }
-
-    const handleChannelStatesOnMute = (sampleObj) => {
-        
-        if(sampleObj.soundStates.muted === false){    
-          sampleObj.waveform.setMute(true) 
-          sampleObj.soundStates.muted = true
-        }else{
-          sampleObj.waveform.setMute(false)
-          sampleObj.soundStates.muted = false
-        }
-        console.log('Mute '+sampleObj.name+' = '+sampleObj.soundStates.muted)
-    }
-
-    const handleChannelStatesOnSolo = (sampleParam) => {
-      if(sampleParam.soundStates.solo === true){
-        restartStates()
-      }else{
-        let resp = sampleList.findIndex(value => value.name === sampleParam.name)
-        sampleList[resp].soundStates = {solo: true, muted: false, rec: false}
-        sampleList[resp].waveform.setMute(false)
-        sampleList.map(samplesOfList => {
-          if(samplesOfList.name !== sampleParam.name){
-            samplesOfList.soundStates = {solo: false, muted: true, rec: false}
-            samplesOfList.waveform.setMute(true)
-          }
-        })
-      }
-      
-      console.log('Solo '+sampleParam.name+' = '+sampleParam.soundStates.solo)
-    }
-
-    const restartStates = () => {
-      sampleList.map(sample => {
-        sample.waveform.setMute(false)
-        sample.soundStates.solo = false
-        sample.soundStates.muted = false
-        sample.soundStates.rec = false
-        refreshTracksStatesContext()
-      })
-
-    }
-
-    const refreshTracksStatesContext = () => {
-      console.log('refreshTracksStatesContext')
-      //let newStates = soundsStatesList.find(value => value.name === sampleParam.name)
-      //console.log(newStates)
+      })    
     }
 
     const playProject = () => {
@@ -138,16 +86,7 @@ export default function ProjectEditor ({ dataContext }) {
                   </div>
               </div>
           </div>
-          <AudioTracksCtxProvider>
-            <div className="tracksContainer">
-                {
-                  sampleList.map(sample => {
-                    return <AudioTrack key={sample.name} sample={sample}/>
-                  })
-                }
-            </div>
-          </AudioTracksCtxProvider>
+          <ListOfChannels sampleList={sampleList}/>
         </>
         )
 }
-
