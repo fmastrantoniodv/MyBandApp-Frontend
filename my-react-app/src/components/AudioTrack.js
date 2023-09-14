@@ -10,11 +10,9 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
     console.log('[AudioTrack].[useEffect]')
     console.log('sample value: ')
     console.log(sample)
-    console.log('sample.waveform value: ')
-    console.log(sample.waveform)
-
     console.log('states value: ')
     console.log(states)
+    updatedStates(states)
   }, [states]);
 
   const onClickMute = () => {
@@ -43,8 +41,6 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
                   btnMuteState={states.find(value => value.id === sample.name)}
                   btnSoloState={states.find(value => value.id === sample.name)}
                   btnRecState={states.find(value => value.id === sample.name)}
-                  
-                  <div id={sample.name} />
                   */
                   />
               </div>

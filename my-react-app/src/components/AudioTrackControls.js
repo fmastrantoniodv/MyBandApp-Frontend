@@ -9,7 +9,7 @@ const AudioTrackControls = (sample, btnMuteState, btnSoloState, btnRecState, onC
     
     useEffect(() => {
         console.log('[AudioTrackControls].[useEffect]')
-    }, [sample]);
+    }, [sample,btnMuteState, btnSoloState, btnRecState]);
 
     const muteChannel = () => {
         sample.onClickMute()
