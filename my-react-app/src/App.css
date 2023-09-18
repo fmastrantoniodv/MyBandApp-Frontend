@@ -118,7 +118,30 @@ justify-content: flex-end;
   background-color: #eeeaea;
   height: 100%;
   display: flex;
+  flex-direction: row;
+}
+
+.EQContainer{
+  display: flex;
   flex-direction: column;
+  font-size: 14px;
+}
+
+.EQContainer label, input{
+  width: 90%;
+}
+
+.EQContainer input{
+  height: 7px;
+}
+
+.EQParameter{
+  display: flex; 
+  flex-direction: column;
+}
+
+.sprite{
+  display: fixed;
 }
 
 .displayName{

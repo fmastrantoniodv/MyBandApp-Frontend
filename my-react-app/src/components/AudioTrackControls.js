@@ -4,7 +4,7 @@ import Button from './Button.js';
 import VolumeController from './VolumeController/VolumeController';
 import EQControls from "./EQControls"
 
-const AudioTrackControls = ({sample, states, onChangeChannelStates, onClickSolo, onClickMute}) => {
+const AudioTrackControls = ({sample, onChangeChannelStates, onClickSolo, onClickMute}) => {
     const sampleName = formatUpperFirstCase(sample.name);
     const [muted, setMuted] = useState(false)
     const [solo, setSolo] = useState(false)

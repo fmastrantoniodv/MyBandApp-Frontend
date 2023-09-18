@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 
-const CreateWaveform = (sound, soundName, containerRef) => {
+const CreateWaveform = (sound, soundName, containerRef, sprite) => {
     const [waveformComponent, setWaveformComponent] = useState(null)
 
     useEffect(() => {
-      console.log(`[CreateWaveform].[useEffect].[sample=${sound}`)
+      console.log(`[CreateWaveform].[useEffect].[sample=${sound+sprite}`)
       
       if (!containerRef.current) return
 

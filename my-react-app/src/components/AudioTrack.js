@@ -11,6 +11,7 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
     console.log(sample)
     console.log('sample.waveform value: ')
     console.log(sample.waveform)
+    console.log(sample.spriteList)
 
     console.log('states value: ')
     console.log(channelState)
@@ -43,10 +44,14 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
                   
               </div>
               <div className='channelSprites' style={{ width: '100%' }}>
-                <div className='spritesContainer' style={{ width: '50%' }}>
-                  <div 
-                  ref={sample.containerRef}
-                  ></div>
+                <div className='spritesContainer' style={{ width: '50%' }}>      
+                  {
+                    sample.spritesList.map(sprite => {
+                      return (
+                              <div className="sprite" ref={sprite.containerRefSprite} />
+                            )
+                    })
+                  }
                 </div>
               </div>
             </div>        

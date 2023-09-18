@@ -18,6 +18,32 @@ export default function ProjectEditor ({ dataContext }) {
 
     function createSampleObjects(){
       sounds.sounds.map(sound => {
+        var spritesList = []
+
+        sound.sprites.map(sprite => {
+          var containerRef = useRef()
+          var waveform = new CreateWaveform(sound, sound.id, containerRef,sprite)
+          waveform.containerRefSprite = containerRef
+          spritesList.push(waveform)
+        })
+        
+        var sampleObj = {
+          name: sound.id,
+          waveform: spritesList[0],
+          soundStates: {
+            solo: false,
+            muted: false,
+            rec: false
+          },
+          containerRef: spritesList[0].containerRefSprite,
+          spritesList: spritesList
+        }
+        sampleList.push(sampleObj)
+      })    
+    }
+    /*
+    function createSampleObjects(){
+      sounds.sounds.map(sound => {
         var containerRef = useRef()
         var waveform = new CreateWaveform(sound, sound.id, containerRef)
         var sampleObj = {
@@ -33,7 +59,7 @@ export default function ProjectEditor ({ dataContext }) {
         sampleList.push(sampleObj)
       })    
     }
-
+    */
     const playProject = () => {
          console.log('Play')
          sampleList.map(sample => {
