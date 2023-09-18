@@ -12,7 +12,7 @@ export default function ProjectEditor ({ dataContext }) {
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect]')
       console.log(sampleList)
-    }, [sampleList]);
+    }, [sounds]);
 
     createSampleObjects()
 

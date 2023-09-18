@@ -2,9 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import AudioTrackControls from "./AudioTrackControls";
 
 export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleChannelStatesOnMute, states }) {
-  const [muteState, setMuteState] = useState(false)
-  const [soloState, setSoloState] = useState(false)
-  const [recState, setRecState] = useState(false)
+
+  const [channelState, setChannelsState] = useState({solo: false, muted: false, rec: false})
 
   useEffect(() => {
     console.log('[AudioTrack].[useEffect]')
@@ -14,23 +13,22 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
     console.log(sample.waveform)
 
     console.log('states value: ')
-    console.log(states)
-  }, [states]);
+    console.log(channelState)
+    setChannelsState(states)
+  }, [channelState]);
 
   const onClickMute = () => {
     handleChannelStatesOnMute(sample)
-  }
-
-  const updatedStates = () => {
-    setMuteState()
-    setSoloState()
-    setRecState()
   }
 
   const onClickSolo = () => {
     handleChannelStatesOnSolo(sample)
   }
 
+  const onChangeChannelStates = () => {
+    setChannelsState(states)
+  }
+  
   return (
           <>  
             <div className='channelContainer'>
@@ -39,20 +37,15 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
                   sample={sample} 
                   onClickMute={onClickMute} 
                   onClickSolo={onClickSolo}
-                  /*
-                  btnMuteState={states.find(value => value.id === sample.name)}
-                  btnSoloState={states.find(value => value.id === sample.name)}
-                  btnRecState={states.find(value => value.id === sample.name)}
-                  
-                  <div id={sample.name} />
-                  */
+                  states={channelState}
+                  onChangeChannelStates={onChangeChannelStates}
                   />
+                  
               </div>
               <div className='channelSprites' style={{ width: '100%' }}>
                 <div className='spritesContainer' style={{ width: '50%' }}>
                   <div 
                   ref={sample.containerRef}
-                  //id={sample.name}
                   ></div>
                 </div>
               </div>

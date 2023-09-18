@@ -3,7 +3,7 @@ import { useState, useRef } from 'react';
 import '../../App.css';
 import '../../views/studio';
 
-function VolumeController( {sampleSource} ) {
+function VolumeController({sampleSource}) {
     const [isDragging, setIsDragging] = useState(false);
     const [startPosition, setStartPosition] = useState(null);
     const [position, setPosition] = useState(10);
@@ -26,7 +26,7 @@ function VolumeController( {sampleSource} ) {
             setPointerValue(pointerValue + event.movementY);
             var unity = 100 / 65;
             setVolumeValue(1-(unity/100*pointerValue));
-            sampleSource.sample.waveform.setVolume(volumeValue);
+            sampleSource.waveform.setVolume(volumeValue);
         }
     }
 

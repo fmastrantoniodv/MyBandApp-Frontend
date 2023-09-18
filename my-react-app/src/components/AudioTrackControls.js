@@ -1,29 +1,41 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../views/studio';
 import Button from './Button.js';
 import VolumeController from './VolumeController/VolumeController';
 import EQControls from "./EQControls"
 
-const AudioTrackControls = (sample, btnMuteState, btnSoloState, btnRecState, onClickSolo, onClickMute) => {
-    const sampleName = formatUpperFirstCase(sample.sample.name);
-    
+const AudioTrackControls = ({sample, states, onChangeChannelStates, onClickSolo, onClickMute}) => {
+    const sampleName = formatUpperFirstCase(sample.name);
+    const [muted, setMuted] = useState(false)
+    const [solo, setSolo] = useState(false)
+    const [rec, setRec] = useState(false)
+
     useEffect(() => {
         console.log('[AudioTrackControls].[useEffect]')
-    }, [sample]);
+        console.log(sample)
+        updateStates()
+    }, [onChangeChannelStates]);
 
     const muteChannel = () => {
-        sample.onClickMute()
+        onClickMute()
     }
 
     const soloChannel = () => {
-        sample.onClickSolo()
+        onClickSolo()
     }
 
     const recChannel = () => {
         //buttonState.rec ? setButtonState({rec: false}) : setButtonState({rec: true})
     }
 
-    if(sample.sample.waveform.audioCtx === undefined){
+    const updateStates = () => {
+        console.log('() => updateStates')
+        setMuted(sample.soundStates.muted)
+        setSolo(sample.soundStates.solo)
+        setRec(sample.soundStates.rec)
+    }
+
+    if(sample.waveform.audioCtx === undefined){
         return <span>loading</span>
     }
 
@@ -36,7 +48,7 @@ const AudioTrackControls = (sample, btnMuteState, btnSoloState, btnRecState, onC
                 </div>
 
                 <div className='audioControlsEQ'>
-                    <EQControls waveformObj={sample.sample.waveform} />
+                    <EQControls waveformObj={sample.waveform} />
                 </div>
 
                 <div className='audioControlsVolume'>
@@ -44,9 +56,9 @@ const AudioTrackControls = (sample, btnMuteState, btnSoloState, btnRecState, onC
                 </div>
 
                 <div className='audioControlsOutputRouterButtons'>
-                    <Button textButton='M' state={btnMuteState} onClickButton={() => muteChannel()}/>
-                    <Button textButton='S' state={btnSoloState} onClickButton={() => soloChannel()}/>
-                    <Button textButton='R' state={btnRecState} onClickButton={() => recChannel()}/>
+                    <Button textButton='M' state={muted} onClickButton={() => muteChannel()}/>
+                    <Button textButton='S' state={solo} onClickButton={() => soloChannel()}/>
+                    <Button textButton='R' state={rec} onClickButton={() => recChannel()}/>
                 </div>
 
                 <br />

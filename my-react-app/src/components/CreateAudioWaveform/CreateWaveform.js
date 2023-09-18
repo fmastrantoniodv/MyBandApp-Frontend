@@ -12,13 +12,12 @@ const CreateWaveform = (sound, soundName, containerRef) => {
       const audio = new Audio()
       audio.controls = true
       audio.src = sound.src
-
+      audio.autoplay = false
+      
       const audioCtx = new AudioContext();
       const source = audioCtx.createMediaElementSource(audio);
 
       const wavesurfer = WaveSurfer.create({
-        //container: '#'+soundName,
-        //container: refContainer.current,
         container: containerRef.current,
         waveColor: 'black',
         progressColor: 'black',
@@ -37,7 +36,7 @@ const CreateWaveform = (sound, soundName, containerRef) => {
         audioContext: audioCtx,
         backend: 'MediaElement'
       });
-
+ 
       wavesurfer.audioCtx = audioCtx;
       wavesurfer.source = source
       wavesurfer.load(audio);
