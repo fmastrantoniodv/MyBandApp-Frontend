@@ -44,15 +44,15 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
                   
               </div>
               <div className='channelSprites' style={{ width: '100%' }}>
-                <div className='spritesContainer' style={{ width: '50%' }}>      
                   {
-                    sample.spritesList.map(sprite => {
+                    sample.spritesList.map((sprite, index) => {
                       return (
-                              <div className="sprite" ref={sprite.containerRefSprite} />
+                            <div className='spritesContainer' style={{ width: '500px' }}>      
+                              <div key={sample.name+index} id={sample.name+index} className="sprite" ref={sprite.containerRefSprite} />
+                            </div>
                             )
                     })
                   }
-                </div>
               </div>
             </div>        
           </>

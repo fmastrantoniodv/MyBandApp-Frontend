@@ -22,7 +22,7 @@ export default function ProjectEditor ({ dataContext }) {
 
         sound.sprites.map(sprite => {
           var containerRef = useRef()
-          var waveform = new CreateWaveform(sound, sound.id, containerRef,sprite)
+          var waveform = new CreateWaveform(sound, sound.id, containerRef, sprite)
           waveform.containerRefSprite = containerRef
           spritesList.push(waveform)
         })
@@ -62,9 +62,25 @@ export default function ProjectEditor ({ dataContext }) {
     */
     const playProject = () => {
          console.log('Play')
+         /*
+         let duration = sampleList[0].spritesList[0].source.mediaElement.duration * 1000
+         console.log(duration)
+         for (let index = 0; index < sampleList[0].spritesList.length; index++) {
+           //setInterval(() => playIndex(index), duration)
+           console.log(index)
+           setTimeout(() => {playIndex(index)}, duration)
+         }
+         */
          sampleList.map(sample => {
-            return sample.waveform.play()
-         })
+          return sample.spritesList[0].play()
+        })
+        //playIndex()
+        
+     }
+
+     const playIndex = () => {
+      console.log('playindex')
+
      }
     
     const stopProject = () => {

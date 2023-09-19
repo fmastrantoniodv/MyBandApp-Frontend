@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 
 const CreateWaveform = (sound, soundName, containerRef, sprite) => {
@@ -26,7 +26,7 @@ const CreateWaveform = (sound, soundName, containerRef, sprite) => {
         cursorColor: 'chartreuse',
         cursorWidth: '2px',
         sampleRate: 4800,
-        key: soundName,
+        key: soundName+sprite,
         fillParent: true,
         minPxPerSec: 10,
         hideScrollbar: true,
@@ -34,7 +34,8 @@ const CreateWaveform = (sound, soundName, containerRef, sprite) => {
         mediaControls: true,
         mediaType: 'audio',
         audioContext: audioCtx,
-        backend: 'MediaElement'
+        backend: 'MediaElement',
+        closeAudioContext: true
       });
  
       wavesurfer.audioCtx = audioCtx;
