@@ -3,31 +3,32 @@ import AudioTrack from "./AudioTrack";
 
 export default function ListOfChannels ({ sampleList }) {
     const [channelsStates, setChannelsStates] = useState([])
+    const [loading, setLoading] = useState(true)
     
     useEffect(() => {
         const channelsArray = channelsStates
-        console.log(`[ListOfChannels].[useEffect].[sampleList:`)
-        console.log(sampleList)
+        console.log(`[ListOfChannels].[useEffect].[sampleList=${sampleList}`)
         sampleList.map(sample => {
             const newRowToContext = { id: sample.name, states: sample.soundStates }
             if(channelsArray.find(value => value.id === newRowToContext.id) === undefined)
             channelsArray.push(newRowToContext)
         })
         setChannelsStates(channelsArray)
+        setLoading(false)
         console.log('channelsStates')
         console.log(channelsStates)
     }, [sampleList]);
 
-    const handleChannelStatesOnMute = (sampleParam) => {
-        if(sampleParam.soundStates.muted === false){    
-          sampleParam.waveform.setMute(true) 
-          sampleParam.soundStates.muted = true
+    const handleChannelStatesOnMute = (sampleObj) => {
+        if(sampleObj.soundStates.muted === false){    
+          sampleObj.waveform.setMute(true) 
+          sampleObj.soundStates.muted = true
         }else{
-          sampleParam.waveform.setMute(false)
-          sampleParam.soundStates.muted = false
+          sampleObj.waveform.setMute(false)
+          sampleObj.soundStates.muted = false
         }
         changeChannelStates()
-        console.log('Mute '+sampleParam.name+' = '+sampleParam.soundStates.muted)
+        console.log('Mute '+sampleObj.name+' = '+sampleObj.soundStates.muted)
     }
 
     const handleChannelStatesOnSolo = (sampleParam) => {
@@ -65,13 +66,18 @@ export default function ListOfChannels ({ sampleList }) {
         })
         setChannelsStates(updatedStates)
     }
-    
+
+    /*
+    if(loading){
+        return <span>loading</span>
+    }
+    */
     return (
         <div className="tracksContainer">
                 {
                     sampleList.map(sample => {
                         return <AudioTrack 
-                            key={sample.name}
+                            key={sample.name} 
                             sample={sample}
                             handleChannelStatesOnMute={handleChannelStatesOnMute}
                             handleChannelStatesOnSolo={handleChannelStatesOnSolo}
