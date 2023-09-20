@@ -14,7 +14,6 @@ function EQControls({ waveformObj }) {
     const midFilter = waveformObj.audioCtx.createBiquadFilter();
     const highFilter = waveformObj.audioCtx.createBiquadFilter();
 
-
     // Configurar los filtros
     // BAJOS
     lowFilter.type = 'lowshelf';
@@ -70,15 +69,10 @@ function EQControls({ waveformObj }) {
   }, [lowFrequency, midFrequency, highFrequency, waveformObj.audioCtx]);
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column'
-    }}>
-      <div 
-      style={{display: 'flex'}}>
-        <label style={{width: '50%'}}>Bajos:</label>
+    <div className='EQContainer'>
+      <div className='EQParameter'>
+        <label>Bajos:</label>
         <input
-        style={{width: '50%'}}
           type="range"
           min="-30"
           max="10"
@@ -87,10 +81,9 @@ function EQControls({ waveformObj }) {
           onChange={handleLowFrequencyChange}
         />
       </div>
-      <div style={{display: 'flex'}}>
-        <label style={{width: '50%'}}>Medios:</label>
+      <div className='EQParameter'>
+        <label>Medios:</label>
         <input
-        style={{width: '50%'}}
           type="range"
           min="-30"
           max="10"
@@ -99,10 +92,9 @@ function EQControls({ waveformObj }) {
           onChange={handleMidFrequencyChange}
         />
       </div>
-      <div style={{display: 'flex'}}>
-        <label style={{width: '50%'}}>Agudos:</label>
+      <div className='EQParameter'>
+        <label>Agudos:</label>
         <input
-        style={{width: '50%'}}
           type="range"
           min="-30"
           max="10"

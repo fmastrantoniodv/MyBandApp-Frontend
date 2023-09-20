@@ -12,10 +12,36 @@ export default function ProjectEditor ({ dataContext }) {
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect]')
       console.log(sampleList)
-    }, [sampleList]);
+    }, [sounds]);
 
     createSampleObjects()
 
+    function createSampleObjects(){
+      sounds.sounds.map(sound => {
+        var spritesList = []
+
+        sound.sprites.map(sprite => {
+          var containerRef = useRef()
+          var waveform = new CreateWaveform(sound, sound.id, containerRef, sprite)
+          waveform.containerRefSprite = containerRef
+          spritesList.push(waveform)
+        })
+        
+        var sampleObj = {
+          name: sound.id,
+          waveform: spritesList[0],
+          soundStates: {
+            solo: false,
+            muted: false,
+            rec: false
+          },
+          containerRef: spritesList[0].containerRefSprite,
+          spritesList: spritesList
+        }
+        sampleList.push(sampleObj)
+      })    
+    }
+    /*
     function createSampleObjects(){
       sounds.sounds.map(sound => {
         var containerRef = useRef()
@@ -33,12 +59,28 @@ export default function ProjectEditor ({ dataContext }) {
         sampleList.push(sampleObj)
       })    
     }
-
+    */
     const playProject = () => {
          console.log('Play')
+         /*
+         let duration = sampleList[0].spritesList[0].source.mediaElement.duration * 1000
+         console.log(duration)
+         for (let index = 0; index < sampleList[0].spritesList.length; index++) {
+           //setInterval(() => playIndex(index), duration)
+           console.log(index)
+           setTimeout(() => {playIndex(index)}, duration)
+         }
+         */
          sampleList.map(sample => {
-            return sample.waveform.play()
-         })
+          return sample.spritesList[0].play()
+        })
+        //playIndex()
+        
+     }
+
+     const playIndex = () => {
+      console.log('playindex')
+
      }
     
     const stopProject = () => {

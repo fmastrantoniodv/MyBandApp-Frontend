@@ -1,24 +1,23 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 
-const CreateWaveform = (sound, soundName, containerRef) => {
+const CreateWaveform = (sound, soundName, containerRef, sprite) => {
     const [waveformComponent, setWaveformComponent] = useState(null)
 
     useEffect(() => {
-      console.log(`[CreateWaveform].[useEffect].[sample=${sound}`)
+      console.log(`[CreateWaveform].[useEffect].[sample=${sound+sprite}`)
       
       if (!containerRef.current) return
 
       const audio = new Audio()
       audio.controls = true
       audio.src = sound.src
-
+      audio.autoplay = false
+      
       const audioCtx = new AudioContext();
       const source = audioCtx.createMediaElementSource(audio);
 
       const wavesurfer = WaveSurfer.create({
-        //container: '#'+soundName,
-        //container: refContainer.current,
         container: containerRef.current,
         waveColor: 'black',
         progressColor: 'black',
@@ -27,7 +26,7 @@ const CreateWaveform = (sound, soundName, containerRef) => {
         cursorColor: 'chartreuse',
         cursorWidth: '2px',
         sampleRate: 4800,
-        key: soundName,
+        key: soundName+sprite,
         fillParent: true,
         minPxPerSec: 10,
         hideScrollbar: true,
@@ -35,9 +34,10 @@ const CreateWaveform = (sound, soundName, containerRef) => {
         mediaControls: true,
         mediaType: 'audio',
         audioContext: audioCtx,
-        backend: 'MediaElement'
+        backend: 'MediaElement',
+        closeAudioContext: true
       });
-
+ 
       wavesurfer.audioCtx = audioCtx;
       wavesurfer.source = source
       wavesurfer.load(audio);

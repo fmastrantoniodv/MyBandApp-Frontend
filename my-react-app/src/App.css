@@ -8,7 +8,6 @@
 
 .spritesContainer{
   background-color: #fff;
-  position: absolute;
   width: 100%;
   border: solid #000000;
   overflow-x: hidden;
@@ -118,7 +117,31 @@ justify-content: flex-end;
   background-color: #eeeaea;
   height: 100%;
   display: flex;
+  flex-direction: row;
+}
+
+.EQContainer{
+  display: flex;
   flex-direction: column;
+  font-size: 14px;
+}
+
+.EQContainer label, input{
+  width: 90%;
+}
+
+.EQContainer input{
+  height: 7px;
+}
+
+.EQParameter{
+  display: flex; 
+  flex-direction: column;
+}
+
+.sprite{
+  display: block;
+  position: relative;
 }
 
 .displayName{
@@ -138,7 +161,7 @@ justify-content: flex-end;
 .MButton{
   /* Botton Mute */
   width: 20px;
-  background-color: #fdc954;
+  background-color: #fdc95485;
   padding: 3px;
   font-weight: bold;
   border-radius: 20%;
@@ -147,17 +170,18 @@ justify-content: flex-end;
 .MButton-press{
   /* Botton Mute */
   width: 20px;
-  background-color: #cbcbcb;
+  background-color: #ffdc8c;
   padding: 3px;
   font-weight: bold;
   border-radius: 20%;
+  border-color: #eeeaea;
 }
 
 
 .SButton{
   /* Botton Solo */
   width: 20px;
-  background-color: #29ace9;
+  background-color: #29ace977;
   padding: 3px;
   font-weight: bold;
   border-radius: 20%;
@@ -166,16 +190,17 @@ justify-content: flex-end;
 .SButton-press{
   /* Botton Solo */
   width: 20px;
-  background-color: #cbcbcb;
+  background-color: #29ace9;
   padding: 3px;
   font-weight: bold;
   border-radius: 20%;
+  border-color: #eeeaea;
 }
 
 .RButton{
   /* Botton Rec */
   width: 20px;
-  background-color: #d60b0b;
+  background-color: #d60b0b80;
   padding: 3px;
   font-weight: bold;
   border-radius: 20%;
@@ -184,7 +209,7 @@ justify-content: flex-end;
 .RButton-press{
   /* Botton Rec */
   width: 20px;
-  background-color: #cbcbcb;
+  background-color: #d60b0b;
   padding: 3px;
   font-weight: bold;
   border-radius: 20%;
