@@ -35,6 +35,8 @@ const AudioTrackControls = ({sample, onChangeChannelStates, onClickSolo, onClick
         setRec(sample.soundStates.rec)
     }
 
+    
+    
     if(sample.waveform.audioCtx === undefined){
         return <span>loading</span>
     }
@@ -50,7 +52,6 @@ const AudioTrackControls = ({sample, onChangeChannelStates, onClickSolo, onClick
                 <div className='audioControlsEQ'>
                     <EQControls waveformObj={sample.waveform} />
                 </div>
-
                 <div className='audioControlsVolume'>
                     <VolumeController sampleSource={sample} />
                 </div>

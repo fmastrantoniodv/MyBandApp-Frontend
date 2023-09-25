@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 
-const CreateWaveform = (sound, soundName, containerRef, sprite) => {
+const CreateWaveform = (sound, soundName, containerRef) => {
     const [waveformComponent, setWaveformComponent] = useState(null)
 
     useEffect(() => {
-      console.log(`[CreateWaveform].[useEffect].[sample=${sound+sprite}`)
+      console.log(`[CreateWaveform].[useEffect].[sample=${sound}`)
       
       if (!containerRef.current) return
 
@@ -13,6 +13,7 @@ const CreateWaveform = (sound, soundName, containerRef, sprite) => {
       audio.controls = true
       audio.src = sound.src
       audio.autoplay = false
+      audio.id = soundName
       
       const audioCtx = new AudioContext();
       const source = audioCtx.createMediaElementSource(audio);
@@ -26,7 +27,7 @@ const CreateWaveform = (sound, soundName, containerRef, sprite) => {
         cursorColor: 'chartreuse',
         cursorWidth: '2px',
         sampleRate: 4800,
-        key: soundName+sprite,
+        key: audio.id,
         fillParent: true,
         minPxPerSec: 10,
         hideScrollbar: true,

@@ -10,19 +10,23 @@ const Studio = () => {
         sounds: [
           {
             id: 'kick',
-            src: '../samples/kick.mp3',
-            sprites: [1, 2]
+            src: '../samples/kick.mp3'
           },
           {
             id: 'clap',
-            src: '../samples/clap.mp3',
-            sprites: [1, 2]
+            src: '../samples/clap.mp3'
           },
           {
             id: 'shake',
-            src: '../samples/shake.mp3',
-            sprites: [1, 2]
+            src: '../samples/shake.mp3'
           }
+          /*
+          ,
+          {
+            id: 'HeavenSound',
+            src: '../samples/sample3.wav'
+          }
+          */
         ]
       })
       

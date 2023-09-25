@@ -1,13 +1,17 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "./Button";
 import CreateWaveform from "../components/CreateAudioWaveform/CreateWaveform";
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 import ListOfChannels from "./ListOfChannels"
+import CurrentTime from "./CurrentTime";
 
 export default function ProjectEditor ({ dataContext }) {
     const sounds = dataContext.soundsList;
     const sampleList = [];
+    const [playing, setPlaying] = useState(false)
+
+    const audioCtxMaster = new AudioContext();
 
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect]')
@@ -18,34 +22,9 @@ export default function ProjectEditor ({ dataContext }) {
 
     function createSampleObjects(){
       sounds.sounds.map(sound => {
-        var spritesList = []
-
-        sound.sprites.map(sprite => {
-          var containerRef = useRef()
-          var waveform = new CreateWaveform(sound, sound.id, containerRef, sprite)
-          waveform.containerRefSprite = containerRef
-          spritesList.push(waveform)
-        })
-        
-        var sampleObj = {
-          name: sound.id,
-          waveform: spritesList[0],
-          soundStates: {
-            solo: false,
-            muted: false,
-            rec: false
-          },
-          containerRef: spritesList[0].containerRefSprite,
-          spritesList: spritesList
-        }
-        sampleList.push(sampleObj)
-      })    
-    }
-    /*
-    function createSampleObjects(){
-      sounds.sounds.map(sound => {
         var containerRef = useRef()
         var waveform = new CreateWaveform(sound, sound.id, containerRef)
+                
         var sampleObj = {
           name: sound.id,
           waveform: waveform,
@@ -54,37 +33,23 @@ export default function ProjectEditor ({ dataContext }) {
             muted: false,
             rec: false
           },
-          containerRef: containerRef
+          containerRef: containerRef,
         }
         sampleList.push(sampleObj)
       })    
     }
-    */
-    const playProject = () => {
-         console.log('Play')
-         /*
-         let duration = sampleList[0].spritesList[0].source.mediaElement.duration * 1000
-         console.log(duration)
-         for (let index = 0; index < sampleList[0].spritesList.length; index++) {
-           //setInterval(() => playIndex(index), duration)
-           console.log(index)
-           setTimeout(() => {playIndex(index)}, duration)
-         }
-         */
-         sampleList.map(sample => {
-          return sample.spritesList[0].play()
-        })
-        //playIndex()
-        
-     }
-
-     const playIndex = () => {
-      console.log('playindex')
-
-     }
     
+    const playProject = () => {
+        console.log('Play')
+        setPlaying(true)
+        sampleList.map(sample => {
+          return sample.waveform.play()
+       })
+     }
+
     const stopProject = () => {
         console.log('Stop')
+        setPlaying(false)
         sampleList.map(sample => {
            return sample.waveform.stop()
         })
@@ -112,6 +77,7 @@ export default function ProjectEditor ({ dataContext }) {
               <Button textButton='Play' onClickButton={() => playProject()}></Button>
               <Button textButton='Stop' onClickButton={() => stopProject()}></Button>
               <Button textButton='Pause' onClickButton={() => pauseProject()}></Button>
+              <CurrentTime playing={playing} audioCtxMaster={audioCtxMaster}></CurrentTime>
               <div style={{ width: '100px', marginBottom: '10px' }}>
                   <div style={{ paddingBottom: '10px' }}>
                     <span>Zoom</span>

@@ -55,6 +55,16 @@ flex-direction: row;
 justify-content: flex-end;
 }
 
+.currentTime{
+  margin-left: 10px;
+  background-color: rgba(160, 160, 160, 0.93);
+  border: solid 2px #fff;
+  display: inline;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 10px;
+}
+
 .volume-container{
   display: flex;
   flex-direction: column;
