@@ -9,12 +9,7 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
     console.log('[AudioTrack].[useEffect]')
     console.log('sample value: ')
     console.log(sample)
-    console.log('sample.waveform value: ')
-    console.log(sample.waveform)
 
-    console.log('states value: ')
-    console.log(channelState)
-    setChannelsState(states)
   }, [channelState]);
 
   const onClickMute = () => {

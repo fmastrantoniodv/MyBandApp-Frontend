@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from 'react';
 
 const CurrentTime = ({ playing, audioCtxMaster }) => {
-    const [tiempo, setTiempo] = useState(0);
+    const [tiempo, setTiempo] = useState();
+    const [prevTiempo, setPrevTiempo] = useState(0);
+
     useEffect(() => {
-      if(playing === true){
+      if(playing === 'true'){
       const interval = setInterval(() => {
-        setTiempo(audioCtxMaster.currentTime * 1000);
+        setTiempo(prevTiempo + audioCtxMaster.currentTime * 1000);
       }, 100);
   
       return () => clearInterval(interval);
-      }else{
+      }else if(playing === 'pause'){
+        setPrevTiempo(tiempo)
+      }
+      else{
         const interval = setInterval(() => {
           setTiempo(0);
+          setPrevTiempo(0)
         }, 1);
     
         return () => clearInterval(interval);

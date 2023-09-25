@@ -7,7 +7,6 @@ export default function ListOfChannels ({ sampleList }) {
     
     useEffect(() => {
         const channelsArray = channelsStates
-        console.log(`[ListOfChannels].[useEffect].[sampleList=${sampleList}`)
         sampleList.map(sample => {
             const newRowToContext = { id: sample.name, states: sample.soundStates }
             if(channelsArray.find(value => value.id === newRowToContext.id) === undefined)
@@ -15,8 +14,6 @@ export default function ListOfChannels ({ sampleList }) {
         })
         setChannelsStates(channelsArray)
         setLoading(false)
-        console.log('channelsStates')
-        console.log(channelsStates)
     }, [sampleList]);
 
     const handleChannelStatesOnMute = (sampleObj) => {
@@ -67,11 +64,6 @@ export default function ListOfChannels ({ sampleList }) {
         setChannelsStates(updatedStates)
     }
 
-    /*
-    if(loading){
-        return <span>loading</span>
-    }
-    */
     return (
         <div className="tracksContainer">
                 {

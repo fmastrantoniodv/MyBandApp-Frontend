@@ -9,7 +9,7 @@ import CurrentTime from "./CurrentTime";
 export default function ProjectEditor ({ dataContext }) {
     const sounds = dataContext.soundsList;
     const sampleList = [];
-    const [playing, setPlaying] = useState(false)
+    const [playing, setPlaying] = useState('false')
 
     const audioCtxMaster = new AudioContext();
 
@@ -24,7 +24,11 @@ export default function ProjectEditor ({ dataContext }) {
       sounds.sounds.map(sound => {
         var containerRef = useRef()
         var waveform = new CreateWaveform(sound, sound.id, containerRef)
-                
+        if(waveform.backend !== undefined){
+          
+          waveform.backend.media.onended = () => stopProject()
+        }
+        
         var sampleObj = {
           name: sound.id,
           waveform: waveform,
@@ -41,7 +45,7 @@ export default function ProjectEditor ({ dataContext }) {
     
     const playProject = () => {
         console.log('Play')
-        setPlaying(true)
+        setPlaying('true')
         sampleList.map(sample => {
           return sample.waveform.play()
        })
@@ -49,7 +53,7 @@ export default function ProjectEditor ({ dataContext }) {
 
     const stopProject = () => {
         console.log('Stop')
-        setPlaying(false)
+        setPlaying('false')
         sampleList.map(sample => {
            return sample.waveform.stop()
         })
@@ -57,6 +61,7 @@ export default function ProjectEditor ({ dataContext }) {
 
     const pauseProject = () => {
         console.log('Pause')
+        setPlaying('pause')
         sampleList.map(sample => {
           console.log(sample.waveform.getCurrentTime())
            return sample.waveform.pause()
