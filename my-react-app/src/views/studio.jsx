@@ -17,8 +17,8 @@ const Studio = () => {
             src: '../samples/clap.mp3'
           },
           {
-            id: 'shake',
-            src: '../samples/shake.mp3'
+            id: 'maqueta1',
+            src: '../samples/Maqueta1.mp3'
           }
           /*
           ,

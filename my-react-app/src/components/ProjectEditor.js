@@ -10,6 +10,7 @@ export default function ProjectEditor ({ dataContext }) {
     const sounds = dataContext.soundsList;
     const sampleList = [];
     const [playing, setPlaying] = useState('false')
+    const [maxSampleLength, setMaxSampleLength] = useState()
 
     const audioCtxMaster = new AudioContext();
 
@@ -25,9 +26,10 @@ export default function ProjectEditor ({ dataContext }) {
         var containerRef = useRef()
         var waveform = new CreateWaveform(sound, sound.id, containerRef)
         if(waveform.backend !== undefined){
-          
           waveform.backend.media.onended = () => stopProject()
+          
         }
+        
         
         var sampleObj = {
           name: sound.id,
@@ -39,6 +41,7 @@ export default function ProjectEditor ({ dataContext }) {
           },
           containerRef: containerRef,
         }
+
         sampleList.push(sampleObj)
       })    
     }

@@ -3,7 +3,7 @@ import WaveSurfer from 'wavesurfer.js';
 
 const CreateWaveform = (sound, soundName, containerRef) => {
     const [waveformComponent, setWaveformComponent] = useState(null)
-
+    
     useEffect(() => {
       console.log(`[CreateWaveform].[useEffect].[sample=${sound}`)
       
