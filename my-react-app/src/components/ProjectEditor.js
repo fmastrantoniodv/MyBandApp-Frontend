@@ -10,27 +10,30 @@ export default function ProjectEditor ({ dataContext }) {
     const sounds = dataContext.soundsList;
     const sampleList = [];
     const [playing, setPlaying] = useState('false')
-    const [maxSampleLength, setMaxSampleLength] = useState()
+    const [maxSampleLength, setMaxSampleLength] = useState(0)
+    const [loading, setLoading] = useState()
 
     const audioCtxMaster = new AudioContext();
 
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect]')
       console.log(sampleList)
-    }, [sounds]);
+      setLoading(true)
+      setMaxSampleLength(getProjectDuration(sampleList))
 
-    createSampleObjects()
+    }, [loading]);
+
+    if(!loading) createSampleObjects()
 
     function createSampleObjects(){
       sounds.sounds.map(sound => {
         var containerRef = useRef()
         var waveform = new CreateWaveform(sound, sound.id, containerRef)
         if(waveform.backend !== undefined){
-          waveform.backend.media.onended = () => stopProject()
-          
+          waveform.backend.media.onended = () => {
+            if(audioCtxMaster.currentTime * 1000 > maxSampleLength) stopProject()
+          }
         }
-        
-        
         var sampleObj = {
           name: sound.id,
           waveform: waveform,
@@ -46,12 +49,27 @@ export default function ProjectEditor ({ dataContext }) {
       })    
     }
     
+    const getProjectDuration = (sampleList) => {
+      var maxDuration = 0;
+      sampleList.map(sample => {
+        if(sample.waveform.isReady){
+          if(maxDuration < sample.waveform.getDuration()*1000){
+            maxDuration = sample.waveform.getDuration()*1000;
+          }
+        }
+      })
+      setLoading(false)
+      return maxDuration
+    }
+    
     const playProject = () => {
         console.log('Play')
-        setPlaying('true')
-        sampleList.map(sample => {
-          return sample.waveform.play()
-       })
+        if(playing !== 'true'){
+          setPlaying('true')
+          sampleList.map(sample => {
+            return sample.waveform.play()
+         })
+        }
      }
 
     const stopProject = () => {
@@ -82,25 +100,25 @@ export default function ProjectEditor ({ dataContext }) {
           <h1>{dataContext.projectName}</h1>
 
           <div className='projectControls' >
-              <Button textButton='Play' onClickButton={() => playProject()}></Button>
-              <Button textButton='Stop' onClickButton={() => stopProject()}></Button>
-              <Button textButton='Pause' onClickButton={() => pauseProject()}></Button>
-              <CurrentTime playing={playing} audioCtxMaster={audioCtxMaster}></CurrentTime>
-              <div style={{ width: '100px', marginBottom: '10px' }}>
-                  <div style={{ paddingBottom: '10px' }}>
-                    <span>Zoom</span>
-                    <div style={{ marginTop: '10px' }}>
-                      <RangeSlider
-                        className="single-thumb"
-                        defaultValue={[0, 1600]}
-                        thumbsDisabled={[true, false]}
-                        rangeSlideDisabled={false}
-                        onInput={changeZoom}
-                        max={1600}
-                        />
-                    </div>
+            <Button textButton='Play' onClickButton={() => playProject()}></Button>
+            <Button textButton='Stop' onClickButton={() => stopProject()}></Button>
+            <Button textButton='Pause' onClickButton={() => pauseProject()}></Button>
+            <CurrentTime playing={playing} audioCtxMaster={audioCtxMaster}></CurrentTime>
+            <div style={{ width: '100px', marginBottom: '10px' }}>
+                <div style={{ paddingBottom: '10px' }}>
+                  <span>Zoom</span>
+                  <div style={{ marginTop: '10px' }}>
+                    <RangeSlider
+                      className="single-thumb"
+                      defaultValue={[0, 1600]}
+                      thumbsDisabled={[true, false]}
+                      rangeSlideDisabled={false}
+                      onInput={changeZoom}
+                      max={1600}
+                      />
                   </div>
-              </div>
+                </div>
+            </div>
           </div>
           <ListOfChannels sampleList={sampleList}/>
         </>

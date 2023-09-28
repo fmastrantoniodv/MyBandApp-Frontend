@@ -3,7 +3,6 @@ import '../App.css';
 import './studio';
 import ProjectEditor from '../components/ProjectEditor';
 
-
 const Studio = () => {
       //TODO: Obtener información de la BD con el ID del proyecto
       const [sounds, setSounds] = useState({
@@ -17,16 +16,13 @@ const Studio = () => {
             src: '../samples/clap.mp3'
           },
           {
-            id: 'maqueta1',
-            src: '../samples/Maqueta1.mp3'
-          }
-          /*
-          ,
+            id: 'shake',
+            src: '../samples/shake.mp3'
+          },
           {
-            id: 'HeavenSound',
+            id: 'sample3',
             src: '../samples/sample3.wav'
           }
-          */
         ]
       })
       

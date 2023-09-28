@@ -14,8 +14,7 @@ const CreateWaveform = (sound, soundName, containerRef) => {
       audio.src = sound.src
       audio.autoplay = false
       audio.id = soundName
-      //audio.onended = () => stopProject()
-      console.log(audio)
+
       const audioCtx = new AudioContext();
       const source = audioCtx.createMediaElementSource(audio);
 

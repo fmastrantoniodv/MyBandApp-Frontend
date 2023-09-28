@@ -13,7 +13,7 @@ export default function ListOfChannels ({ sampleList }) {
             channelsArray.push(newRowToContext)
         })
         setChannelsStates(channelsArray)
-        setLoading(false)
+        setLoading(false)        
     }, [sampleList]);
 
     const handleChannelStatesOnMute = (sampleObj) => {
