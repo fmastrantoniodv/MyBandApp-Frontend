@@ -13,12 +13,14 @@ const AudioTrackControls = ({sampleComponent, onChangeChannelStates, onClickSolo
 
     const { settings, saveSettings } = useSettings();
 
+    /*  ######### metodo para borrar pista ##########
     const handleToggleDeleteTrack = () => {
         var newSettings = settings
         var updatedSoundsList = settings.soundsList.sounds.filter(sound => sound.id !== sample.name)
         newSettings.soundsList.sounds = updatedSoundsList;
         saveSettings(newSettings);
     };
+    */
 
     useEffect(() => {
         console.log('[AudioTrackControls].[useEffect]')
@@ -48,11 +50,8 @@ const AudioTrackControls = ({sampleComponent, onChangeChannelStates, onClickSolo
         */
     }
 
-<<<<<<< HEAD
     
     /*
-=======
->>>>>>> 9bd12fc0958d34465089562165576660596b3842
     if(sample.waveform.audioCtx === undefined){
         return <span>loading</span>
     }
@@ -60,26 +59,6 @@ const AudioTrackControls = ({sampleComponent, onChangeChannelStates, onClickSolo
     return (
         <>
             <div className='audioControlsChannel'>
-<<<<<<< HEAD
-            
-            <div className='audioControlsSample'>
-            <span className='displayName'>{sampleName}</span>
-            </div>
-            
-            
-            <div className='audioControlsVolume'>
-            <VolumeController sampleSource={sample} />
-            </div>
-            
-            <div className='audioControlsOutputRouterButtons'>
-            <Button textButton='M' state={muted} onClickButton={() => muteChannel()}/>
-            <Button textButton='S' state={solo} onClickButton={() => soloChannel()}/>
-            <Button textButton='R' state={rec} onClickButton={() => recChannel()}/>
-            </div>
-            
-            <br />
-            
-=======
 
                 <div className='audioControlsSample'>
                     <span className='displayName'>{sampleName}</span>
@@ -103,7 +82,6 @@ const AudioTrackControls = ({sampleComponent, onChangeChannelStates, onClickSolo
 
                 <br />
 
->>>>>>> 9bd12fc0958d34465089562165576660596b3842
             </div>
             </>
             )

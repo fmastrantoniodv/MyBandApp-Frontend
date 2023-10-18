@@ -8,10 +8,10 @@ import CurrentTime from "./CurrentTime";
 import useSettings from "../hooks/useSettings";
 
 export default function ProjectEditor ({ dataContext }) {
-<<<<<<< HEAD
     const sounds = dataContext.soundsList;
     const sampleList = [];
 
+    const [loading, setLoading] = useState(true)
     const [playing, setPlaying] = useState('false')
     const [maxSampleLength, setMaxSampleLength] = useState()
     const [soundsList, setSoundsList] = useState(null)
@@ -39,38 +39,6 @@ export default function ProjectEditor ({ dataContext }) {
           waveform.backend.media.onended = () => stopProject()
         }
 
-=======
-    const [playing, setPlaying] = useState('false')
-    const [maxSampleLength, setMaxSampleLength] = useState(0)
-    const [loading, setLoading] = useState()
-    const { settings, saveSettings } = useSettings();
-    const [soundsList, setSoundsList] = useState(dataContext.soundsList)
-    
-    const sampleList = [];
-    
-    const audioCtxMaster = new AudioContext();
-    
-    //const sounds = settings.soundsList;
-
-    useEffect(() => {
-      console.log('[ProjectEditor].[useEffect]')
-      setLoading(true)
-      setSoundsList(settings.soundsList)
-      setMaxSampleLength(getProjectDuration(sampleList))
-    }, [loading, settings]);
-
-    if(!loading) createSampleObjects()
-
-    function createSampleObjects(){
-      soundsList.sounds.map(sound => {
-        var containerRef = useRef()
-        var waveform = new CreateWaveform(sound, sound.id, containerRef)
-        if(waveform.backend !== undefined){
-          waveform.backend.media.onended = () => {
-            if(audioCtxMaster.currentTime * 1000 > maxSampleLength) stopProject()
-          }
-        }
->>>>>>> 9bd12fc0958d34465089562165576660596b3842
         var sampleObj = {
           name: sound.id,
           waveform: waveform,
@@ -149,7 +117,6 @@ export default function ProjectEditor ({ dataContext }) {
             <Button textButton='Play' onClickButton={() => playProject()}></Button>
             <Button textButton='Stop' onClickButton={() => stopProject()}></Button>
             <Button textButton='Pause' onClickButton={() => pauseProject()}></Button>
-            <Button textButton='Prueba' onClickButton={() => handleToggleTheme()}></Button>
             <CurrentTime playing={playing} audioCtxMaster={audioCtxMaster}></CurrentTime>
             <div style={{ width: '100px', marginBottom: '10px' }}>
                 <div style={{ paddingBottom: '10px' }}>

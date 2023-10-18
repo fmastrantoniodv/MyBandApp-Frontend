@@ -9,7 +9,7 @@ const useWaveform = (src, soundID, containerRef) => {
       
       if (!containerRef.current) return
 
-<<<<<<< HEAD:my-react-app/src/components/CreateAudioWaveform/useWaveform.js
+
       console.log(console.log(`[useWaveform].[useEffect].[containerRef`, containerRef))
 
       const audio = new Audio()
@@ -18,15 +18,7 @@ const useWaveform = (src, soundID, containerRef) => {
       audio.autoplay = false
       audio.id = soundID
       //audio.onended = () => stopProject()
-      
-=======
-      const audio = new Audio(sound.src)
-      audio.controls = true
-      //audio.src = 
-      audio.autoplay = false
-      audio.id = soundName
-
->>>>>>> 9bd12fc0958d34465089562165576660596b3842:my-react-app/src/components/CreateAudioWaveform/CreateWaveform.js
+    
       const audioCtx = new AudioContext();
       const source = audioCtx.createMediaElementSource(audio);
 
