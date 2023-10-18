@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Button from "./Button";
-import CreateWaveform from "../components/CreateAudioWaveform/CreateWaveform";
+import CreateWaveform from "./CreateAudioWaveform/useWaveform";
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 import ListOfChannels from "./ListOfChannels"
@@ -9,28 +9,34 @@ import CurrentTime from "./CurrentTime";
 export default function ProjectEditor ({ dataContext }) {
     const sounds = dataContext.soundsList;
     const sampleList = [];
+
     const [playing, setPlaying] = useState('false')
     const [maxSampleLength, setMaxSampleLength] = useState()
+    const [soundsList, setSoundsList] = useState(null)
 
     const audioCtxMaster = new AudioContext();
+    console.log("[ProjectEditor].dataContext", dataContext)
+    console.log("[ProjectEditor].sounds", sounds)
 
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect]')
-      console.log(sampleList)
-    }, [sounds]);
-
-    createSampleObjects()
-
+      console.log(sounds)
+      setSoundsList(sounds)
+      //if(soundsList === null) return
+      //createSampleObjects();
+      //getMaxDuration()
+      console.log("soundList: ",soundsList)
+    }, [soundsList]);
+    
+    
     function createSampleObjects(){
-      sounds.sounds.map(sound => {
+      soundsList.map(sound => {
         var containerRef = useRef()
         var waveform = new CreateWaveform(sound, sound.id, containerRef)
         if(waveform.backend !== undefined){
           waveform.backend.media.onended = () => stopProject()
-          
         }
-        
-        
+
         var sampleObj = {
           name: sound.id,
           waveform: waveform,
@@ -44,6 +50,15 @@ export default function ProjectEditor ({ dataContext }) {
 
         sampleList.push(sampleObj)
       })    
+    }
+
+    const getMaxDuration = () => {
+      sampleList.map(sample => {
+        if(sample.waveform.isReady){
+          console.log(sample.waveform.isReady)
+          setMaxSampleLength(sample.waveform.getDuration())
+        }
+      })
     }
     
     const playProject = () => {
@@ -102,7 +117,7 @@ export default function ProjectEditor ({ dataContext }) {
                   </div>
               </div>
           </div>
-          <ListOfChannels sampleList={sampleList}/>
+          <ListOfChannels sampleList={soundsList}/>
         </>
         )
 }

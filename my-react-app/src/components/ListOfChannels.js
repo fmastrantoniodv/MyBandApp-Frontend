@@ -4,16 +4,22 @@ import AudioTrack from "./AudioTrack";
 export default function ListOfChannels ({ sampleList }) {
     const [channelsStates, setChannelsStates] = useState([])
     const [loading, setLoading] = useState(true)
+    const [channelList, setChannelList] = useState(null)
     
     useEffect(() => {
+      console.log("[ListOfChannels].[useEffect].sampleList", sampleList)
+      if(channelList === null){
+        setChannelList(sampleList)
+      }else{
+        setLoading(false)
         const channelsArray = channelsStates
-        sampleList.map(sample => {
+        channelList.map(sample => {
             const newRowToContext = { id: sample.name, states: sample.soundStates }
             if(channelsArray.find(value => value.id === newRowToContext.id) === undefined)
             channelsArray.push(newRowToContext)
         })
         setChannelsStates(channelsArray)
-        setLoading(false)
+      }
     }, [sampleList]);
 
     const handleChannelStatesOnMute = (sampleObj) => {
@@ -32,10 +38,10 @@ export default function ListOfChannels ({ sampleList }) {
       if(sampleParam.soundStates.solo === true){
         restartStates()
       }else{
-        let resp = sampleList.findIndex(value => value.name === sampleParam.name)
-        sampleList[resp].soundStates = {solo: true, muted: false, rec: false}
-        sampleList[resp].waveform.setMute(false)
-        sampleList.map(samplesOfList => {
+        let resp = channelList.findIndex(value => value.name === sampleParam.name)
+        channelList[resp].soundStates = {solo: true, muted: false, rec: false}
+        channelList[resp].waveform.setMute(false)
+        channelList.map(samplesOfList => {
           if(samplesOfList.name !== sampleParam.name){
             samplesOfList.soundStates = {solo: false, muted: true, rec: false}
             samplesOfList.waveform.setMute(true)
@@ -47,7 +53,7 @@ export default function ListOfChannels ({ sampleList }) {
     }
 
     const restartStates = () => {
-      sampleList.map(sample => {
+      channelList.map(sample => {
         sample.waveform.setMute(false)
         sample.soundStates.solo = false
         sample.soundStates.muted = false
@@ -57,17 +63,18 @@ export default function ListOfChannels ({ sampleList }) {
 
     const changeChannelStates = () => {
         let updatedStates = []
-        sampleList.map(sample => {
+        channelList.map(sample => {
             let newRowToContext = { id: sample.name, states: sample.soundStates }
             updatedStates.push(newRowToContext)
         })
         setChannelsStates(updatedStates)
     }
 
+    if(channelList === null) return
     return (
         <div className="tracksContainer">
                 {
-                    sampleList.map(sample => {
+                    channelList.map(sample => {
                         return <AudioTrack 
                             key={sample.name} 
                             sample={sample}
