@@ -5,28 +5,32 @@ import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 import ListOfChannels from "./ListOfChannels"
 import CurrentTime from "./CurrentTime";
+import useSettings from "../hooks/useSettings";
 
 export default function ProjectEditor ({ dataContext }) {
-    const sounds = dataContext.soundsList;
-    const sampleList = [];
     const [playing, setPlaying] = useState('false')
     const [maxSampleLength, setMaxSampleLength] = useState(0)
     const [loading, setLoading] = useState()
-
+    const { settings, saveSettings } = useSettings();
+    const [soundsList, setSoundsList] = useState(dataContext.soundsList)
+    
+    const sampleList = [];
+    
     const audioCtxMaster = new AudioContext();
+    
+    //const sounds = settings.soundsList;
 
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect]')
-      console.log(sampleList)
       setLoading(true)
+      setSoundsList(settings.soundsList)
       setMaxSampleLength(getProjectDuration(sampleList))
-
-    }, [loading]);
+    }, [loading, settings]);
 
     if(!loading) createSampleObjects()
 
     function createSampleObjects(){
-      sounds.sounds.map(sound => {
+      soundsList.sounds.map(sound => {
         var containerRef = useRef()
         var waveform = new CreateWaveform(sound, sound.id, containerRef)
         if(waveform.backend !== undefined){
@@ -82,7 +86,7 @@ export default function ProjectEditor ({ dataContext }) {
 
     const pauseProject = () => {
         console.log('Pause')
-        setPlaying('pause')
+        setPlaying('pause') 
         sampleList.map(sample => {
           console.log(sample.waveform.getCurrentTime())
            return sample.waveform.pause()
@@ -103,6 +107,7 @@ export default function ProjectEditor ({ dataContext }) {
             <Button textButton='Play' onClickButton={() => playProject()}></Button>
             <Button textButton='Stop' onClickButton={() => stopProject()}></Button>
             <Button textButton='Pause' onClickButton={() => pauseProject()}></Button>
+            <Button textButton='Prueba' onClickButton={() => handleToggleTheme()}></Button>
             <CurrentTime playing={playing} audioCtxMaster={audioCtxMaster}></CurrentTime>
             <div style={{ width: '100px', marginBottom: '10px' }}>
                 <div style={{ paddingBottom: '10px' }}>

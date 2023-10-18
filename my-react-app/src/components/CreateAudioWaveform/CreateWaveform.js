@@ -9,9 +9,9 @@ const CreateWaveform = (sound, soundName, containerRef) => {
       
       if (!containerRef.current) return
 
-      const audio = new Audio()
+      const audio = new Audio(sound.src)
       audio.controls = true
-      audio.src = sound.src
+      //audio.src = 
       audio.autoplay = false
       audio.id = soundName
 

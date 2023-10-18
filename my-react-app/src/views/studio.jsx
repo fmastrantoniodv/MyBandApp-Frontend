@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../App.css';
 import './studio';
 import ProjectEditor from '../components/ProjectEditor';
+import { SettingsProvider } from '../contexts/SettingsContext'
+import useSettings from '../hooks/useSettings';
 
 const Studio = () => {
       //TODO: Obtener información de la BD con el ID del proyecto
@@ -18,10 +20,6 @@ const Studio = () => {
           {
             id: 'shake',
             src: '../samples/shake.mp3'
-          },
-          {
-            id: 'sample3',
-            src: '../samples/sample3.wav'
           }
         ]
       })
@@ -31,11 +29,22 @@ const Studio = () => {
         soundsList: sounds
         }); // El estado del contexto
 
+      const initialSettings = {
+        projectName: 'firstProject',
+        soundsList: sounds
+        }
+
+        useEffect(() => {
+          console.log('[Studio].[useEffect]')
+        }, []);
+    
 
     return(
         <>
           <div className='container'>
-            <ProjectEditor dataContext={dataContext}/>
+            <SettingsProvider settings={initialSettings}>
+              <ProjectEditor dataContext={dataContext} />
+            </SettingsProvider>
           </div>
         </>
     )

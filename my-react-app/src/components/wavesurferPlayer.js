@@ -7,6 +7,9 @@ const WaveSurferPlayer = (props) => {
     const [currentTime, setCurrentTime] = useState(0)
     const wavesurfer = useWavesurfer(containerRef, props)
 
+    console.log("WaveSuferPlayer")
+    console.log(props)
+
     // On play button click
     const onPlayClick = useCallback(() => {
       wavesurfer.isPlaying() ? wavesurfer.pause() : wavesurfer.play()
@@ -19,8 +22,7 @@ const WaveSurferPlayer = (props) => {
       if (!wavesurfer) return 
       setCurrentTime(0)
       setIsPlaying(false)
-      console.log('WaveSurferPlayer.useEffect.wavesurferObj.isReady')
-      console.log(wavesurfer.isReady)
+      
       const subscriptions = [
         wavesurfer.on('play', () => setIsPlaying(true)),
         wavesurfer.on('pause', () => setIsPlaying(false)),

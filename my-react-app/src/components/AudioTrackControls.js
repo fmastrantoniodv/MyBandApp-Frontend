@@ -3,12 +3,22 @@ import '../views/studio';
 import Button from './Button.js';
 import VolumeController from './VolumeController/VolumeController';
 import EQControls from "./EQControls"
+import useSettings from '../hooks/useSettings';
 
 const AudioTrackControls = ({sample, onChangeChannelStates, onClickSolo, onClickMute}) => {
     const sampleName = formatUpperFirstCase(sample.name);
     const [muted, setMuted] = useState(false)
     const [solo, setSolo] = useState(false)
     const [rec, setRec] = useState(false)
+
+    const { settings, saveSettings } = useSettings();
+
+    const handleToggleDeleteTrack = () => {
+        var newSettings = settings
+        var updatedSoundsList = settings.soundsList.sounds.filter(sound => sound.id !== sample.name)
+        newSettings.soundsList.sounds = updatedSoundsList;
+        saveSettings(newSettings);
+    };
 
     useEffect(() => {
         console.log('[AudioTrackControls].[useEffect]')
@@ -35,8 +45,6 @@ const AudioTrackControls = ({sample, onChangeChannelStates, onClickSolo, onClick
         setRec(sample.soundStates.rec)
     }
 
-    
-    
     if(sample.waveform.audioCtx === undefined){
         return <span>loading</span>
     }
@@ -47,6 +55,9 @@ const AudioTrackControls = ({sample, onChangeChannelStates, onClickSolo, onClick
 
                 <div className='audioControlsSample'>
                     <span className='displayName'>{sampleName}</span>
+                    <div>
+                        <Button textButton={'borrar'} onClickButton={()=> handleToggleDeleteTrack()}></Button>
+                    </div>
                 </div>
 
                 <div className='audioControlsEQ'>
