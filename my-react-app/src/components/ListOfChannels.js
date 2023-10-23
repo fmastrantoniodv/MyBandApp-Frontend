@@ -55,7 +55,7 @@ export default function ListOfChannels ({ sampleList }) {
       })
     }
 
-    const changeChannelStates = () => {
+    const changeChannelStates = (newStates) => {
         let updatedStates = []
         channelList.map(sample => {
             let newRowToContext = { id: sample.id, states: sample.channelConfig.states }

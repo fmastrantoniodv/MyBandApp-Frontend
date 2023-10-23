@@ -61,12 +61,14 @@ function EQControls({ waveformObj }) {
 
   // Aplicar los filtros cuando cambian las frecuencias de corte
   useEffect(() => {
+    if(waveformObj === null) return
     const disconnectFilters = applyFilters();
+
     return () => {
       // Desconectar los filtros cuando el componente se desmonta
       disconnectFilters();
     };
-  }, [lowFrequency, midFrequency, highFrequency, waveformObj.audioCtx]);
+  }, [lowFrequency, midFrequency, highFrequency, waveformObj]);
 
   return (
     <div className='EQContainer'>

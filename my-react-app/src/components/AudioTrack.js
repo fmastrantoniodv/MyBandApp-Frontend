@@ -1,6 +1,8 @@
 import React, { useRef, useContext, useEffect, useState } from "react";
-import AudioTrackControls from "./AudioTrackControls";
 import useWaveform from "../hooks/useWaveform";
+import Button from './Button.js';
+import VolumeController from './VolumeController/VolumeController';
+import EQControls from "./EQControls"
 
 const PUBLICROOT = 'http://127.0.0.1:8080/'
 
@@ -20,8 +22,9 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
 
     setSampleComponent(waveformPlayer)
     console.log(waveformPlayer)
+    console.log("sampleComponent: ",sampleComponent)
 
-  }, [waveformPlayer, states]);
+  }, [waveformPlayer, states, sampleComponent]);
 
 
   const onClickMute = () => {
@@ -32,23 +35,32 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
     handleChannelStatesOnSolo(sampleComponent)
   }
 
-  const onChangeChannelStates = () => {
-    setChannelsState(sampleComponent)
-  }
+  const onClickRec = () => {
+    //buttonState.rec ? setButtonState({rec: false}) : setButtonState({rec: true})
+}
 
   return (
           <>  
             <div className='channelContainer'>
               <div className='channelControls'>
-                <AudioTrackControls 
-                  sampleComponent={sampleComponent} 
-                  onClickMute={onClickMute} 
-                  onClickSolo={onClickSolo}
-                  states={channelState}
-                  onChangeChannelStates={onChangeChannelStates}
-                  sampleName={sample.sampleName}
-                  />
-                  
+              <div className='audioControlsChannel'>
+                    <div className='audioControlsSample'>
+                        <span className='displayName'>{sample.sampleName}</span>
+                    </div>                     
+                    <div className='audioControlsEQ'>
+                        <EQControls waveformObj={sampleComponent} />
+                    </div>
+                    <div className='audioControlsVolume'>
+                        <VolumeController sampleSource={sampleComponent} />
+                    </div>
+                    <div className='audioControlsOutputRouterButtons'>
+                        <Button textButton='M' state={channelState.muted} onClickButton={() => onClickMute(sampleComponent)}/>
+                        <Button textButton='S' state={channelState.solo} onClickButton={() => onClickSolo(sampleComponent)}/>
+                        <Button textButton='R' state={channelState.rec} onClickButton={() => onClickRec(sampleComponent)}/>
+                    </div>
+                    <br />
+                </div>
+
               </div>
               <div className='channelSprites' style={{ width: '100%' }}>
                 <div className='spritesContainer' style={{ width: '500px' }}>      
