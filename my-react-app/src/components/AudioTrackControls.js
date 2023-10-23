@@ -5,7 +5,7 @@ import VolumeController from './VolumeController/VolumeController';
 import EQControls from "./EQControls"
 import useSettings from '../hooks/useSettings';
 
-const AudioTrackControls = ({sampleComponent, onChangeChannelStates, onClickSolo, onClickMute, sampleName}) => {
+const AudioTrackControls = ({sampleComponent, onClickMute, onClickSolo, states, onChangeChannelStates, sampleName}) => {
     //const displayName = formatUpperFirstCase(sampleName);
     const [muted, setMuted] = useState(false)
     const [solo, setSolo] = useState(false)
@@ -20,34 +20,34 @@ const AudioTrackControls = ({sampleComponent, onChangeChannelStates, onClickSolo
         newSettings.soundsList.sounds = updatedSoundsList;
         saveSettings(newSettings);
     };
+
     */
 
     useEffect(() => {
         console.log('[AudioTrackControls].[useEffect]')
-        console.log('[AudioTrackControls].[useEffect].sampleName', sampleName)
+        if(sampleComponent === null) return
         console.log('[AudioTrackControls].[useEffect].sampleComponent', sampleComponent)
-        //updateStates()
-    }, [onChangeChannelStates,sampleComponent]);
+        updateStates()
+    }, [onChangeChannelStates, sampleComponent, states]);
 
-    const muteChannel = () => {
-        onClickMute()
+    const muteChannel = (sampleComponent) => {
+        onClickMute(sampleComponent)
     }
 
-    const soloChannel = () => {
-        onClickSolo()
+    const soloChannel = (sampleComponent) => {
+        onClickSolo(sampleComponent)
     }
 
-    const recChannel = () => {
+    const recChannel = (sampleComponent) => {
         //buttonState.rec ? setButtonState({rec: false}) : setButtonState({rec: true})
     }
 
     const updateStates = () => {
         console.log('() => updateStates')
-        /*
-        setMuted(sample.soundStates.muted)
-        setSolo(sample.soundStates.solo)
-        setRec(sample.soundStates.rec)
-        */
+        setMuted(states.muted)
+        setSolo(states.solo)
+        setRec(states.rec)
+        onChangeChannelStates()
     }
 
     
@@ -67,12 +67,8 @@ const AudioTrackControls = ({sampleComponent, onChangeChannelStates, onClickSolo
                     </div>
                 </div>
 
-                <div className='audioControlsEQ'>
-                    <EQControls waveformObj={sample.waveform} />
-                </div>
-                <div className='audioControlsVolume'>
-                    <VolumeController sampleSource={sample} />
-                </div>
+                
+
 
                 <div className='audioControlsOutputRouterButtons'>
                     <Button textButton='M' state={muted} onClickButton={() => muteChannel()}/>
@@ -88,6 +84,8 @@ const AudioTrackControls = ({sampleComponent, onChangeChannelStates, onClickSolo
         } 
         */
 
+        if(sampleComponent === null) return <span>Loading</span>
+
         return (
             <>
                 <div className='audioControlsChannel'>
@@ -95,12 +93,19 @@ const AudioTrackControls = ({sampleComponent, onChangeChannelStates, onClickSolo
                         <span className='displayName'>{sampleName}
                         </span>
                     </div>
-            
+
+                    <div className='audioControlsEQ'>
+                        <EQControls waveformObj={sampleComponent} />
+                    </div>
+
+                    <div className='audioControlsVolume'>
+                        <VolumeController sampleSource={sampleComponent} />
+                    </div>
     
                     <div className='audioControlsOutputRouterButtons'>
-                        <Button textButton='M' state={muted} onClickButton={() => muteChannel()}/>
-                        <Button textButton='S' state={solo} onClickButton={() => soloChannel()}/>
-                        <Button textButton='R' state={rec} onClickButton={() => recChannel()}/>
+                        <Button textButton='M' state={muted} onClickButton={() => muteChannel(sampleComponent)}/>
+                        <Button textButton='S' state={solo} onClickButton={() => soloChannel(sampleComponent)}/>
+                        <Button textButton='R' state={rec} onClickButton={() => recChannel(sampleComponent)}/>
                     </div>
     
                     <br />

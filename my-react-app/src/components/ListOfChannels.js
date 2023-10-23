@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import AudioTrack from "./AudioTrack";
-import useSettings from "../hooks/useSettings";
 
 export default function ListOfChannels ({ sampleList }) {
     const [channelsStates, setChannelsStates] = useState([])
@@ -9,30 +8,24 @@ export default function ListOfChannels ({ sampleList }) {
     
     useEffect(() => {
       console.log("[ListOfChannels].[useEffect].sampleList", sampleList)
-      if(channelList === null){
+      if(sampleList !== null){
         setChannelList(sampleList)
-      }else{
+        initChannelsStates(sampleList)
         setLoading(false)
-        const channelsArray = channelsStates
-        channelList.map(sample => {
-            const newRowToContext = { id: sample.name, states: sample.soundStates }
-            if(channelsArray.find(value => value.id === newRowToContext.id) === undefined)
-            channelsArray.push(newRowToContext)
-        })
-        setChannelsStates(channelsArray)
       }
     }, [sampleList]);
 
-    const handleChannelStatesOnMute = (sampleObj) => {
-        if(sampleObj.soundStates.muted === false){    
-          sampleObj.waveform.setMute(true) 
-          sampleObj.soundStates.muted = true
+    const handleChannelStatesOnMute = (sampleComponent) => {
+      console.log("Mute: ", sampleComponent)
+      let newStates = {}
+        if(sampleComponent.isMuted === false){    
+          newStates= {muted: true, solo: false, rec: false}
         }else{
-          sampleObj.waveform.setMute(false)
-          sampleObj.soundStates.muted = false
+          newStates = {muted: true, solo: false, rec: false}
         }
-        changeChannelStates()
-        console.log('Mute '+sampleObj.name+' = '+sampleObj.soundStates.muted)
+        changeChannelStates(newStates)
+        //console.log('Mute '+sampleObj.name+' = '+sampleObj.soundStates.muted)
+      
     }
 
     const handleChannelStatesOnSolo = (sampleParam) => {
@@ -65,16 +58,29 @@ export default function ListOfChannels ({ sampleList }) {
     const changeChannelStates = () => {
         let updatedStates = []
         channelList.map(sample => {
-            let newRowToContext = { id: sample.name, states: sample.soundStates }
+            let newRowToContext = { id: sample.id, states: sample.channelConfig.states }
             updatedStates.push(newRowToContext)
         })
         setChannelsStates(updatedStates)
     }
 
-    if(channelList === null) return
+    const initChannelsStates = (sampleList) => {
+      let newStatesArray = []
+      sampleList.map(sample => {
+        let itemJson = {
+          id: sample.id,
+          states: sample.channelConfig.states
+        }
+        newStatesArray.push(itemJson)
+      })
+      setChannelsStates(newStatesArray)
+      console.log('newStatesArray: ',newStatesArray)
+    }
+
+    if(!channelList) return
+
     return (
         <div className="tracksContainer">
-
                 {
                     channelList.map(sample => {
                         return <AudioTrack 

@@ -1,22 +1,24 @@
-import WaveSurfer from "wavesurfer.js"
-import React, { useRef, useState, useEffect, useCallback } from "react"
+import React, { useEffect, useState } from 'react';
+import WaveSurfer from 'wavesurfer.js';
 
-// WaveSurfer hook
-const useWavesurfer = (sound, containerRef, options) => {
+const useWaveform = (src, soundID, containerRef) => {
     const [waveformComponent, setWaveformComponent] = useState(null)
-    // Initialize wavesurfer when the container mounts
-    // or any of the props change
+    
     useEffect(() => {
-      if (!containerRef.current) return
+      console.log(`[useWaveform].[useEffect].[sample=${soundID}`)
       
-      console.log('useWavesufer')
-      console.log(sound)
+      if (!containerRef.current) return 
+
+
+      console.log(console.log(`[useWaveform].[useEffect].[containerRef`, containerRef))
+
       const audio = new Audio()
       audio.controls = true
-      audio.src = sound.src
+      audio.src = src
       audio.autoplay = false
-      audio.id = sound.id
-
+      audio.id = soundID
+      //audio.onended = () => stopProject()
+    
       const audioCtx = new AudioContext();
       const source = audioCtx.createMediaElementSource(audio);
 
@@ -38,9 +40,10 @@ const useWavesurfer = (sound, containerRef, options) => {
         mediaType: 'audio',
         audioContext: audioCtx,
         backend: 'MediaElement',
-        closeAudioContext: true
+        closeAudioContext: true        
       });
 
+      wavesurfer.audioElement = audio;
       wavesurfer.audioCtx = audioCtx;
       wavesurfer.source = source
       wavesurfer.load(audio);
@@ -55,4 +58,4 @@ const useWavesurfer = (sound, containerRef, options) => {
     return waveformComponent;
   }
 
-export default useWavesurfer
+  export default useWaveform;

@@ -9,9 +9,6 @@ const Studio = () => {
       //TODO: Obtener información de la BD con el ID del proyecto
       const [dataContext, setDataContext] = useState(null); // El estado del contexto
       
-      /* 
-      Web para obtener los datos https://www.mockable.io/a/#/space/demo3233307/rest/TVLxqZAAA?inwizzard=true  
-      */
       useEffect(()=>{
         fetch("https://demo3233307.mockable.io/projects")
         .then(response => response.json())

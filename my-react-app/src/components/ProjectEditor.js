@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import Button from "./Button";
-import CreateWaveform from "./CreateAudioWaveform/useWaveform";
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 import ListOfChannels from "./ListOfChannels"
 import CurrentTime from "./CurrentTime";
-import useSettings from "../hooks/useSettings";
 
 export default function ProjectEditor ({ dataContext }) {
     const sounds = dataContext.soundsList;
@@ -17,43 +15,12 @@ export default function ProjectEditor ({ dataContext }) {
     const [soundsList, setSoundsList] = useState(null)
 
     const audioCtxMaster = new AudioContext();
-    console.log("[ProjectEditor].dataContext", dataContext)
-    console.log("[ProjectEditor].sounds", sounds)
 
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect]')
-      console.log(sounds)
       setSoundsList(sounds)
-      //if(soundsList === null) return
-      //createSampleObjects();
-      //getMaxDuration()
-      console.log("soundList: ",soundsList)
-    }, [soundsList]);
+    }, [sounds]);
     
-    
-    function createSampleObjects(){
-      soundsList.map(sound => {
-        var containerRef = useRef()
-        var waveform = new CreateWaveform(sound, sound.id, containerRef)
-        if(waveform.backend !== undefined){
-          waveform.backend.media.onended = () => stopProject()
-        }
-
-        var sampleObj = {
-          name: sound.id,
-          waveform: waveform,
-          soundStates: {
-            solo: false,
-            muted: false,
-            rec: false
-          },
-          containerRef: containerRef,
-        }
-
-        sampleList.push(sampleObj)
-      })    
-    }
-
     const getMaxDuration = () => {
       sampleList.map(sample => {
         if(sample.waveform.isReady){

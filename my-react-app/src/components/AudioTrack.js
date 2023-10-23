@@ -1,45 +1,40 @@
 import React, { useRef, useContext, useEffect, useState } from "react";
 import AudioTrackControls from "./AudioTrackControls";
-import useWaveform from "./CreateAudioWaveform/useWaveform";
+import useWaveform from "../hooks/useWaveform";
 
-const PUBLICROOT = '../../public'
+const PUBLICROOT = 'http://127.0.0.1:8080/'
 
 export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleChannelStatesOnMute, states }) {
   const [channelState, setChannelsState] = useState({solo: false, muted: false, rec: false})
   const [sampleComponent, setSampleComponent] = useState(null)
   const containerRef = useRef()
-  //const waveformPlayer = CreateWaveform(sample.src, sample.sampleName, containerRef)
   
   //HARDCODE PARA QUE TOME LAS URL LOCALES
-  const localAudioSrc = PUBLICROOT+'/samples/'+sample.id+".mp3";
-  console.log(localAudioSrc)
+  const localAudioSrc = PUBLICROOT+'samples/'+sample.id+".mp3";
   const waveformPlayer = useWaveform(localAudioSrc, sample.id, containerRef)
   
   useEffect(() => {
     console.log('[AudioTrack].[useEffect].sample',sample)
+    
     if (!waveformPlayer) return
-    if(sample !== undefined){
-      console.log('[AudioTrack].[useEffect].containerRef.current',containerRef.current)
-    }
+
     setSampleComponent(waveformPlayer)
     console.log(waveformPlayer)
 
-  },[containerRef.current , waveformPlayer]);
+  }, [waveformPlayer, states]);
 
 
   const onClickMute = () => {
-    handleChannelStatesOnMute(sample)
+    handleChannelStatesOnMute(sampleComponent)
   }
 
   const onClickSolo = () => {
-    handleChannelStatesOnSolo(sample)
+    handleChannelStatesOnSolo(sampleComponent)
   }
 
   const onChangeChannelStates = () => {
-    setChannelsState(states)
+    setChannelsState(sampleComponent)
   }
-  
-  if(sampleComponent) return 
 
   return (
           <>  

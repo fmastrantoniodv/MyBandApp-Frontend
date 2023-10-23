@@ -28,7 +28,7 @@ function VolumeController({sampleSource}) {
             var value = 1-(unity/100*pointerValue);
             value < 0 ? value = 0 : value = value;
             setVolumeValue(value);
-            sampleSource.waveform.setVolume(volumeValue);
+            sampleSource.setVolume(volumeValue);
         }
     }
 
