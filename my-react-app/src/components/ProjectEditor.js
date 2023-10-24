@@ -21,53 +21,22 @@ export default function ProjectEditor ({ dataContext }) {
       setSoundsList(sounds)
     }, [sounds]);
     
-    const getMaxDuration = () => {
-      sampleList.map(sample => {
-        if(sample.waveform.isReady){
-          console.log(sample.waveform.isReady)
-          setMaxSampleLength(sample.waveform.getDuration())
-        }
-      })
-    }
-    
-    const getProjectDuration = (sampleList) => {
-      var maxDuration = 0;
-      sampleList.map(sample => {
-        if(sample.waveform.isReady){
-          if(maxDuration < sample.waveform.getDuration()*1000){
-            maxDuration = sample.waveform.getDuration()*1000;
-          }
-        }
-      })
-      setLoading(false)
-      return maxDuration
-    }
     
     const playProject = () => {
         console.log('Play')
         if(playing !== 'true'){
           setPlaying('true')
-          sampleList.map(sample => {
-            return sample.waveform.play()
-         })
         }
      }
 
     const stopProject = () => {
         console.log('Stop')
         setPlaying('false')
-        sampleList.map(sample => {
-           return sample.waveform.stop()
-        })
     }
 
     const pauseProject = () => {
         console.log('Pause')
         setPlaying('pause') 
-        sampleList.map(sample => {
-          console.log(sample.waveform.getCurrentTime())
-           return sample.waveform.pause()
-        })
     }
   
     const changeZoom = ( number ) => {
@@ -101,7 +70,7 @@ export default function ProjectEditor ({ dataContext }) {
                 </div>
             </div>
           </div>
-          <ListOfChannels sampleList={soundsList}/>
+          <ListOfChannels sampleList={soundsList} playState={playing}/>
         </>
         )
 }

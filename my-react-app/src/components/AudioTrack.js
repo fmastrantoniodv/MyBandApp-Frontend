@@ -6,7 +6,7 @@ import EQControls from "./EQControls"
 
 const PUBLICROOT = 'http://127.0.0.1:8080/'
 
-export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleChannelStatesOnMute, states }) {
+export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleChannelStatesOnMute, states, playing }) {
   const [channelState, setChannelsState] = useState({solo: false, muted: false, rec: false})
   const [sampleComponent, setSampleComponent] = useState(null)
   const containerRef = useRef()
@@ -16,16 +16,32 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
   const waveformPlayer = useWaveform(localAudioSrc, sample.id, containerRef)
   
   useEffect(() => {
-    console.log('[AudioTrack].[useEffect].sample',sample)
-    
-    if (!waveformPlayer) return
+    console.log('[AudioTrack].[useEffect].playing',playing)
+    console.log(playing)
+    if(playing === 'true'){
+      sampleComponent.play()
+      return
+    }else if(playing === 'false' && sampleComponent !== null){
+      sampleComponent.stop()
+      return
+    }else if(playing === 'pause'){
+      sampleComponent.pause()
+      return
+    }
 
+    console.log('[AudioTrack].[useEffect].sample',sample)
+    console.log('[AudioTrack].[useEffect].states', states)
+    setChannelsState(states)
+    console.log('[AudioTrack].[useEffect].sampleName: '+sample.sampleName+" ChannelState: ",channelState)
+    if (!waveformPlayer) return
+    
     setSampleComponent(waveformPlayer)
+    calculateWidthWaveform()
     console.log(waveformPlayer)
     console.log("sampleComponent: ",sampleComponent)
-
-  }, [waveformPlayer, states, sampleComponent]);
-
+    
+  }, [waveformPlayer, states, sampleComponent, playing]);
+  
 
   const onClickMute = () => {
     handleChannelStatesOnMute(sampleComponent)
@@ -37,7 +53,15 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
 
   const onClickRec = () => {
     //buttonState.rec ? setButtonState({rec: false}) : setButtonState({rec: true})
-}
+  }
+
+  const calculateWidthWaveform = () =>{
+    var anchoContainerSprite = document.getElementById('root').clientWidth;
+    console.log('root: ',anchoContainerSprite)
+
+  }
+
+
 
   return (
           <>  
@@ -63,7 +87,7 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
 
               </div>
               <div className='channelSprites' style={{ width: '100%' }}>
-                <div className='spritesContainer' style={{ width: '500px' }}>      
+                <div className='spritesContainer' style={{ width: '90%' }}>      
                   <div key={sample.sampleName} id={sample.id} className="sprite" ref={containerRef} />
                 </div>
               </div>

@@ -13,6 +13,7 @@ const useWaveform = (src, soundID, containerRef) => {
       console.log(console.log(`[useWaveform].[useEffect].[containerRef`, containerRef))
 
       const audio = new Audio()
+      audio.crossOrigin = "anonymous"
       audio.controls = true
       audio.src = src
       audio.autoplay = false
