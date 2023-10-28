@@ -11,12 +11,12 @@ export default function ListOfChannels ({ sampleList, playState }) {
       console.log("[ListOfChannels].[useEffect].sampleList", sampleList)
       setPlaying(playState)
 
-      if(sampleList !== null){
+      if(sampleList !== null && channelList === null){
         setChannelList(sampleList)
         initChannelsStates(sampleList)
         setLoading(false)
       }
-    }, [sampleList, playState]);
+    }, [sampleList, playState, channelList]);
 
     const handleChannelStatesOnMute = (sampleComponent) => {
       console.log("Mute: id="+sampleComponent.mediaContainer.id+",sampleComponent=", sampleComponent)
@@ -86,6 +86,11 @@ export default function ListOfChannels ({ sampleList, playState }) {
       console.log('newStatesArray: ',newStatesArray)
     }
 
+    const handleDeleteChannel = ( idChannel ) => {
+      let updateArrayChannelList = channelList.filter(value => value.id !== idChannel)
+      setChannelList(updateArrayChannelList)
+    }
+
     if(channelList === null || channelList === undefined) return
 
     return (
@@ -99,6 +104,7 @@ export default function ListOfChannels ({ sampleList, playState }) {
                             handleChannelStatesOnSolo={handleChannelStatesOnSolo}
                             states={channelsStates.find(value => value.id === sample.id).states}
                             playing={playing}
+                            handleDeleteChannel={handleDeleteChannel}
                             />
                     })
     

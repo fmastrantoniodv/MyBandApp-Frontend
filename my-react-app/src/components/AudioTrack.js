@@ -4,9 +4,11 @@ import Button from './Button.js';
 import VolumeController from './VolumeController/VolumeController';
 import EQControls from "./EQControls"
 
+
+// npx http-server ./public --cors
 const PUBLICROOT = 'http://127.0.0.1:8080/'
 
-export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleChannelStatesOnMute, states, playing }) {
+export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleChannelStatesOnMute, states, playing, handleDeleteChannel }) {
   const [channelState, setChannelsState] = useState({solo: false, muted: false, rec: false})
   const [sampleComponent, setSampleComponent] = useState(null)
   const containerRef = useRef()
@@ -58,10 +60,11 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
   const calculateWidthWaveform = () =>{
     var anchoContainerSprite = document.getElementById('root').clientWidth;
     console.log('root: ',anchoContainerSprite)
-
   }
 
-
+  const deleteChannel = ( sampleID ) => {
+    handleDeleteChannel(sampleID)
+  }
 
   return (
           <>  
@@ -70,7 +73,8 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
               <div className='audioControlsChannel'>
                     <div className='audioControlsSample'>
                         <span className='displayName'>{sample.sampleName}</span>
-                    </div>                     
+                        <button onClick={() => deleteChannel(sample.id)}>Borrar</button>                    
+                    </div>
                     <div className='audioControlsEQ'>
                         <EQControls waveformObj={sampleComponent} />
                     </div>
