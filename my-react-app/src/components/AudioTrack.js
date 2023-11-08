@@ -3,6 +3,7 @@ import useWaveform from "../hooks/useWaveform";
 import Button from './Button.js';
 import VolumeController from './VolumeController/VolumeController';
 import EQControls from "./EQControls"
+import deleteIconSvg from '../img/deleteIcon.svg'
 
 
 // npx http-server ./public --cors
@@ -11,6 +12,7 @@ const PUBLICROOT = 'http://127.0.0.1:8080/'
 export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleChannelStatesOnMute, states, playing, handleDeleteChannel }) {
   const [channelState, setChannelsState] = useState({solo: false, muted: false, rec: false})
   const [sampleComponent, setSampleComponent] = useState(null)
+  const [eqValues, setEqValues] = useState(sample.channelConfig.EQ)
   const containerRef = useRef()
   
   //HARDCODE PARA QUE TOME LAS URL LOCALES
@@ -19,6 +21,7 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
   
   useEffect(() => {
     console.log('[AudioTrack].[useEffect].playing',playing)
+    console.log(sample)
     console.log(playing)
     if(playing === 'true'){
       sampleComponent.play()
@@ -66,17 +69,33 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
     handleDeleteChannel(sampleID)
   }
 
+  const onChangeEQValues = ( values ) => {
+    setEqValues(values)
+  }
+
+  const DeleteButton = () => {
+    return(
+      <button className="btn-delete-channel" 
+        onClick={() => deleteChannel(sample.id)}>
+        <img 
+          src={deleteIconSvg} 
+          alt="icono de borrar"
+        ></img>  
+      </button>        
+    )
+  }
+
   return (
           <>  
             <div className='channelContainer'>
               <div className='channelControls'>
               <div className='audioControlsChannel'>
                     <div className='audioControlsSample'>
+                        <DeleteButton />
                         <span className='displayName'>{sample.sampleName}</span>
-                        <button onClick={() => deleteChannel(sample.id)}>Borrar</button>                    
                     </div>
                     <div className='audioControlsEQ'>
-                        <EQControls waveformObj={sampleComponent} />
+                        <EQControls waveformObj={sampleComponent} eqValues={eqValues} onChangeEqValues={onChangeEQValues}/>
                     </div>
                     <div className='audioControlsVolume'>
                         <VolumeController sampleSource={sampleComponent} />

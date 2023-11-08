@@ -1,8 +1,50 @@
 import React, { useState, useEffect } from 'react';
+import knobSvg from '../img/knob.svg'
 
-function EQControls({ waveformObj }) {
+export function EQKnob({ value, handleOnChange }) {
+  const maxRotatevalue = 45;
+  const minRotateValue = -150;
+  const rangoDeg = 195;
+  const rangoTotal = 40;
 
-  // Estado para almacenar las frecuencias de corte de los filtros
+  const [rotateDegValue, setRotateDegValue] = useState('')
+  
+  useEffect(()=>{
+    //const rotateValue = value * 2.5 ;
+    setRotateDegValue((rangoDeg / rangoTotal) * value)
+    
+  }, [value])
+  
+  return (
+    <div className='eq-knob-container'>
+      <input
+        className='eq-knob-input'
+        type="range"
+        min="-30"
+        max="10"
+        step="1"
+        value={value}
+        onChange={handleOnChange}
+      />
+      <div className='eq-knob-svg'>
+        <img 
+          src={knobSvg} 
+          alt="perilla eq"
+          style={{
+            position: "absolute",
+            transform: "rotate("+rotateDegValue+"deg)"
+          }}
+        ></img>
+      </div>
+      <span>{value > 0 ? "+"+value : value}</span>
+    </div>
+  )
+
+}
+
+function EQControls({ waveformObj, eqValues, onChangeEqValues }) {
+
+  // Estado para almacenar el gain de los band EQ
   const [lowFrequency, setLowFrequency] = useState(0);
   const [midFrequency, setMidFrequency] = useState(0);
   const [highFrequency, setHighFrequency] = useState(0);
@@ -49,18 +91,31 @@ function EQControls({ waveformObj }) {
   // Manejar cambios en las frecuencias de corte
   const handleLowFrequencyChange = (e) => {
     setLowFrequency(parseFloat(e.target.value));
+    updateEQValues()
   };
 
   const handleMidFrequencyChange = (e) => {
     setMidFrequency(parseFloat(e.target.value));
+    updateEQValues()
   };
 
   const handleHighFrequencyChange = (e) => {
     setHighFrequency(parseFloat(e.target.value));
+    updateEQValues()
   };
+
+  const updateEQValues = ( ) => {
+    var values = {
+      low: lowFrequency,
+      mid: midFrequency,
+      high: highFrequency
+    }
+    onChangeEqValues(values)
+  }
 
   // Aplicar los filtros cuando cambian las frecuencias de corte
   useEffect(() => {
+    console.log(eqValues)
     if(waveformObj === null) return
     const disconnectFilters = applyFilters();
 
@@ -73,37 +128,25 @@ function EQControls({ waveformObj }) {
   return (
     <div className='EQContainer'>
       <div className='EQParameter'>
-        <label>Bajos:</label>
-        <input
-          type="range"
-          min="-30"
-          max="10"
-          step="10"
+        <label>Bajos</label>
+        <EQKnob 
           value={lowFrequency}
-          onChange={handleLowFrequencyChange}
-        />
+          handleOnChange={handleLowFrequencyChange}>
+        </EQKnob>
       </div>
       <div className='EQParameter'>
-        <label>Medios:</label>
-        <input
-          type="range"
-          min="-30"
-          max="10"
-          step="10"
+        <label>Medios</label>
+        <EQKnob 
           value={midFrequency}
-          onChange={handleMidFrequencyChange}
-        />
+          handleOnChange={handleMidFrequencyChange}>
+        </EQKnob>
       </div>
       <div className='EQParameter'>
-        <label>Agudos:</label>
-        <input
-          type="range"
-          min="-30"
-          max="10"
-          step="10"
+        <label>Agudos</label>
+        <EQKnob 
           value={highFrequency}
-          onChange={handleHighFrequencyChange}
-        />
+          handleOnChange={handleHighFrequencyChange}>
+        </EQKnob>
       </div>
     </div>
   );

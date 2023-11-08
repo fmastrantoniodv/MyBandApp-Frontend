@@ -55,6 +55,34 @@ flex-direction: row;
 justify-content: flex-end;
 }
 
+.eq-knob-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.eq-knob-input {
+  width: 30px;
+  height: 44px; /* Ajusta el alto según tus necesidades */
+  z-index: 1;
+  position: absolute;
+  opacity: 0;
+}
+
+.eq-knob-svg {
+  display: flex;
+  width: 30px;
+  height: 30px;
+}
+
+.eq-knob-svg img {
+  width: 25px;
+  height: 25px;
+  object-fit: cover; /* Ajusta el tamaño del fondo según tus necesidades */
+}
+
+
 .currentTime{
   margin-left: 10px;
   background-color: rgba(160, 160, 160, 0.93);
@@ -100,7 +128,8 @@ justify-content: flex-end;
 }
 
 .audioControlsEQ{
-  width: 85px;
+  display: flex;
+  flex-direction: row;
   border-left: solid 1px #757575;
 }
 
@@ -130,23 +159,35 @@ justify-content: flex-end;
   flex-direction: row;
 }
 
+.btn-delete-channel{
+  width: 30px;
+  height: 30px;
+}
+
 .EQContainer{
   display: flex;
-  flex-direction: column;
-  font-size: 14px;
+  flex-direction: row;
+  font-size: 13px;
+  height: 50px;
 }
 
 .EQContainer label, input{
   width: 90%;
 }
 
-.EQContainer input{
-  height: 7px;
-}
-
 .EQParameter{
   display: flex; 
   flex-direction: column;
+  width: 50px;
+  height: 50px;
+  align-content: center;
+}
+
+.EQParameter label{
+  display: flex;
+  justify-content: center;
+  padding-top: 2px;
+  padding-bottom: 5px;
 }
 
 .sprite{
