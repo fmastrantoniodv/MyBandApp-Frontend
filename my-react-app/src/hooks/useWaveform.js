@@ -36,7 +36,7 @@ const useWaveform = (src, soundID, containerRef) => {
         fillParent: true,
         minPxPerSec: 10,
         hideScrollbar: true,
-        height: 108,
+        height: 111,
         mediaControls: true,
         mediaType: 'audio',
         audioContext: audioCtx,

@@ -126,22 +126,22 @@ function EQControls({ waveformObj, eqValues, onChangeEqValues }) {
   }, [lowFrequency, midFrequency, highFrequency, waveformObj]);
 
   return (
-    <div className='EQContainer'>
-      <div className='EQParameter'>
+    <div className='eq-container'>
+      <div className='eq-parameter'>
         <label>Bajos</label>
         <EQKnob 
           value={lowFrequency}
           handleOnChange={handleLowFrequencyChange}>
         </EQKnob>
       </div>
-      <div className='EQParameter'>
+      <div className='eq-parameter'>
         <label>Medios</label>
         <EQKnob 
           value={midFrequency}
           handleOnChange={handleMidFrequencyChange}>
         </EQKnob>
       </div>
-      <div className='EQParameter'>
+      <div className='eq-parameter'>
         <label>Agudos</label>
         <EQKnob 
           value={highFrequency}

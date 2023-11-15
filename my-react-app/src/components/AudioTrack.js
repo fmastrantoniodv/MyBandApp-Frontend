@@ -4,6 +4,7 @@ import Button from './Button.js';
 import VolumeController from './VolumeController/VolumeController';
 import EQControls from "./EQControls"
 import deleteIconSvg from '../img/deleteIcon.svg'
+import configIconSvg from '../img/configIcon.svg'
 
 
 // npx http-server ./public --cors
@@ -85,32 +86,48 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
     )
   }
 
+  const EditButton = () => {
+    return(
+      <button className="btn-edit-channel" 
+        //onClick={() => deleteChannel(sample.id)}
+        >
+        <img 
+          src={configIconSvg} 
+          alt="icono de configuracion"
+          width="100%"
+        ></img>  
+      </button>        
+    )
+  }
+
   return (
           <>  
-            <div className='channelContainer'>
-              <div className='channelControls'>
-              <div className='audioControlsChannel'>
-                    <div className='audioControlsSample'>
+            <div className='channel-container'>
+              <div className='channel-controls'>
+              <div className='audio-controls-channel'>
+                    <div className='audio-controls-sample'>
+                      <div className='channel-settings'>
                         <DeleteButton />
-                        <span className='displayName'>{sample.sampleName}</span>
+                        <EditButton />
+                        <span className='display-name'>{sample.sampleName}</span>
+                      </div>
+                      <div className='audio-controls-eq'>
+                          <EQControls waveformObj={sampleComponent} eqValues={eqValues} onChangeEqValues={onChangeEQValues}/>
+                      </div>
                     </div>
-                    <div className='audioControlsEQ'>
-                        <EQControls waveformObj={sampleComponent} eqValues={eqValues} onChangeEqValues={onChangeEQValues}/>
-                    </div>
-                    <div className='audioControlsVolume'>
+                    <div className='audio-controls-volume'>
                         <VolumeController sampleSource={sampleComponent} />
                     </div>
-                    <div className='audioControlsOutputRouterButtons'>
+                    <div className='audio-controls-output-router-buttons'>
                         <Button textButton='M' state={channelState.muted} onClickButton={() => onClickMute(sampleComponent)}/>
                         <Button textButton='S' state={channelState.solo} onClickButton={() => onClickSolo(sampleComponent)}/>
-                        <Button textButton='R' state={channelState.rec} onClickButton={() => onClickRec(sampleComponent)}/>
                     </div>
                     <br />
                 </div>
 
               </div>
-              <div className='channelSprites' style={{ width: '100%' }}>
-                <div className='spritesContainer' style={{ width: '90%' }}>      
+              <div className='channel-sprites' style={{ width: '100%' }}>
+                <div className='sprites-container' style={{ width: '90%' }}>      
                   <div key={sample.sampleName} id={sample.id} className="sprite" ref={containerRef} />
                 </div>
               </div>

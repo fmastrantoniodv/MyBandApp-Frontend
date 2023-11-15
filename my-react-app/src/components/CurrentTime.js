@@ -36,7 +36,9 @@ const CurrentTime = ({ playing, audioCtxMaster }) => {
     };
   
   return(
-    <div className='currentTime'>{formatTiempo(tiempo)}</div>
+    <div className='current-time'>
+      <span>{formatTiempo(tiempo)}</span>
+      </div>
   ) ;
 };
 

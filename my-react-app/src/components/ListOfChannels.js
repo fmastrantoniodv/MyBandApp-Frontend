@@ -94,7 +94,7 @@ export default function ListOfChannels ({ sampleList, playState }) {
     if(channelList === null || channelList === undefined) return
 
     return (
-        <div className="tracksContainer">
+        <div className="tracks-container">
                 {
                     channelList.map(sample => {
                         return <AudioTrack 

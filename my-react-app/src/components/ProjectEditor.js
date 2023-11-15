@@ -4,6 +4,10 @@ import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 import ListOfChannels from "./ListOfChannels"
 import CurrentTime from "./CurrentTime";
+import deleteIconSvg from '../img/deleteIcon.svg'
+import playIcon from '../img/playIcon.svg'
+import stopIcon from '../img/stopIcon.svg'
+import pauseIcon from '../img/pauseIcon.svg'
 
 export default function ProjectEditor ({ dataContext }) {
     const sounds = dataContext.soundsList;
@@ -45,16 +49,62 @@ export default function ProjectEditor ({ dataContext }) {
       })
     }
 
+    const PlayButton = () => {
+      return(
+        <button className="btn-project-controls" 
+          onClick={() => playProject()}
+          >
+          <img 
+            src={playIcon} 
+            alt="icono de reproducir"
+            width="100%"
+          ></img>  
+        </button>        
+      )
+    }
+
+    const StopButton = () => {
+      return(
+        <button className="btn-project-controls" 
+          onClick={() => stopProject()}
+          >
+          <img 
+            src={stopIcon} 
+            alt="icono de detener reproduccion"
+            width="100%"
+          ></img>  
+        </button>        
+      )
+    }
+
+    const PauseButton = () => {
+      return(
+        <button className="btn-project-controls" 
+          onClick={() => pauseProject()}
+          >
+          <img 
+            src={pauseIcon} 
+            alt="icono de pausar reproduccion"
+            width="100%"
+          ></img>  
+        </button>        
+      )
+    }
+
     return (
         <>
           <h1>{dataContext.projectName}</h1>
 
-          <div className='projectControls' >
-            <Button textButton='Play' onClickButton={() => playProject()}></Button>
-            <Button textButton='Stop' onClickButton={() => stopProject()}></Button>
-            <Button textButton='Pause' onClickButton={() => pauseProject()}></Button>
+          <div className='project-controls' >
+            <div className="project-controls-btn-container">
+              <PlayButton />
+              <PauseButton />
+              <StopButton />
+            </div>
             <CurrentTime playing={playing} audioCtxMaster={audioCtxMaster}></CurrentTime>
-            <div style={{ width: '100px', marginBottom: '10px' }}>
+            {/**
+             * 
+             * <div style={{ width: '100px', marginBottom: '10px' }}>
                 <div style={{ paddingBottom: '10px' }}>
                   <span>Zoom</span>
                   <div style={{ marginTop: '10px' }}>
@@ -69,6 +119,8 @@ export default function ProjectEditor ({ dataContext }) {
                   </div>
                 </div>
             </div>
+             */}
+            
           </div>
           <ListOfChannels sampleList={soundsList} playState={playing}/>
         </>
