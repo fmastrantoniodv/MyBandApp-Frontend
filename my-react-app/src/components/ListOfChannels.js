@@ -18,48 +18,49 @@ export default function ListOfChannels ({ sampleList, playState }) {
       }
     }, [sampleList, playState, channelList]);
 
-    const handleChannelStatesOnMute = (sampleComponent) => {
-      console.log("Mute: id="+sampleComponent.mediaContainer.id+",sampleComponent=", sampleComponent)
-      console.log(sampleComponent.mediaContainer.id)
+    const handleChannelStatesOnMute = (sampleID) => {
+      console.log("Mute: id="+sampleID)
+      console.log(sampleID)
+      console.log(channelsStates)
       let newStates = {}
-      if(sampleComponent.isMuted === false){    
+      if(channelsStates.find(value => value.id === sampleID).states.muted === false){    
         newStates = {muted: true, solo: false, rec: false}
-        sampleComponent.setMute(true)
       }else{
         newStates = {muted: false, solo: false, rec: false}
-        sampleComponent.setMute(false)
       }
-      changeChannelStates(sampleComponent.mediaContainer.id,newStates)
+      changeChannelStates(sampleID,newStates)
     }
 
-    const handleChannelStatesOnSolo = (sampleParam) => {
-      if(sampleParam.soundStates.solo === true){
+    const handleChannelStatesOnSolo = (sampleID) => {
+      console.log('[HandleSolo]', sampleID)
+      let selectedSampleStates = channelsStates.find(value => value.id === sampleID) 
+      console.log('[HandleSolo].[selectedSampleStates]=', selectedSampleStates)
+      if(selectedSampleStates.states.solo === true){
         restartStates()
       }else{
-        let resp = channelList.findIndex(value => value.name === sampleParam.name)
-        channelList[resp].soundStates = {solo: true, muted: false, rec: false}
-        channelList[resp].waveform.setMute(false)
-        channelList.map(samplesOfList => {
-          if(samplesOfList.name !== sampleParam.name){
-            samplesOfList.soundStates = {solo: false, muted: true, rec: false}
-            samplesOfList.waveform.setMute(true)
+        let updatedStates = []
+        channelsStates.map(sampleStates => {
+          if(sampleStates.id === sampleID){
+            updatedStates.push({ id: sampleStates.id, states: {solo: true, muted: false, rec: false} })
+          }else{
+            updatedStates.push({ id: sampleStates.id, states: {solo: false, muted: true, rec: false} })
           }
         })
+        setChannelsStates(updatedStates)  
       }
-      changeChannelStates()
-      console.log('Solo '+sampleParam.name+' = '+sampleParam.soundStates.solo)
+      console.log('Solo '+sampleID)
     }
 
     const restartStates = () => {
-      channelList.map(sample => {
-        sample.waveform.setMute(false)
-        sample.soundStates.solo = false
-        sample.soundStates.muted = false
-        sample.soundStates.rec = false
-      })
+        let updatedStates = []
+        channelsStates.map(sampleStates => {
+            updatedStates.push({ id: sampleStates.id, states: {solo: false, muted: false, rec: false} })
+        })
+        setChannelsStates(updatedStates)  
     }
 
     const changeChannelStates = (idSample , newStates) => {
+        console.log('[changeChannelStates]', idSample, newStates)
         let updatedStates = []
         channelsStates.map(sampleStates => {
           let newRowToContext;
@@ -97,7 +98,7 @@ export default function ListOfChannels ({ sampleList, playState }) {
         <div className="tracks-container">
                 {
                     channelList.map(sample => {
-                        return <AudioTrack 
+                        return <AudioTrack
                             key={sample.id} 
                             sample={sample}
                             handleChannelStatesOnMute={handleChannelStatesOnMute}

@@ -10,7 +10,7 @@ import configIconSvg from '../img/configIcon.svg'
 // npx http-server ./public --cors
 const PUBLICROOT = 'http://127.0.0.1:8080/'
 
-export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleChannelStatesOnMute, states, playing, handleDeleteChannel }) {
+export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleChannelStatesOnMute, states, playing, handleDeleteChannel}) {
   const [channelState, setChannelsState] = useState({solo: false, muted: false, rec: false})
   const [sampleComponent, setSampleComponent] = useState(null)
   const [eqValues, setEqValues] = useState(sample.channelConfig.EQ)
@@ -21,9 +21,18 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
   const waveformPlayer = useWaveform(localAudioSrc, sample.id, containerRef)
   
   useEffect(() => {
+    /*
     console.log('[AudioTrack].[useEffect].playing',playing)
-    console.log(sample)
-    console.log(playing)
+    console.log('[AudioTrack].[useEffect].sample',sample)
+    console.log('[AudioTrack].[useEffect].states', states)
+    */
+    setChannelsState(states)
+    
+    if(sampleComponent !== null){
+      /*console.log('[channelState].[sample '+sample.id+'].[setMute]', channelState)*/
+      sampleComponent.setMute(states.muted)
+    }
+
     if(playing === 'true'){
       sampleComponent.play()
       return
@@ -34,27 +43,22 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
       sampleComponent.pause()
       return
     }
-
-    console.log('[AudioTrack].[useEffect].sample',sample)
-    console.log('[AudioTrack].[useEffect].states', states)
-    setChannelsState(states)
-    console.log('[AudioTrack].[useEffect].sampleName: '+sample.sampleName+" ChannelState: ",channelState)
+    
+    //console.log('[AudioTrack].[useEffect].sampleName: '+sample.sampleName+" ChannelState: ",channelState)
     if (!waveformPlayer) return
     
     setSampleComponent(waveformPlayer)
     calculateWidthWaveform()
-    console.log(waveformPlayer)
-    console.log("sampleComponent: ",sampleComponent)
     
   }, [waveformPlayer, states, sampleComponent, playing]);
   
 
   const onClickMute = () => {
-    handleChannelStatesOnMute(sampleComponent)
+    handleChannelStatesOnMute(sampleComponent.mediaContainer.id)
   }
 
   const onClickSolo = () => {
-    handleChannelStatesOnSolo(sampleComponent)
+    handleChannelStatesOnSolo(sampleComponent.mediaContainer.id)
   }
 
   const onClickRec = () => {
@@ -63,7 +67,7 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
 
   const calculateWidthWaveform = () =>{
     var anchoContainerSprite = document.getElementById('root').clientWidth;
-    console.log('root: ',anchoContainerSprite)
+    //console.log('root: ',anchoContainerSprite)
   }
 
   const deleteChannel = ( sampleID ) => {
@@ -102,13 +106,15 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
 
   return (
           <>  
-            <div className='channel-container'>
+            <div
+             className='channel-container'>
               <div className='channel-controls'>
               <div className='audio-controls-channel'>
                     <div className='audio-controls-sample'>
                       <div className='channel-settings'>
                         <DeleteButton />
                         <EditButton />
+                        <button onClick={() => console.log(channelState, sampleComponent, eqValues)}>ConsoleLog</button>
                         <span className='display-name'>{sample.sampleName}</span>
                       </div>
                       <div className='audio-controls-eq'>
@@ -119,8 +125,8 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
                         <VolumeController sampleSource={sampleComponent} />
                     </div>
                     <div className='audio-controls-output-router-buttons'>
-                        <Button textButton='M' state={channelState.muted} onClickButton={() => onClickMute(sampleComponent)}/>
-                        <Button textButton='S' state={channelState.solo} onClickButton={() => onClickSolo(sampleComponent)}/>
+                        <Button faderID={sample.id} textButton='M' state={channelState.muted} onClickButton={() => onClickMute(sampleComponent)}/>
+                        <Button faderID={sample.id} textButton='S' state={channelState.solo} onClickButton={() => onClickSolo(sampleComponent)}/>
                     </div>
                     <br />
                 </div>
@@ -128,7 +134,7 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
               </div>
               <div className='channel-sprites' style={{ width: '100%' }}>
                 <div className='sprites-container' style={{ width: '90%' }}>      
-                  <div key={sample.sampleName} id={sample.id} className="sprite" ref={containerRef} />
+                  <div id={sample.id} className="sprite" ref={containerRef} />
                 </div>
               </div>
             </div>        

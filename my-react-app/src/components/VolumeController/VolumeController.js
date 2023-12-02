@@ -4,48 +4,29 @@ import '../../App.css';
 import '../../views/studio';
 
 function VolumeController({sampleSource}) {
-    const [isDragging, setIsDragging] = useState(false);
-    const [startPosition, setStartPosition] = useState(null);
-    const [position, setPosition] = useState(10);
-    const [pointerValue, setPointerValue] = useState(10);
-    const [volumeValue, setVolumeValue] = useState(1);
-    const divRef = useRef(null);
+    const [volumeValue, setVolumeValue] = useState(0.9);
 
-    function handleMouseDown(event) {
-        setIsDragging(true);
-        setStartPosition(event.clientY);
-    }
+    const handleOnChangeVolume = (e) => {
+        setVolumeValue(parseFloat(e.target.value));
+        sampleSource.setVolume(volumeValue);
+      };
 
-    function handleMouseMove(event) {
-        if (isDragging) {
-            const deltaY = event.clientY - startPosition;
-            const newPosition = Math.max(0, Math.min(100, position + deltaY / 0.7));
-            
-            setPosition(newPosition);
-            setStartPosition(event.clientY);
-            setPointerValue(pointerValue + event.movementY);
-            var unity = 100 / 65;
-            var value = 1-(unity/100*pointerValue);
-            value < 0 ? value = 0 : value = value;
-            setVolumeValue(value);
-            sampleSource.setVolume(volumeValue);
-        }
-    }
-
-    function handleMouseUp() {
-        setIsDragging(false);
-    }
-
-    return (
+    return(
         <>
-        <div className='volume-container' onMouseUp={handleMouseUp}>
-            <div className="volume-controller" onMouseMove={handleMouseMove}>
-                <div className="volume-bar" style={{ top: `${position}%` }} ref={divRef} onMouseDown={handleMouseDown} />
+            <div className='volume-container'>
+                <input
+                    className='volume-range-controller'
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={volumeValue}
+                    onChange={handleOnChangeVolume}
+                    />
+                <label>Volume</label>
             </div>
-            <span style={{margin: '5px 0px 5px 0px', fontSize: '10px'}}>Volumen</span>
-        </div>
         </>
-    );
+    )
 }
 
 export default VolumeController;
