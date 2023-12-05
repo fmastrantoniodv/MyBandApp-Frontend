@@ -105,12 +105,11 @@ justify-content: flex-end;
 .volume-container{
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   width: 100%;
   height: 100%;
+  padding-top: 10px;
 }
-
 
 .volume-container label{
     display: flex;
@@ -118,30 +117,18 @@ justify-content: flex-end;
     padding-top: 2px;
     padding-bottom: 5px;
 }
-/*
-.volume-controller{
-  
-  background-color: #282c34;
-  border: 1px;
-  border-color: #333;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 
-}
-*/
 .volume-range-controller{
   width: 70px;
   height: 10px; /* Ajusta el alto según tus necesidades */
   z-index: 1;
   display: flex;
-  rotate: 270deg;
   -webkit-appearance: none;
-  border-radius: 5px;
-  background: #d3d3d3;
+  background: transparent;
   outline: none;
-  -webkit-transition: .2s;
-  transition: opacity .2s;
+  -webkit-transform: rotate(270deg);
+  -moz-transform: rotate(270deg);
+       transform: rotate(270deg);
 }
 
 .volume-range-controller::-webkit-slider-thumb {
@@ -155,19 +142,6 @@ justify-content: flex-end;
   box-shadow:0px 0px 11px 8px rgba(0,0,0,0.26);
   margin-top: -10px;
 }
-
-.volume-range-controller::-moz-range-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 10px;
-  height: 30px;
-  border-radius: 0px;
-  background: #fff;
-  cursor: pointer;
-  box-shadow:0px 0px 11px 8px rgba(0,0,0,0.26);
-  margin-top: -10px;
-}
-
 .volume-range-controller::-webkit-slider-runnable-track {
   display: flex;
   -webkit-appearance: none;
@@ -178,14 +152,29 @@ justify-content: flex-end;
   cursor: pointer;
 }
 
+.volume-range-controller::-moz-range-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 30px;
+  border-radius: 0px;
+  background: #fff;
+  cursor: pointer;
+  box-shadow:0px 0px 11px 5px rgba(0,0,0,0.26);
+  display: flex;
+}
+
+
 .volume-range-controller::-moz-range-track {
   display: flex;
   -webkit-appearance: none;
   appearance: none;
   height: 10px;
+  width: 70px;
   border-radius: 3px;
   background: #282C34;
   cursor: pointer;
+  justify-content: center;
 }
 
 .volume-bar{

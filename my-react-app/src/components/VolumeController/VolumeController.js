@@ -14,17 +14,22 @@ function VolumeController({sampleSource}) {
     return(
         <>
             <div className='volume-container'>
-                <input
-                    className='volume-range-controller'
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={volumeValue}
-                    onChange={handleOnChangeVolume}
-                    />
-                <label>Volume</label>
+                <div style={{display: 'flex', justifyContent: 'center', marginTop: '30px'}}>
+                    <input
+                        className='volume-range-controller'
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        value={volumeValue}
+                        onChange={handleOnChangeVolume}
+                        />
+                
+                </div>
+                <label style={{display: 'flex', marginTop: '5px'}}>Volume</label>
+                
             </div>
+            
         </>
     )
 }
