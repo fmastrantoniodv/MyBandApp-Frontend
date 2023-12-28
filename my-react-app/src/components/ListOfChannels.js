@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AudioTrack from "./AudioTrack";
 
+
 export default function ListOfChannels ({ sampleList, playState }) {
     const [channelsStates, setChannelsStates] = useState([])
     const [loading, setLoading] = useState(true)
@@ -8,7 +9,7 @@ export default function ListOfChannels ({ sampleList, playState }) {
     const [playing, setPlaying] = useState('false')
     
     useEffect(() => {
-      console.log("[ListOfChannels].[useEffect].sampleList", sampleList)
+      console.log("[ListOfChannels].[useEffect].channelList", channelList)
       setPlaying(playState)
 
       if(sampleList !== null && channelList === null){
@@ -92,24 +93,55 @@ export default function ListOfChannels ({ sampleList, playState }) {
       setChannelList(updateArrayChannelList)
     }
 
+    const handleAddChannel = () => {
+      console.log('Nueva pista')
+      var updatedChannelList = channelList
+      var newChannel = updatedChannelList[0]
+      
+      updatedChannelList.push(newChannel)
+      newChannel.id = newChannel.id + 'copia'
+      console.log(newChannel.channelConfig.states)
+      setChannelList(updatedChannelList)
+
+      var updatedChannelStates = channelsStates
+      var newSampleStates = {
+        id: newChannel.id,
+        states: newChannel.channelConfig.states
+      }
+      updatedChannelStates.push(newSampleStates)
+      setChannelsStates(updatedChannelStates)
+      console.log(channelsStates)
+    }
+
     if(channelList === null || channelList === undefined) return
 
     return (
+      <>
         <div className="tracks-container">
-                {
-                    channelList.map(sample => {
-                        return <AudioTrack
-                            key={sample.id} 
-                            sample={sample}
-                            handleChannelStatesOnMute={handleChannelStatesOnMute}
-                            handleChannelStatesOnSolo={handleChannelStatesOnSolo}
-                            states={channelsStates.find(value => value.id === sample.id).states}
-                            playing={playing}
-                            handleDeleteChannel={handleDeleteChannel}
-                            />
-                    })
-    
-                }
+          {
+            channelList.map(sample => {
+                return <AudioTrack
+                    key={sample.id} 
+                    sample={sample}
+                    handleChannelStatesOnMute={handleChannelStatesOnMute}
+                    handleChannelStatesOnSolo={handleChannelStatesOnSolo}
+                    states={channelsStates.find(value => value.id === sample.id).states}
+                    playing={playing}
+                    handleDeleteChannel={handleDeleteChannel}
+                    />
+            })
+          }
           </div>
+          <div>
+            <button 
+            onClick={() => handleAddChannel()}
+            style={{ 
+              width: '70px',
+              height: '50px',
+              margin: '15px'
+
+            }}>+</button>
+            </div>
+          </>
         )
 }

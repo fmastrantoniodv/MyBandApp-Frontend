@@ -4,11 +4,13 @@ import './studio';
 import ProjectEditor from '../components/ProjectEditor';
 import { SettingsProvider } from '../contexts/SettingsContext'
 import useSettings from '../hooks/useSettings';
+import GenericModal from '../components/GenericModal'
+import BootstrapButton from 'react-bootstrap/Button';
 
 const Studio = () => {
       //TODO: Obtener información de la BD con el ID del proyecto
       const [dataContext, setDataContext] = useState(null); // El estado del contexto
-      
+      const [modalShow, setModalShow] = useState(false)      
       useEffect(()=>{
         fetch("https://demo3233307.mockable.io/projects")
         .then(response => response.json())
@@ -30,6 +32,17 @@ const Studio = () => {
             <SettingsProvider settings={initialSettings}>
               <ProjectEditor dataContext={dataContext} />
             </SettingsProvider>
+{/*
+                    <GenericModal
+      show={modalShow}
+      onHide={() => setModalShow(false)}
+      />
+
+
+            <BootstrapButton variant="primary" onClick={() => setModalShow(true)}>
+        Launch vertically centered modal
+      </BootstrapButton>
+*/}
           </div>
         </>
     )

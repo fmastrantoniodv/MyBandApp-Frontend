@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import Button from "./Button";
-import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 import ListOfChannels from "./ListOfChannels"
 import CurrentTime from "./CurrentTime";
@@ -9,10 +7,10 @@ import playIcon from '../img/playIcon.svg'
 import stopIcon from '../img/stopIcon.svg'
 import pauseIcon from '../img/pauseIcon.svg'
 
+
 export default function ProjectEditor ({ dataContext }) {
     const sounds = dataContext.soundsList;
     const sampleList = [];
-
     const [loading, setLoading] = useState(true)
     const [playing, setPlaying] = useState('false')
     const [maxSampleLength, setMaxSampleLength] = useState()
@@ -93,7 +91,6 @@ export default function ProjectEditor ({ dataContext }) {
 
     return (
         <>
-
           <div className='project-controls' >
             <h1>{dataContext.projectName}</h1>
             <div className="project-controls-btn-container">

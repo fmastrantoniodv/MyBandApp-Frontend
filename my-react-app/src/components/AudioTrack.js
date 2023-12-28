@@ -106,8 +106,7 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
 
   return (
           <>  
-            <div
-             className='channel-container'>
+            <div className='channel-container'>
               <div className='channel-controls'>
               <div className='audio-controls-channel'>
                     <div className='audio-controls-sample'>

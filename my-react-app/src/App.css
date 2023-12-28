@@ -230,6 +230,7 @@ justify-content: flex-end;
 .audio-controls-output-router-buttons button{
   width: 20px;
   height: 50%;
+  cursor: pointer;
 }
 
 .channel-sprites{
