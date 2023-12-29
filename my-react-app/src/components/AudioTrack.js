@@ -16,8 +16,14 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
   const [eqValues, setEqValues] = useState(sample.channelConfig.EQ)
   const containerRef = useRef()
   
+  var localAudioSrc;
   //HARDCODE PARA QUE TOME LAS URL LOCALES
-  const localAudioSrc = PUBLICROOT+'samples/'+sample.id+".mp3";
+  if(sample.id === "sample1"){
+    localAudioSrc = PUBLICROOT+'samples/'+sample.id+".wav";
+  }else{
+    localAudioSrc = PUBLICROOT+'samples/'+sample.id+".mp3";
+  }
+
   const waveformPlayer = useWaveform(localAudioSrc, sample.id, containerRef)
   
   useEffect(() => {

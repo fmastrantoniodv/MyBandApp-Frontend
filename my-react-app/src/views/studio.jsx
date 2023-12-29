@@ -4,8 +4,6 @@ import './studio';
 import ProjectEditor from '../components/ProjectEditor';
 import { SettingsProvider } from '../contexts/SettingsContext'
 import useSettings from '../hooks/useSettings';
-import GenericModal from '../components/GenericModal'
-import BootstrapButton from 'react-bootstrap/Button';
 
 const Studio = () => {
       //TODO: Obtener información de la BD con el ID del proyecto
@@ -32,17 +30,6 @@ const Studio = () => {
             <SettingsProvider settings={initialSettings}>
               <ProjectEditor dataContext={dataContext} />
             </SettingsProvider>
-{/*
-                    <GenericModal
-      show={modalShow}
-      onHide={() => setModalShow(false)}
-      />
-
-
-            <BootstrapButton variant="primary" onClick={() => setModalShow(true)}>
-        Launch vertically centered modal
-      </BootstrapButton>
-*/}
           </div>
         </>
     )

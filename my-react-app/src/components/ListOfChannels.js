@@ -90,27 +90,39 @@ export default function ListOfChannels ({ sampleList, playState }) {
 
     const handleDeleteChannel = ( idChannel ) => {
       let updateArrayChannelList = channelList.filter(value => value.id !== idChannel)
+      let updateArrayChannelStates = channelsStates.filter(value => value.id !== idChannel)
       setChannelList(updateArrayChannelList)
+      setChannelsStates(updateArrayChannelStates)
+      console.log('ChannelList', channelList)
+      console.log('ChannelStates', channelsStates)
     }
 
     const handleAddChannel = () => {
       console.log('Nueva pista')
-      var updatedChannelList = channelList
-      var newChannel = updatedChannelList[0]
-      
-      updatedChannelList.push(newChannel)
-      newChannel.id = newChannel.id + 'copia'
-      console.log(newChannel.channelConfig.states)
-      setChannelList(updatedChannelList)
+      let updatedChannelList = [...channelList]
+      var newChannel = {
+        id: "sample1",
+        channelConfig: {
+          states: {solo: false, muted: false, rec: false},
+          volume: 0.7,
+          EQ: {low: 0.5, mid: 0.5, high: 0.5},
+        },
+        duration: null,
+        sampleName: "Pianola",
+        src: null
+      }
 
-      var updatedChannelStates = channelsStates
-      var newSampleStates = {
+      updatedChannelList.push(newChannel)
+      
+      let updatedChannelStates = channelsStates
+      let newSampleStates = {
         id: newChannel.id,
         states: newChannel.channelConfig.states
       }
       updatedChannelStates.push(newSampleStates)
+
+      setChannelList(updatedChannelList)
       setChannelsStates(updatedChannelStates)
-      console.log(channelsStates)
     }
 
     if(channelList === null || channelList === undefined) return
@@ -134,12 +146,11 @@ export default function ListOfChannels ({ sampleList, playState }) {
           </div>
           <div>
             <button 
-            onClick={() => handleAddChannel()}
-            style={{ 
-              width: '70px',
-              height: '50px',
-              margin: '15px'
-
+              onClick={() => handleAddChannel()}
+              style={{ 
+                width: '70px',
+                height: '50px',
+                margin: '15px'
             }}>+</button>
             </div>
           </>
