@@ -92,7 +92,11 @@ export default function ListOfChannels ({ sampleList, playState }) {
 
     const handleDeleteChannel = ( idChannel ) => {
       let updateArrayChannelList = channelList.filter(value => value.id !== idChannel)
+      let updateArrayChannelStates = channelsStates.filter(value => value.id !== idChannel)
       setChannelList(updateArrayChannelList)
+      setChannelsStates(updateArrayChannelStates)
+      console.log('ChannelList', channelList)
+      console.log('ChannelStates', channelsStates)
     }
 
     const handleAddChannel = () => {
@@ -107,14 +111,17 @@ export default function ListOfChannels ({ sampleList, playState }) {
       console.log(newChannel.channelConfig.states)
       setChannelList(updatedChannelList)
 
-      var updatedChannelStates = channelsStates
-      var newSampleStates = {
+      updatedChannelList.push(newChannel)
+      
+      let updatedChannelStates = channelsStates
+      let newSampleStates = {
         id: newChannel.id,
         states: newChannel.channelConfig.states
       }
       updatedChannelStates.push(newSampleStates)
+
+      setChannelList(updatedChannelList)
       setChannelsStates(updatedChannelStates)
-      console.log(channelsStates)
     }
 
     if(channelList === null || channelList === undefined) return
@@ -138,12 +145,11 @@ export default function ListOfChannels ({ sampleList, playState }) {
           </div>
           <div>
             <button 
-            onClick={() => handleAddChannel()}
-            style={{ 
-              width: '70px',
-              height: '50px',
-              margin: '15px'
-
+              onClick={() => handleAddChannel()}
+              style={{ 
+                width: '70px',
+                height: '50px',
+                margin: '15px'
             }}>+</button>
             </div>
           </>
