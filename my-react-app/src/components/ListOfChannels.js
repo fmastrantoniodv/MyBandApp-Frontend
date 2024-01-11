@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AudioTrack from "./AudioTrack";
+import useModal from "../hooks/useModal";
 
 
 export default function ListOfChannels ({ sampleList, playState }) {
@@ -7,6 +8,7 @@ export default function ListOfChannels ({ sampleList, playState }) {
     const [loading, setLoading] = useState(true)
     const [channelList, setChannelList] = useState(null)
     const [playing, setPlaying] = useState('false')
+    const modalComponent = useModal('')
     
     useEffect(() => {
       console.log("[ListOfChannels].[useEffect].channelList", channelList)
@@ -97,7 +99,9 @@ export default function ListOfChannels ({ sampleList, playState }) {
       console.log('Nueva pista')
       var updatedChannelList = channelList
       var newChannel = updatedChannelList[0]
-      
+
+      modalComponent.openModal('Esto es un pop up')
+      return      
       updatedChannelList.push(newChannel)
       newChannel.id = newChannel.id + 'copia'
       console.log(newChannel.channelConfig.states)

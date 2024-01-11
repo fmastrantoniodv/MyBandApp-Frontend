@@ -393,3 +393,23 @@ justify-content: flex-end;
   display: flex;
   flex-direction: column;
 }
+
+.msg-card-container{
+  display: flex;
+  width: 500px;
+  background-color: rgb(255, 255, 255);
+  height: 500px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.modal-container{
+  display: flex;
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 3000;
+  background-color: rgba(28, 45, 74, 0.58);
+}
