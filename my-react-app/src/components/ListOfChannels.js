@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AudioTrack from "./AudioTrack";
 import useModal from "../hooks/useModal";
+import useFavouritesSamples from "../hooks/useFavouritesSamples";
 
 
 export default function ListOfChannels ({ sampleList, playState }) {
@@ -8,13 +9,18 @@ export default function ListOfChannels ({ sampleList, playState }) {
     const [loading, setLoading] = useState(true)
     const [channelList, setChannelList] = useState(null)
     const [playing, setPlaying] = useState('false')
+    const [favouritesList, setFavouritesList] = useState(null)
+    
     const modalComponent = useModal('')
+    const favouritesSamples = useFavouritesSamples()
     
     useEffect(() => {
       console.log("[ListOfChannels].[useEffect].channelList", channelList)
       setPlaying(playState)
+      console.log("favouritesSamples", favouritesList)
 
       if(sampleList !== null && channelList === null){
+        setFavouritesList(favouritesSamples)
         setChannelList(sampleList)
         initChannelsStates(sampleList)
         setLoading(false)
@@ -104,7 +110,7 @@ export default function ListOfChannels ({ sampleList, playState }) {
       var updatedChannelList = channelList
       var newChannel = updatedChannelList[0]
 
-      modalComponent.openModal('Esto es un pop up')
+      modalComponent.openModal('Esto es un pop up',favouritesList)
       return      
       updatedChannelList.push(newChannel)
       newChannel.id = newChannel.id + 'copia'

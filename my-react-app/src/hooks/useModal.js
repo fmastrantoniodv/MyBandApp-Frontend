@@ -9,7 +9,7 @@ const useModal = () => {
     
     const createModal = () => {
         console.log('[useModal].createModal')
-        modalContainerRef.openModal = (texto) => openModal(texto)
+        modalContainerRef.openModal = (texto, arrayOptions) => openModal(texto, arrayOptions)
         modalContainerRef.closeModal = () => closeModal()
         console.log("modalContainerRef", modalContainerRef)
         modalContainerRef.current.style.display = 'none'
@@ -17,9 +17,11 @@ const useModal = () => {
         setModalComponent(modalContainerRef)
     }
 
-    const openModal = (texto) => {
+    const openModal = (texto, arrayOptions) => {
         console.log('[useModal].openModal')
-        
+        var optionsList = arrayOptions;
+        console.log(arrayOptions)
+
         const mainText = document.createTextNode(texto)
         const mainTextElement = document.createElement("span").appendChild(mainText)
 

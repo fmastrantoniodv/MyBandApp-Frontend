@@ -8,6 +8,7 @@ import stopIcon from '../img/stopIcon.svg'
 import pauseIcon from '../img/pauseIcon.svg'
 
 
+
 export default function ProjectEditor ({ dataContext }) {
     const sounds = dataContext.soundsList;
     const sampleList = [];
@@ -15,6 +16,7 @@ export default function ProjectEditor ({ dataContext }) {
     const [playing, setPlaying] = useState('false')
     const [maxSampleLength, setMaxSampleLength] = useState()
     const [soundsList, setSoundsList] = useState(null)
+
 
     const audioCtxMaster = new AudioContext();
 
