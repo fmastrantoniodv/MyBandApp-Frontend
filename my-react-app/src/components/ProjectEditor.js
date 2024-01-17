@@ -9,6 +9,7 @@ import pauseIcon from '../img/pauseIcon.svg'
 
 
 
+
 export default function ProjectEditor ({ dataContext }) {
     const sounds = dataContext.soundsList;
     const sampleList = [];

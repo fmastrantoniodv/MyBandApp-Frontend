@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import '../App.css'
+import SelectorList from '../components/SelectorList';
 
 const useModal = () => {
     const [modalComponent, setModalComponent] = useState(null)
@@ -43,6 +44,7 @@ const useModal = () => {
         modalContainerRef.current.style.justifyContent = 'center'
         modalContainerRef.current.style.alignItems = 'center'
         setOpen(true)
+        return <SelectorList onClickButton={() => closeModal()} arrayList={arrayOptions}></SelectorList>
     }
 
     const closeModal = () => {

@@ -7,7 +7,6 @@ import { SettingsProvider } from '../contexts/SettingsContext'
 const Studio = () => {
       //TODO: Obtener información de la BD con el ID del proyecto
       const [dataContext, setDataContext] = useState(null); // El estado del contexto
-      const [modalShow, setModalShow] = useState(false)
 
       useEffect(()=>{
         fetch("https://demo3233307.mockable.io/projects")

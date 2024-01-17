@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AudioTrack from "./AudioTrack";
-import useModal from "../hooks/useModal";
 import useFavouritesSamples from "../hooks/useFavouritesSamples";
+import GenericModal from "./GenericModal";
 
 
 export default function ListOfChannels ({ sampleList, playState }) {
@@ -10,8 +10,8 @@ export default function ListOfChannels ({ sampleList, playState }) {
     const [channelList, setChannelList] = useState(null)
     const [playing, setPlaying] = useState('false')
     const [favouritesList, setFavouritesList] = useState(null)
+    const [sampleSelectorOpen, setSampleSelectorOpen] = useState(false)
     
-    const modalComponent = useModal('')
     const favouritesSamples = useFavouritesSamples()
     
     useEffect(() => {
@@ -105,17 +105,30 @@ export default function ListOfChannels ({ sampleList, playState }) {
       console.log('ChannelStates', channelsStates)
     }
 
-    const handleAddChannel = () => {
+    const handleAddChannel = (itemId) => {
       console.log('Nueva pista')
       var updatedChannelList = channelList
-      var newChannel = updatedChannelList[0]
-
-      modalComponent.openModal('Esto es un pop up',favouritesList)
-      return      
-      updatedChannelList.push(newChannel)
-      newChannel.id = newChannel.id + 'copia'
-      console.log(newChannel.channelConfig.states)
-      setChannelList(updatedChannelList)
+      console.log(favouritesList)
+      var newChannel = {
+        id: itemId,
+        sampleName: favouritesList.find(value => value.id === itemId).displayName,
+        src: "http:fileserver.com/kick",
+        duration: "6452",
+        channelConfig: {
+          states: {
+              "solo": false,
+              "muted": false,
+              "rec": false
+          },
+          volume: 0.7,
+          EQ: {
+              low: 0.5,
+              mid: 0.5,
+              high: 0.5
+          }
+          
+      }}
+      console.log(newChannel)
 
       updatedChannelList.push(newChannel)
       
@@ -128,12 +141,26 @@ export default function ListOfChannels ({ sampleList, playState }) {
 
       setChannelList(updatedChannelList)
       setChannelsStates(updatedChannelStates)
+      setSampleSelectorOpen(false)
+    }
+    
+    const handleCloseSamplesSelector = () =>{
+      setSampleSelectorOpen(false)
     }
 
     if(channelList === null || channelList === undefined) return
 
+    if(favouritesList === null || favouritesList === undefined) return
     return (
       <>
+      {
+      sampleSelectorOpen && <GenericModal 
+        arrayList={favouritesList} 
+        handleCloseSamplesSelector={handleCloseSamplesSelector}
+        handleOnClickSelection={handleAddChannel}
+        />
+      }
+
         <div className="tracks-container">
           {
             channelList.map(sample => {
@@ -151,7 +178,7 @@ export default function ListOfChannels ({ sampleList, playState }) {
           </div>
           <div>
             <button 
-              onClick={() => handleAddChannel()}
+              onClick={() => setSampleSelectorOpen(true)}
               style={{ 
                 width: '70px',
                 height: '50px',
