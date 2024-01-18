@@ -2,13 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import 'react-range-slider-input/dist/style.css';
 import ListOfChannels from "./ListOfChannels"
 import CurrentTime from "./CurrentTime";
-import deleteIconSvg from '../img/deleteIcon.svg'
 import playIcon from '../img/playIcon.svg'
 import stopIcon from '../img/stopIcon.svg'
 import pauseIcon from '../img/pauseIcon.svg'
-
-
-
 
 export default function ProjectEditor ({ dataContext }) {
     const sounds = dataContext.soundsList;

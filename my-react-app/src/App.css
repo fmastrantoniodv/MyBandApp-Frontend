@@ -1,4 +1,3 @@
-
 label{
   font-size: 13px;
 }
@@ -401,7 +400,7 @@ justify-content: flex-end;
   height: 500px;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  justify-content: flex-start;
   border-radius: 10px;
 }
 
@@ -426,6 +425,10 @@ justify-content: flex-end;
   padding-left: 10px;
 }
 
+.msg-card-container .selected{
+  background-color: #d60b0b;
+}
+
 .msg-card-container li:hover{
 background-color: #cbcbcb;
 cursor: pointer;
@@ -434,4 +437,28 @@ cursor: pointer;
 .msg-card-container ul{
   padding-left: 0%;
   width: 90%;
+}
+
+.msg-buttons-container{
+  width: 90%;
+  height: 50px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.msg-button{
+  width: 145px;
+  background-color: black;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.msg-button:disabled{
+  background-color: #cbcbcb;
+}
+
+.subtitle-text{
+  color: #333;
+  font-size: 18px;
+  font-weight: 700;
 }

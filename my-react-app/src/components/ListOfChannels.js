@@ -3,7 +3,6 @@ import AudioTrack from "./AudioTrack";
 import useFavouritesSamples from "../hooks/useFavouritesSamples";
 import GenericModal from "./GenericModal";
 
-
 export default function ListOfChannels ({ sampleList, playState }) {
     const [channelsStates, setChannelsStates] = useState([])
     const [loading, setLoading] = useState(true)
@@ -148,6 +147,14 @@ export default function ListOfChannels ({ sampleList, playState }) {
       setSampleSelectorOpen(false)
     }
 
+    const getFavsAvailable = (allFavs) => {
+      var listFilteredFavs = new Array;
+      allFavs.map(fav => {
+        if(channelList.find(value => value.id === fav.id) === undefined) listFilteredFavs.push({ id: fav.id, displayName: fav.displayName})
+      })
+      return listFilteredFavs
+    }
+
     if(channelList === null || channelList === undefined) return
 
     if(favouritesList === null || favouritesList === undefined) return
@@ -155,7 +162,7 @@ export default function ListOfChannels ({ sampleList, playState }) {
       <>
       {
       sampleSelectorOpen && <GenericModal 
-        arrayList={favouritesList} 
+        arrayList={getFavsAvailable(favouritesList)} 
         handleCloseSamplesSelector={handleCloseSamplesSelector}
         handleOnClickSelection={handleAddChannel}
         />
@@ -184,6 +191,8 @@ export default function ListOfChannels ({ sampleList, playState }) {
                 height: '50px',
                 margin: '15px'
             }}>+</button>
+
+            
             </div>
           </>
         )
