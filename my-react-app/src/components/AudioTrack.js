@@ -67,10 +67,6 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
     handleChannelStatesOnSolo(sampleComponent.mediaContainer.id)
   }
 
-  const onClickRec = () => {
-    //buttonState.rec ? setButtonState({rec: false}) : setButtonState({rec: true})
-  }
-
   const calculateWidthWaveform = () =>{
     var anchoContainerSprite = document.getElementById('root').clientWidth;
     //console.log('root: ',anchoContainerSprite)
@@ -119,7 +115,6 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
                       <div className='channel-settings'>
                         <DeleteButton />
                         <EditButton />
-                        <button onClick={() => console.log(channelState, sampleComponent, eqValues)}>ConsoleLog</button>
                         <span className='display-name'>{sample.sampleName}</span>
                       </div>
                       <div className='audio-controls-eq'>
@@ -133,12 +128,10 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
                         <Button faderID={sample.id} textButton='M' state={channelState.muted} onClickButton={() => onClickMute(sampleComponent)}/>
                         <Button faderID={sample.id} textButton='S' state={channelState.solo} onClickButton={() => onClickSolo(sampleComponent)}/>
                     </div>
-                    <br />
                 </div>
-
               </div>
-              <div className='channel-sprites' style={{ width: '100%' }}>
-                <div className='sprites-container' style={{ width: '90%' }}>      
+              <div className='channel-sprites'>
+                <div className='sprites-container' >      
                   <div id={sample.id} className="sprite" ref={containerRef} />
                 </div>
               </div>

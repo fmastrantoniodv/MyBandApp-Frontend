@@ -1,5 +1,13 @@
+body{
+  background-color: black;
+}
+
 label{
   font-size: 13px;
+}
+
+.background-modal-open{
+  overflow: hidden;
 }
 
 .current-time-pointer{
@@ -30,7 +38,7 @@ label{
 .container {
   background-color: black;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   color: white;
   margin-top: 0px;
   display: flex;
@@ -234,6 +242,7 @@ justify-content: flex-end;
 
 .channel-sprites{
   background-color: #eeeaea;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: row;
@@ -397,11 +406,11 @@ justify-content: flex-end;
   display: flex;
   width: 500px;
   background-color: rgb(255, 255, 255);
-  height: 500px;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   border-radius: 10px;
+  padding-bottom: 15px;
 }
 
 .modal-container{
@@ -414,19 +423,22 @@ justify-content: flex-end;
   background-color: rgba(28, 45, 74, 0.58);
   align-items: center;
   justify-content: center;
+  overflow-y: auto;
 }
 
 .msg-card-container li{
   list-style-type: none;
   font-size: 18px;
-  color: #333;
+  color: #000000;
   border: #cbcbcb solid 1px;
   border-radius: 5px;
   padding-left: 10px;
+  font-weight: 500;
+  padding: 5px 5px 5px 15px;
 }
 
 .msg-card-container .selected{
-  background-color: #d60b0b;
+  border: 2px solid #d60b0b;
 }
 
 .msg-card-container li:hover{
@@ -448,9 +460,20 @@ cursor: pointer;
 
 .msg-button{
   width: 145px;
-  background-color: black;
   border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  height: 40px;
+}
+
+.btn-positive{
+  background-color: black;
   color: #fff;
+}
+
+.btn-negative{
+   color:black;
+   background-color: #fff;
 }
 
 .msg-button:disabled{
