@@ -97,28 +97,9 @@ export default function ProjectEditor ({ dataContext }) {
               <PauseButton />
               <StopButton />
             </div>
-            <CurrentTime playing={playing} audioCtxMaster={audioCtxMaster}></CurrentTime>
-            {/**
-             * 
-             * <div style={{ width: '100px', marginBottom: '10px' }}>
-                <div style={{ paddingBottom: '10px' }}>
-                  <span>Zoom</span>
-                  <div style={{ marginTop: '10px' }}>
-                    <RangeSlider
-                      className="single-thumb"
-                      defaultValue={[0, 1600]}
-                      thumbsDisabled={[true, false]}
-                      rangeSlideDisabled={false}
-                      onInput={changeZoom}
-                      max={1600}
-                      />
-                  </div>
-                </div>
-            </div>
-             */}
-            
+            <CurrentTime playing={playing} audioCtxMaster={audioCtxMaster} />        
           </div>
-          <ListOfChannels sampleList={soundsList} playState={playing}/>
+          <ListOfChannels sampleList={soundsList} playState={playing} handleStop={stopProject}/>
         </>
         )
 }

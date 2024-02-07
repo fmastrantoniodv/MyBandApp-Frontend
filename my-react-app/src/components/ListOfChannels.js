@@ -3,7 +3,7 @@ import AudioTrack from "./AudioTrack";
 import useFavouritesSamples from "../hooks/useFavouritesSamples";
 import GenericModal from "./GenericModal";
 
-export default function ListOfChannels ({ sampleList, playState }) {
+export default function ListOfChannels ({ sampleList, playState, handleStop }) {
     const [channelsStates, setChannelsStates] = useState([])
     const [loading, setLoading] = useState(true)
     const [channelList, setChannelList] = useState(null)
@@ -106,6 +106,8 @@ export default function ListOfChannels ({ sampleList, playState }) {
 
     const handleAddChannel = (itemId) => {
       console.log('Nueva pista')
+      handleStop()
+      setPlaying('false')
       var updatedChannelList = channelList
       console.log(favouritesList)
       var newChannel = {
@@ -137,7 +139,7 @@ export default function ListOfChannels ({ sampleList, playState }) {
         states: newChannel.channelConfig.states
       }
       updatedChannelStates.push(newSampleStates)
-
+      
       setChannelList(updatedChannelList)
       setChannelsStates(updatedChannelStates)
       setSampleSelectorOpen(false)
