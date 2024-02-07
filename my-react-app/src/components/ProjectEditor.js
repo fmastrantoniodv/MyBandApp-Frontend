@@ -5,6 +5,7 @@ import CurrentTime from "./CurrentTime";
 import playIcon from '../img/playIcon.svg'
 import stopIcon from '../img/stopIcon.svg'
 import pauseIcon from '../img/pauseIcon.svg'
+import exportIcon from '../img/exportIcon.svg'
 
 export default function ProjectEditor ({ dataContext }) {
     const sounds = dataContext.soundsList;
@@ -88,10 +89,25 @@ export default function ProjectEditor ({ dataContext }) {
       )
     }
 
+    const ExportProject = () =>{
+      return(
+      <button className="btn-export"
+      onClick={() => console.log('export')}
+      >
+      <img 
+        src={exportIcon} 
+        alt="icono de exportar archivo"
+        width="100%"
+      ></img>  
+    </button>
+      )
+    }
+
     return (
         <>
           <div className='project-controls' >
             <h1>{dataContext.projectName}</h1>
+            <ExportProject />
             <div className="project-controls-btn-container">
               <PlayButton />
               <PauseButton />

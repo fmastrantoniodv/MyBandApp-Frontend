@@ -485,3 +485,16 @@ cursor: pointer;
   font-size: 18px;
   font-weight: 700;
 }
+
+.btn-export{
+  background-color: #D9D9D9;
+  height: 30px;
+  width: 30px;
+  border-radius: 10px;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+  cursor: pointer;
+}
