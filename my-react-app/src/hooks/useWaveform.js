@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
+import MasterAudioContext from '../contexts/MasterAudioContext'
 
 const useWaveform = (src, soundID, containerRef) => {
     const [waveformComponent, setWaveformComponent] = useState(null)
+    const masterAudioCtx = useContext(MasterAudioContext)
     
     useEffect(() => {
       console.log(`[useWaveform].[useEffect].[sample=${soundID}`)
+      console.log('[useWaveform].[useEffect].masterAudioCtx.masterAudioCtx', masterAudioCtx.masterAudioCtx)
       
       if (!containerRef.current) return 
-
-
+      
       console.log(console.log(`[useWaveform].[useEffect].[containerRef`, containerRef))
 
       const audio = new Audio()
@@ -20,7 +22,7 @@ const useWaveform = (src, soundID, containerRef) => {
       audio.id = soundID
       //audio.onended = () => stopProject()
     
-      const audioCtx = new AudioContext();
+      const audioCtx = masterAudioCtx.masterAudioCtx;
       const source = audioCtx.createMediaElementSource(audio);
 
       const wavesurfer = WaveSurfer.create({
@@ -50,6 +52,7 @@ const useWaveform = (src, soundID, containerRef) => {
       wavesurfer.load(audio);
 
       setWaveformComponent(wavesurfer)
+      masterAudioCtx.setMasterAudioCtx(audioCtx)
 
       return () => {
         wavesurfer.destroy()

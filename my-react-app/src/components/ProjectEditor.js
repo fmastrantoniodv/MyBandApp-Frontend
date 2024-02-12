@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import 'react-range-slider-input/dist/style.css';
 import ListOfChannels from "./ListOfChannels"
 import CurrentTime from "./CurrentTime";
@@ -6,6 +6,7 @@ import playIcon from '../img/playIcon.svg'
 import stopIcon from '../img/stopIcon.svg'
 import pauseIcon from '../img/pauseIcon.svg'
 import exportIcon from '../img/exportIcon.svg'
+import MasterAudioContext from "../contexts/MasterAudioContext";
 
 export default function ProjectEditor ({ dataContext }) {
     const sounds = dataContext.soundsList;
@@ -14,15 +15,23 @@ export default function ProjectEditor ({ dataContext }) {
     const [playing, setPlaying] = useState('false')
     const [maxSampleLength, setMaxSampleLength] = useState()
     const [soundsList, setSoundsList] = useState(null)
-
-
-    const audioCtxMaster = new AudioContext();
-
+    const [audioCtxState, setAudioCtxState] = useState(null)
+    
+    const masterAudioContext = useContext(MasterAudioContext)
+    
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect]')
+      console.log('[ProjectEditor].masterAudioContext', masterAudioContext)
+      
+      setAudioCtxState(masterAudioContext.masterAudioCtx)
       setSoundsList(sounds)
-    }, [sounds]);
+    }, [sounds, masterAudioContext.setAudioCtxState]);
     
+    const exportProjectToMP3 = () => {
+      console.log('[exportProjectToMP3].masterAudioContext', masterAudioContext )
+      console.log('[exportProjectToMP3].audioCtxState', audioCtxState )
+      
+    }
     
     const playProject = () => {
         console.log('Play')
@@ -92,7 +101,7 @@ export default function ProjectEditor ({ dataContext }) {
     const ExportProject = () =>{
       return(
       <button className="btn-export"
-      onClick={() => console.log('export')}
+      onClick={() => exportProjectToMP3()}
       >
       <img 
         src={exportIcon} 
@@ -105,17 +114,17 @@ export default function ProjectEditor ({ dataContext }) {
 
     return (
         <>
-          <div className='project-controls' >
-            <h1>{dataContext.projectName}</h1>
-            <ExportProject />
-            <div className="project-controls-btn-container">
-              <PlayButton />
-              <PauseButton />
-              <StopButton />
+            <div className='project-controls' >
+              <h1>{dataContext.projectName}</h1>
+              <ExportProject />
+              <div className="project-controls-btn-container">
+                <PlayButton />
+                <PauseButton />
+                <StopButton />
+              </div>
+              <CurrentTime playing={playing} audioCtxMaster={audioCtxState} />        
             </div>
-            <CurrentTime playing={playing} audioCtxMaster={audioCtxMaster} />        
-          </div>
-          <ListOfChannels sampleList={soundsList} playState={playing} handleStop={stopProject}/>
+            <ListOfChannels sampleList={soundsList} playState={playing} handleStop={stopProject}/>
         </>
         )
 }
