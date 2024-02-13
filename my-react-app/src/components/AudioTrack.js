@@ -10,7 +10,7 @@ import configIconSvg from '../img/configIcon.svg'
 // npx http-server ./public --cors
 const PUBLICROOT = 'http://127.0.0.1:8080/'
 
-export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleChannelStatesOnMute, states, playing, handleDeleteChannel}) {
+export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleChannelStatesOnMute, states, playing, handleDeleteChannel, destinationNode, masterAudioCtx}) {
   const [channelState, setChannelsState] = useState({solo: false, muted: false, rec: false})
   const [sampleComponent, setSampleComponent] = useState(null)
   const [eqValues, setEqValues] = useState(sample.channelConfig.EQ)
@@ -24,7 +24,9 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
     localAudioSrc = PUBLICROOT+'samples/'+sample.id+".mp3";
   }
 
-  const waveformPlayer = useWaveform(localAudioSrc, sample.id, containerRef)
+  const waveformPlayer = useWaveform(localAudioSrc, sample.id, containerRef, masterAudioCtx)
+  
+  if(waveformPlayer) connectSampleToMaster(waveformPlayer)
   
   useEffect(() => {
     /*
@@ -33,12 +35,10 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
     console.log('[AudioTrack].[useEffect].states', states)
     */
     setChannelsState(states)
-    
     if(sampleComponent !== null){
-      /*console.log('[channelState].[sample '+sample.id+'].[setMute]', channelState)*/
       sampleComponent.setMute(states.muted)
     }
-
+    
     if(playing === 'true'){
       sampleComponent.play()
       return
@@ -106,6 +106,12 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
     )
   }
 
+  function connectSampleToMaster(waveformPlayer){
+    console.log('connectSampleToMaster')
+    console.log(waveformPlayer.audioElement.id)
+    console.log(waveformPlayer)
+  }
+
   return (
           <>  
             <div className='channel-container'>
@@ -114,7 +120,6 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
                     <div className='audio-controls-sample'>
                       <div className='channel-settings'>
                         <DeleteButton />
-                        <EditButton />
                         <span className='display-name'>{sample.sampleName}</span>
                       </div>
                       <div className='audio-controls-eq'>

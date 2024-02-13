@@ -92,7 +92,7 @@ export default function ProjectEditor ({ dataContext }) {
     const ExportProject = () =>{
       return(
       <button className="btn-export"
-      onClick={() => console.log('export')}
+      onClick={() => downloadMP3Project(dataContext.projectName)}
       >
       <img 
         src={exportIcon} 
@@ -101,6 +101,30 @@ export default function ProjectEditor ({ dataContext }) {
       ></img>  
     </button>
       )
+    }
+
+    const downloadMP3Project = ( projectName ) => {
+      console.log(projectName)
+      console.log(audioCtxMaster)
+      /*
+      const destination = audioContext.createBuffer(
+        1,
+        audioContext.sampleRate * 10,
+        audioContext.sampleRate
+      );
+  
+      tracks.forEach((track, index) => {
+        destination.getChannelData(0).set(track.getChannelData(0), index * track.length);
+      });
+  
+      const audioBlob = new Blob([destination], { type: 'audio/wav' });
+      const audioUrl = URL.createObjectURL(audioBlob);
+  
+      const downloadLink = document.createElement('a');
+      downloadLink.href = audioUrl;
+      downloadLink.download = 'combined_audio.wav';
+      downloadLink.click();
+      */
     }
 
     return (
@@ -115,7 +139,7 @@ export default function ProjectEditor ({ dataContext }) {
             </div>
             <CurrentTime playing={playing} audioCtxMaster={audioCtxMaster} />        
           </div>
-          <ListOfChannels sampleList={soundsList} playState={playing} handleStop={stopProject}/>
+          <ListOfChannels sampleList={soundsList} playState={playing} handleStop={stopProject} audioCtxMaster={audioCtxMaster}/>
         </>
         )
 }

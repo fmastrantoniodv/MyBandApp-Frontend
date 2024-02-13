@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 
-const useWaveform = (src, soundID, containerRef) => {
+const useWaveform = (src, soundID, containerRef, masterAudioCtx) => {
     const [waveformComponent, setWaveformComponent] = useState(null)
     
     useEffect(() => {
       console.log(`[useWaveform].[useEffect].[sample=${soundID}`)
       
-      if (!containerRef.current) return 
+      if (!containerRef.current || masterAudioCtx === undefined) return 
 
 
       console.log(console.log(`[useWaveform].[useEffect].[containerRef`, containerRef))
@@ -20,8 +20,8 @@ const useWaveform = (src, soundID, containerRef) => {
       audio.id = soundID
       //audio.onended = () => stopProject()
     
-      const audioCtx = new AudioContext();
-      const source = audioCtx.createMediaElementSource(audio);
+      //const audioCtx = masterAudioCtx;
+      const source = masterAudioCtx.createMediaElementSource(audio);
 
       const wavesurfer = WaveSurfer.create({
         container: containerRef.current,
@@ -39,13 +39,13 @@ const useWaveform = (src, soundID, containerRef) => {
         height: 111,
         mediaControls: true,
         mediaType: 'audio',
-        audioContext: audioCtx,
+        audioContext: masterAudioCtx,
         backend: 'MediaElement',
         closeAudioContext: true        
       });
 
       wavesurfer.audioElement = audio;
-      wavesurfer.audioCtx = audioCtx;
+      wavesurfer.audioCtx = masterAudioCtx;
       wavesurfer.source = source
       wavesurfer.load(audio);
 
@@ -54,7 +54,7 @@ const useWaveform = (src, soundID, containerRef) => {
       return () => {
         wavesurfer.destroy()
       };
-    }, [containerRef]);
+    }, [containerRef, masterAudioCtx]);
 
     return waveformComponent;
   }

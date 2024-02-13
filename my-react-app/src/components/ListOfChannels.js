@@ -3,13 +3,15 @@ import AudioTrack from "./AudioTrack";
 import useFavouritesSamples from "../hooks/useFavouritesSamples";
 import GenericModal from "./GenericModal";
 
-export default function ListOfChannels ({ sampleList, playState, handleStop }) {
+const ListOfChannels = ({ sampleList, playState, handleStop, audioCtxMaster }) => {
     const [channelsStates, setChannelsStates] = useState([])
     const [loading, setLoading] = useState(true)
     const [channelList, setChannelList] = useState(null)
     const [playing, setPlaying] = useState('false')
     const [favouritesList, setFavouritesList] = useState(null)
     const [sampleSelectorOpen, setSampleSelectorOpen] = useState(false)
+    const [audioContext, setAudioContext] = useState(null);
+    const [destinationNode, setDestinationNode] = useState(null);
     
     const favouritesSamples = useFavouritesSamples()
     
@@ -17,13 +19,15 @@ export default function ListOfChannels ({ sampleList, playState, handleStop }) {
       console.log("[ListOfChannels].[useEffect].channelList", channelList)
       setPlaying(playState)
       console.log("favouritesSamples", favouritesList)
-
+      console.log("audioContext", audioContext)
       if(sampleList !== null && channelList === null){
+        createDestinationExportNode(audioCtxMaster)
         setFavouritesList(favouritesSamples)
         setChannelList(sampleList)
         initChannelsStates(sampleList)
         setLoading(false)
       }
+      
     }, [sampleList, playState, channelList]);
 
     const handleChannelStatesOnMute = (sampleID) => {
@@ -157,6 +161,14 @@ export default function ListOfChannels ({ sampleList, playState, handleStop }) {
       return listFilteredFavs
     }
 
+    const createDestinationExportNode = (audioCtxMaster) => {
+      const context = audioCtxMaster
+      setAudioContext(context);
+  
+      const destination = context.destination;
+      setDestinationNode(destination);
+    }
+
     if(channelList === null || channelList === undefined) return
 
     if(favouritesList === null || favouritesList === undefined) return
@@ -181,6 +193,7 @@ export default function ListOfChannels ({ sampleList, playState, handleStop }) {
                     states={channelsStates.find(value => value.id === sample.id).states}
                     playing={playing}
                     handleDeleteChannel={handleDeleteChannel}
+                    masterAudioCtx={audioContext}
                     />
             })
           }
@@ -199,3 +212,13 @@ export default function ListOfChannels ({ sampleList, playState, handleStop }) {
           </>
         )
 }
+
+const getTrackList = () => {
+  const [tracks, setTracks] = useState([]);
+
+  setTracks((prevTracks) => [...prevTracks, audioBuffer]);
+
+  return tracks;
+}
+
+export default ListOfChannels;
