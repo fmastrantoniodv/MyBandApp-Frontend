@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import knobSvg from '../img/knob.svg'
 
 export function EQKnob({ value, handleOnChange }) {
-  const maxRotatevalue = 45;
-  const minRotateValue = -150;
   const rangoDeg = 195;
   const rangoTotal = 40;
 
@@ -78,7 +76,7 @@ function EQControls({ waveformObj, eqValues, onChangeEqValues }) {
     midFilter.connect(highFilter);
 
     // Conectar la entrada y la salida del componente
-    highFilter.connect(waveformObj.audioCtx.destination);
+    highFilter.connect(waveformObj.gainNode);
 
     // Devolver la función para desconectar los filtros
     return () => {

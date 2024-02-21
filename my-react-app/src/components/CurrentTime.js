@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import MasterAudioContext from "../contexts/MasterAudioContext";
 
-const CurrentTime = ({ playing, audioCtxMaster }) => {
+const CurrentTime = ({ playing }) => {
     const [tiempo, setTiempo] = useState();
     const [prevTiempo, setPrevTiempo] = useState(0);
+    const {masterAudioCtx} = useContext(MasterAudioContext)
 
     useEffect(() => {
+
       if(playing === 'true'){
       const interval = setInterval(() => {
-        setTiempo(prevTiempo + audioCtxMaster.currentTime * 1000);
+        setTiempo(prevTiempo + masterAudioCtx.currentTime * 1000);
       }, 100);
-  
       return () => clearInterval(interval);
+
       }else if(playing === 'pause'){
         setPrevTiempo(tiempo)
       }

@@ -4,13 +4,18 @@ import Button from './Button.js';
 import VolumeController from './VolumeController/VolumeController';
 import EQControls from "./EQControls"
 import deleteIconSvg from '../img/deleteIcon.svg'
-import configIconSvg from '../img/configIcon.svg'
-
 
 // npx http-server ./public --cors
 const PUBLICROOT = 'http://127.0.0.1:8080/'
 
-export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleChannelStatesOnMute, states, playing, handleDeleteChannel, destinationNode, masterAudioCtx}) {
+export default function AudioTrack ({ 
+  sample, 
+  handleChannelStatesOnSolo, 
+  handleChannelStatesOnMute, 
+  states, 
+  playing, 
+  handleDeleteChannel}){
+
   const [channelState, setChannelsState] = useState({solo: false, muted: false, rec: false})
   const [sampleComponent, setSampleComponent] = useState(null)
   const [eqValues, setEqValues] = useState(sample.channelConfig.EQ)
@@ -24,16 +29,9 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
     localAudioSrc = PUBLICROOT+'samples/'+sample.id+".mp3";
   }
 
-  const waveformPlayer = useWaveform(localAudioSrc, sample.id, containerRef, masterAudioCtx)
-  
-  if(waveformPlayer) connectSampleToMaster(waveformPlayer)
+  const waveformPlayer = useWaveform(localAudioSrc, sample.id, containerRef)
   
   useEffect(() => {
-    /*
-    console.log('[AudioTrack].[useEffect].playing',playing)
-    console.log('[AudioTrack].[useEffect].sample',sample)
-    console.log('[AudioTrack].[useEffect].states', states)
-    */
     setChannelsState(states)
     if(sampleComponent !== null){
       sampleComponent.setMute(states.muted)
@@ -49,7 +47,6 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
       sampleComponent.pause()
       return
     }
-    
     //console.log('[AudioTrack].[useEffect].sampleName: '+sample.sampleName+" ChannelState: ",channelState)
     if (!waveformPlayer) return
     
@@ -92,26 +89,6 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
     )
   }
 
-  const EditButton = () => {
-    return(
-      <button className="btn-edit-channel" 
-        //onClick={() => deleteChannel(sample.id)}
-        >
-        <img 
-          src={configIconSvg} 
-          alt="icono de configuracion"
-          width="100%"
-        ></img>  
-      </button>        
-    )
-  }
-
-  function connectSampleToMaster(waveformPlayer){
-    console.log('connectSampleToMaster')
-    console.log(waveformPlayer.audioElement.id)
-    console.log(waveformPlayer)
-  }
-
   return (
           <>  
             <div className='channel-container'>
@@ -123,7 +100,7 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
                         <span className='display-name'>{sample.sampleName}</span>
                       </div>
                       <div className='audio-controls-eq'>
-                          <EQControls waveformObj={sampleComponent} eqValues={eqValues} onChangeEqValues={onChangeEQValues}/>
+                        <EQControls waveformObj={sampleComponent} eqValues={eqValues} onChangeEqValues={onChangeEQValues}/>
                       </div>
                     </div>
                     <div className='audio-controls-volume'>
@@ -140,7 +117,7 @@ export default function AudioTrack ({ sample, handleChannelStatesOnSolo, handleC
                   <div id={sample.id} className="sprite" ref={containerRef} />
                 </div>
               </div>
-            </div>        
+            </div>       
           </>
         )
-}
+  }

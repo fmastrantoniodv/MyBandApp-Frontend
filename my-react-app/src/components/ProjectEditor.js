@@ -11,30 +11,28 @@ import MasterAudioContext from "../contexts/MasterAudioContext";
 export default function ProjectEditor ({ dataContext }) {
     const sounds = dataContext.soundsList;
     const sampleList = [];
-    const [loading, setLoading] = useState(true)
     const [playing, setPlaying] = useState('false')
-    const [maxSampleLength, setMaxSampleLength] = useState()
+//    const [maxSampleLength, setMaxSampleLength] = useState()
     const [soundsList, setSoundsList] = useState(null)
-    const [audioCtxState, setAudioCtxState] = useState(null)
     
-    const masterAudioContext = useContext(MasterAudioContext)
+    const {masterAudioCtx} = useContext(MasterAudioContext)
+    const [audioCtxState, setAudioCtxState] = useState(null)
     
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect]')
-      console.log('[ProjectEditor].masterAudioContext', masterAudioContext)
-      
-      setAudioCtxState(masterAudioContext.masterAudioCtx)
       setSoundsList(sounds)
-    }, [sounds, masterAudioContext.setAudioCtxState]);
+      setAudioCtxState(masterAudioCtx)
+    }, [sounds, masterAudioCtx]);
     
     const exportProjectToMP3 = () => {
-      console.log('[exportProjectToMP3].masterAudioContext', masterAudioContext )
-      console.log('[exportProjectToMP3].audioCtxState', audioCtxState )
+      //console.log('[exportProjectToMP3].masterAudioContext', masterAudioContext )
       
     }
     
     const playProject = () => {
         console.log('Play')
+        console.log('masterAudioContext=',masterAudioCtx)
+        //masterAudioCtx.currentTime = 0;
         if(playing !== 'true'){
           setPlaying('true')
         }
@@ -114,7 +112,7 @@ export default function ProjectEditor ({ dataContext }) {
 
     const downloadMP3Project = ( projectName ) => {
       console.log(projectName)
-      console.log(audioCtxMaster)
+      //console.log(masterAudioContext)
       /*
       const destination = audioContext.createBuffer(
         1,
@@ -146,7 +144,7 @@ export default function ProjectEditor ({ dataContext }) {
                 <PauseButton />
                 <StopButton />
               </div>
-              <CurrentTime playing={playing} audioCtxMaster={audioCtxState} />        
+              <CurrentTime playing={playing} />        
             </div>
             <ListOfChannels sampleList={soundsList} playState={playing} handleStop={stopProject}/>
         </>

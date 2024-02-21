@@ -8,7 +8,7 @@ function VolumeController({sampleSource}) {
 
     const handleOnChangeVolume = (e) => {
         setVolumeValue(parseFloat(e.target.value));
-        sampleSource.setVolume(volumeValue);
+        sampleSource.gainNode.gain.value = volumeValue
       };
 
     return(
@@ -24,7 +24,6 @@ function VolumeController({sampleSource}) {
                         value={volumeValue}
                         onChange={handleOnChangeVolume}
                         />
-                
                 </div>
                 <label style={{display: 'flex', marginTop: '5px'}}>Volume</label>
                 

@@ -1,18 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import MasterAudioContext from '../contexts/MasterAudioContext'
 
-const useWaveform = (src, soundID, containerRef, masterAudioCtx) => {
+const useWaveform = (src, soundID, containerRef) => {
     const [waveformComponent, setWaveformComponent] = useState(null)
-    const masterAudioCtx = useContext(MasterAudioContext)
+    const {masterAudioCtx, mainGainNode} = useContext(MasterAudioContext)
     
     useEffect(() => {
       console.log(`[useWaveform].[useEffect].[sample=${soundID}`)
-      console.log('[useWaveform].[useEffect].masterAudioCtx.masterAudioCtx', masterAudioCtx.masterAudioCtx)
       
       if (!containerRef.current) return 
       
-      console.log(console.log(`[useWaveform].[useEffect].[containerRef`, containerRef))
+      console.log(`[useWaveform].[useEffect].[containerRef`, containerRef)
 
       const audio = new Audio()
       audio.crossOrigin = "anonymous"
@@ -21,9 +20,6 @@ const useWaveform = (src, soundID, containerRef, masterAudioCtx) => {
       audio.autoplay = false
       audio.id = soundID
       //audio.onended = () => stopProject()
-    
-      const audioCtx = masterAudioCtx.masterAudioCtx;
-      const source = audioCtx.createMediaElementSource(audio);
 
       const wavesurfer = WaveSurfer.create({
         container: containerRef.current,
@@ -43,21 +39,29 @@ const useWaveform = (src, soundID, containerRef, masterAudioCtx) => {
         mediaType: 'audio',
         audioContext: masterAudioCtx,
         backend: 'MediaElement',
-        closeAudioContext: true        
+        closeAudioContext: true    
       });
 
+      const source = masterAudioCtx.createMediaElementSource(audio);
+      
+      const gain = masterAudioCtx.createGain();
+      source.connect(gain)
+      
+      gain.connect(mainGainNode)
+
+      //updateAudioCtxMerger(merger)
       wavesurfer.audioElement = audio;
       wavesurfer.audioCtx = masterAudioCtx;
       wavesurfer.source = source
+      wavesurfer.gainNode = gain
       wavesurfer.load(audio);
 
       setWaveformComponent(wavesurfer)
-      masterAudioCtx.setMasterAudioCtx(audioCtx)
 
       return () => {
         wavesurfer.destroy()
       };
-    }, [containerRef, masterAudioCtx]);
+    }, [containerRef]);
 
     return waveformComponent;
   }
