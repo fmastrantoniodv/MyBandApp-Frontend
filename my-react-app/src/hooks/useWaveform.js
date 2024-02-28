@@ -4,7 +4,7 @@ import MasterAudioContext from '../contexts/MasterAudioContext'
 
 const useWaveform = (src, soundID, containerRef) => {
     const [waveformComponent, setWaveformComponent] = useState(null)
-    const {masterAudioCtx, mainGainNode} = useContext(MasterAudioContext)
+    const {masterAudioCtx, mainGainNode, addSampleComponentToList} = useContext(MasterAudioContext)
     
     useEffect(() => {
       console.log(`[useWaveform].[useEffect].[sample=${soundID}`)
@@ -57,7 +57,7 @@ const useWaveform = (src, soundID, containerRef) => {
       wavesurfer.load(audio);
 
       setWaveformComponent(wavesurfer)
-
+      addSampleComponentToList(wavesurfer)
       return () => {
         wavesurfer.destroy()
       };

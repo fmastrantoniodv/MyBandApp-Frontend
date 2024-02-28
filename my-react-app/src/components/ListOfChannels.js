@@ -13,7 +13,7 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
     const [sampleSelectorOpen, setSampleSelectorOpen] = useState(false)
     const [audioContext, setAudioContext] = useState(null);
     const [destinationNode, setDestinationNode] = useState(null);
-    const {masterAudioCtx, mainGainNode} = useContext(MasterAudioContext)
+    const {masterAudioCtx, mainGainNode, deleteSampleComponentFromList} = useContext(MasterAudioContext)
     
     const favouritesSamples = useFavouritesSamples()
     //const useAudioMerger = useAudioMerger()
@@ -107,6 +107,7 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
       let updateArrayChannelStates = channelsStates.filter(value => value.id !== idChannel)
       setChannelList(updateArrayChannelList)
       setChannelsStates(updateArrayChannelStates)
+      deleteSampleComponentFromList(idChannel)
       console.log('ChannelList', channelList)
       console.log('ChannelStates', channelsStates)
     }
