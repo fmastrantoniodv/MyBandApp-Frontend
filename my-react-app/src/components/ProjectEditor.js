@@ -16,12 +16,10 @@ export default function ProjectEditor ({ dataContext }) {
     const [soundsList, setSoundsList] = useState(null)
     
     const {masterAudioCtx} = useContext(MasterAudioContext)
-    const [audioCtxState, setAudioCtxState] = useState(null)
     
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect]')
       setSoundsList(sounds)
-      setAudioCtxState(masterAudioCtx)
     }, [sounds, masterAudioCtx]);
     
     const exportProjectToMP3 = () => {

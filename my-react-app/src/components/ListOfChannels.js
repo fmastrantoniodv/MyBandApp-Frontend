@@ -1,8 +1,13 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import AudioTrack from "./AudioTrack";
 import useFavouritesSamples from "../hooks/useFavouritesSamples";
 import GenericModal from "./GenericModal";
 import MasterAudioContext from '../contexts/MasterAudioContext'
+
+// npx http-server ./public --cors
+const PUBLICROOT = 'http://127.0.0.1:8080/'
+
+//HARDCODE PARA QUE TOME LAS URL LOCALES
 
 const ListOfChannels = ({ sampleList, playState, handleStop }) => {
     const [channelsStates, setChannelsStates] = useState([])
@@ -11,28 +16,56 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
     const [playing, setPlaying] = useState('false')
     const [favouritesList, setFavouritesList] = useState(null)
     const [sampleSelectorOpen, setSampleSelectorOpen] = useState(false)
-    const [audioContext, setAudioContext] = useState(null);
-    const [destinationNode, setDestinationNode] = useState(null);
     const {masterAudioCtx, mainGainNode, deleteSampleComponentFromList} = useContext(MasterAudioContext)
+    const [channelObjectList, setChannelObjectList] = useState(null)
     
     const favouritesSamples = useFavouritesSamples()
-    //const useAudioMerger = useAudioMerger()
-    
+
     useEffect(() => {
       console.log("[ListOfChannels].[useEffect].channelList", channelList)
       setPlaying(playState)
       console.log("favouritesSamples", favouritesList)
-      console.log("audioContext", audioContext)
-      if(sampleList !== null && channelList === null){
-        createDestinationExportNode(masterAudioCtx)
+      if(sampleList !== null && channelObjectList === null){
+        createChannelObjectList(sampleList)
         setFavouritesList(favouritesSamples)
-        setChannelList(sampleList)
+        //setChannelList(sampleList)
         initChannelsStates(sampleList)
         setLoading(false)
       }
       
-    }, [sampleList, playState, channelList]);
+      console.log("[ListOfChannels].[useEffect].channelObjectList", channelObjectList)
+    }, [sampleList, playState, channelObjectList]);
 
+    const refreshState = (playing) => {
+      channelObjectList.map(audioPlayer => {
+        audioPlayer.props.playing = playing
+      })
+    }
+    
+    const createChannelObjectList = (sampleList) => {
+      console.log('[ListOfChannel].createChannelObjectList')
+      let newArrayChannelObjects = [];
+      sampleList.map(sample => {
+        var localAudioSrc;
+        if(sample.id === "sample1"){
+          localAudioSrc = PUBLICROOT+'samples/'+sample.id+".wav";
+        }else{
+          localAudioSrc = PUBLICROOT+'samples/'+sample.id+".mp3";
+        }
+        const audioPlayer = <AudioTrack
+              key={sample.id} 
+              sample={sample}
+              handleChannelStatesOnMute={handleChannelStatesOnMute}
+              handleChannelStatesOnSolo={handleChannelStatesOnSolo}
+              states={{muted: true, solo: false, rec: false}}
+              playing={playing}
+              handleDeleteChannel={handleDeleteChannel}/>;
+        newArrayChannelObjects.push(audioPlayer)
+      })
+      setChannelObjectList(newArrayChannelObjects)
+
+    }
+    
     const handleChannelStatesOnMute = (sampleID) => {
       console.log("Mute: id="+sampleID)
       console.log(sampleID)
@@ -45,7 +78,7 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
       }
       changeChannelStates(sampleID,newStates)
     }
-
+    
     const handleChannelStatesOnSolo = (sampleID) => {
       console.log('[HandleSolo]', sampleID)
       let selectedSampleStates = channelsStates.find(value => value.id === sampleID) 
@@ -65,30 +98,30 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
       }
       console.log('Solo '+sampleID)
     }
-
+    
     const restartStates = () => {
-        let updatedStates = []
-        channelsStates.map(sampleStates => {
-            updatedStates.push({ id: sampleStates.id, states: {solo: false, muted: false, rec: false} })
-        })
-        setChannelsStates(updatedStates)  
+      let updatedStates = []
+      channelsStates.map(sampleStates => {
+        updatedStates.push({ id: sampleStates.id, states: {solo: false, muted: false, rec: false} })
+      })
+      setChannelsStates(updatedStates)  
     }
-
+    
     const changeChannelStates = (idSample , newStates) => {
-        console.log('[changeChannelStates]', idSample, newStates)
-        let updatedStates = []
-        channelsStates.map(sampleStates => {
-          let newRowToContext;
-            if(idSample === sampleStates.id){
-              newRowToContext = { id: sampleStates.id, states: newStates }
-            }else{
-              newRowToContext = { id: sampleStates.id, states: sampleStates.states }
-            }
-            updatedStates.push(newRowToContext)
-        })
-        setChannelsStates(updatedStates)
+      console.log('[changeChannelStates]', idSample, newStates)
+      let updatedStates = []
+      channelsStates.map(sampleStates => {
+        let newRowToContext;
+        if(idSample === sampleStates.id){
+          newRowToContext = { id: sampleStates.id, states: newStates }
+        }else{
+          newRowToContext = { id: sampleStates.id, states: sampleStates.states }
+        }
+        updatedStates.push(newRowToContext)
+      })
+      setChannelsStates(updatedStates)
     }
-
+    
     const initChannelsStates = (sampleList) => {
       let newStatesArray = []
       sampleList.map(sample => {
@@ -101,7 +134,7 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
       setChannelsStates(newStatesArray)
       console.log('newStatesArray: ',newStatesArray)
     }
-
+    
     const handleDeleteChannel = ( idChannel ) => {
       let updateArrayChannelList = channelList.filter(value => value.id !== idChannel)
       let updateArrayChannelStates = channelsStates.filter(value => value.id !== idChannel)
@@ -111,7 +144,7 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
       console.log('ChannelList', channelList)
       console.log('ChannelStates', channelsStates)
     }
-
+    
     const handleAddChannel = (itemId) => {
       console.log('Nueva pista')
       handleStop()
@@ -125,62 +158,51 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
         duration: "6452",
         channelConfig: {
           states: {
-              "solo": false,
-              "muted": false,
-              "rec": false
+            "solo": false,
+            "muted": false,
+            "rec": false
           },
           volume: 0.7,
           EQ: {
-              low: 0.5,
-              mid: 0.5,
-              high: 0.5
+            low: 0.5,
+            mid: 0.5,
+            high: 0.5
           }
           
-      }}
-      console.log(newChannel)
-
-      updatedChannelList.push(newChannel)
-      
-      let updatedChannelStates = channelsStates
-      let newSampleStates = {
-        id: newChannel.id,
-        states: newChannel.channelConfig.states
+        }}
+        console.log(newChannel)
+        
+        updatedChannelList.push(newChannel)
+        
+        let updatedChannelStates = channelsStates
+        let newSampleStates = {
+          id: newChannel.id,
+          states: newChannel.channelConfig.states
+        }
+        updatedChannelStates.push(newSampleStates)
+        
+        setChannelList(updatedChannelList)
+        setChannelsStates(updatedChannelStates)
+        setSampleSelectorOpen(false)
       }
-      updatedChannelStates.push(newSampleStates)
       
-      setChannelList(updatedChannelList)
-      setChannelsStates(updatedChannelStates)
-      setSampleSelectorOpen(false)
-    }
-    
-    const handleCloseSamplesSelector = () =>{
-      setSampleSelectorOpen(false)
-    }
-
-    const getFavsAvailable = (allFavs) => {
-      var listFilteredFavs = new Array;
-      allFavs.map(fav => {
-        if(channelList.find(value => value.id === fav.id) === undefined) listFilteredFavs.push({ id: fav.id, displayName: fav.displayName})
-      })
+      const handleCloseSamplesSelector = () =>{
+        setSampleSelectorOpen(false)
+      }
+      
+      const getFavsAvailable = (allFavs) => {
+        var listFilteredFavs = new Array;
+        allFavs.map(fav => {
+          if(channelList.find(value => value.id === fav.id) === undefined) listFilteredFavs.push({ id: fav.id, displayName: fav.displayName})
+        })
       return listFilteredFavs
     }
-
-    const createDestinationExportNode = (audioCtxMaster) => {
-      const context = audioCtxMaster
-      setAudioContext(context);
-      /*
-      const destination = context.destination;
-      setDestinationNode(destination);
-      */
-    }
-
-    if(channelList === null || channelList === undefined) return
-
+    
     if(favouritesList === null || favouritesList === undefined) return
     return (
       <>
       {
-      sampleSelectorOpen && <GenericModal 
+        sampleSelectorOpen && <GenericModal 
         arrayList={getFavsAvailable(favouritesList)} 
         handleCloseSamplesSelector={handleCloseSamplesSelector}
         handleOnClickSelection={handleAddChannel}
@@ -188,20 +210,7 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
       }
 
         <div className="tracks-container">
-          {
-            channelList.map(sample => {
-                return <AudioTrack
-                    key={sample.id} 
-                    sample={sample}
-                    handleChannelStatesOnMute={handleChannelStatesOnMute}
-                    handleChannelStatesOnSolo={handleChannelStatesOnSolo}
-                    states={channelsStates.find(value => value.id === sample.id).states}
-                    playing={playing}
-                    handleDeleteChannel={handleDeleteChannel}
-                    />
-            })
-
-          }
+          {channelObjectList}
           </div>
           <div>
             <button 
@@ -212,7 +221,7 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
                 margin: '15px'
             }}>+</button>
             <button 
-              onClick={() => console.log(mainGainNode)}
+              onClick={() => channelObjectList.map(sample => console.log(sample))}
               style={{ 
                 width: '70px',
                 height: '50px',

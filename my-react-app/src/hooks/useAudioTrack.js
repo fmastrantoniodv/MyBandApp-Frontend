@@ -1,14 +1,14 @@
 import React, { useRef, useContext, useEffect, useState } from "react";
 import useWaveform from "../hooks/useWaveform";
-import Button from './Button.js';
-import VolumeController from './VolumeController/VolumeController';
-import EQControls from "./EQControls"
+import Button from '../components/Button.js'
+import VolumeController from '../components/VolumeController/VolumeController';
+import EQControls from "../components/EQControls"
 import deleteIconSvg from '../img/deleteIcon.svg'
 
 // npx http-server ./public --cors
 const PUBLICROOT = 'http://127.0.0.1:8080/'
 
-export default function AudioTrack ({ 
+export default function useAudioTrack ({ 
   sample, 
   handleChannelStatesOnSolo, 
   handleChannelStatesOnMute, 
@@ -17,6 +17,7 @@ export default function AudioTrack ({
   handleDeleteChannel}){
 
   const [channelState, setChannelsState] = useState({solo: false, muted: false, rec: false})
+  const [sampleComponent, setSampleComponent] = useState(null)
   const [eqValues, setEqValues] = useState(sample.channelConfig.EQ)
   const containerRef = useRef()
   
@@ -32,34 +33,35 @@ export default function AudioTrack ({
   
   useEffect(() => {
     setChannelsState(states)
-    if(waveformPlayer !== null){
-      waveformPlayer.setMute(states.muted)
+    if(sampleComponent !== null){
+      sampleComponent.setMute(states.muted)
     }
     
     if(playing === 'true'){
-      waveformPlayer.play()
+      sampleComponent.play()
       return
-    }else if(playing === 'false' && waveformPlayer !== null){
-      waveformPlayer.stop()
+    }else if(playing === 'false' && sampleComponent !== null){
+      sampleComponent.stop()
       return
     }else if(playing === 'pause'){
-      waveformPlayer.pause()
+      sampleComponent.pause()
       return
     }
     //console.log('[AudioTrack].[useEffect].sampleName: '+sample.sampleName+" ChannelState: ",channelState)
     if (!waveformPlayer) return
-        
+    
+    setSampleComponent(waveformPlayer)
     calculateWidthWaveform()
     
-  }, [waveformPlayer, states, playing]);
+  }, [waveformPlayer, states, sampleComponent, playing]);
   
 
   const onClickMute = () => {
-    handleChannelStatesOnMute(waveformPlayer.mediaContainer.id)
+    handleChannelStatesOnMute(sampleComponent.mediaContainer.id)
   }
 
   const onClickSolo = () => {
-    handleChannelStatesOnSolo(waveformPlayer.mediaContainer.id)
+    handleChannelStatesOnSolo(sampleComponent.mediaContainer.id)
   }
 
   const calculateWidthWaveform = () =>{
@@ -96,18 +98,17 @@ export default function AudioTrack ({
                       <div className='channel-settings'>
                         <DeleteButton />
                         <span className='display-name'>{sample.sampleName}</span>
-                        <button onClick={() => console.log(waveformPlayer.audioElement.play())}>testPlay</button>
                       </div>
                       <div className='audio-controls-eq'>
-                        <EQControls waveformObj={waveformPlayer} eqValues={eqValues} onChangeEqValues={onChangeEQValues}/>
+                        <EQControls waveformObj={sampleComponent} eqValues={eqValues} onChangeEqValues={onChangeEQValues}/>
                       </div>
                     </div>
                     <div className='audio-controls-volume'>
-                        <VolumeController sampleSource={waveformPlayer} />
+                        <VolumeController sampleSource={sampleComponent} />
                     </div>
                     <div className='audio-controls-output-router-buttons'>
-                        <Button faderID={sample.id} textButton='M' state={channelState.muted} onClickButton={() => onClickMute(waveformPlayer)}/>
-                        <Button faderID={sample.id} textButton='S' state={channelState.solo} onClickButton={() => onClickSolo(waveformPlayer)}/>
+                        <Button faderID={sample.id} textButton='M' state={channelState.muted} onClickButton={() => onClickMute(sampleComponent)}/>
+                        <Button faderID={sample.id} textButton='S' state={channelState.solo} onClickButton={() => onClickSolo(sampleComponent)}/>
                     </div>
                 </div>
               </div>
