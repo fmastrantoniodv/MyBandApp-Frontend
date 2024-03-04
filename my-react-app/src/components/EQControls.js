@@ -50,9 +50,9 @@ function EQControls({ waveformObj, eqValues, onChangeEqValues }) {
   // Función para aplicar los filtros de sonido
   const applyFilters = () => {
     // Crear filtros de tipo BiquadFilterNode
-    const lowFilter = waveformObj.audioCtx.createBiquadFilter();
-    const midFilter = waveformObj.audioCtx.createBiquadFilter();
-    const highFilter = waveformObj.audioCtx.createBiquadFilter();
+    const lowFilter = waveformObj.backend.ac.createBiquadFilter();
+    const midFilter = waveformObj.backend.ac.createBiquadFilter();
+    const highFilter = waveformObj.backend.ac.createBiquadFilter();
 
     // Configurar los filtros
     // BAJOS
@@ -71,12 +71,12 @@ function EQControls({ waveformObj, eqValues, onChangeEqValues }) {
     highFilter.gain.value = highFrequency;
 
     // Conectar los filtros en serie
-    waveformObj.source.connect(lowFilter)
+    waveformObj.backend.source.connect(lowFilter)
     lowFilter.connect(midFilter);
     midFilter.connect(highFilter);
 
     // Conectar la entrada y la salida del componente
-    highFilter.connect(waveformObj.gainNode);
+    highFilter.connect(waveformObj.backend.gainNode);
 
     // Devolver la función para desconectar los filtros
     return () => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import 'react-range-slider-input/dist/style.css';
 import ListOfChannels from "./ListOfChannels"
 import CurrentTime from "./CurrentTime";
@@ -6,33 +6,22 @@ import playIcon from '../img/playIcon.svg'
 import stopIcon from '../img/stopIcon.svg'
 import pauseIcon from '../img/pauseIcon.svg'
 import exportIcon from '../img/exportIcon.svg'
-import MasterAudioContext from "../contexts/MasterAudioContext";
+import MasterAudioContext from '../contexts/MasterAudioContext'
 
 export default function ProjectEditor ({ dataContext }) {
     const sounds = dataContext.soundsList;
     const sampleList = [];
     const [playing, setPlaying] = useState('false')
-//    const [maxSampleLength, setMaxSampleLength] = useState()
     const [soundsList, setSoundsList] = useState(null)
-    
-    const {masterAudioCtx} = useContext(MasterAudioContext)
-    const [audioCtxState, setAudioCtxState] = useState(null)
+    const { exportWavFile } = useContext(MasterAudioContext)
     
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect]')
       setSoundsList(sounds)
-      setAudioCtxState(masterAudioCtx)
-    }, [sounds, masterAudioCtx]);
-    
-    const exportProjectToMP3 = () => {
-      //console.log('[exportProjectToMP3].masterAudioContext', masterAudioContext )
+    }, [sounds]);
       
-    }
-    
     const playProject = () => {
         console.log('Play')
-        console.log('masterAudioContext=',masterAudioCtx)
-        //masterAudioCtx.currentTime = 0;
         if(playing !== 'true'){
           setPlaying('true')
         }
@@ -99,7 +88,7 @@ export default function ProjectEditor ({ dataContext }) {
     const ExportProject = () =>{
       return(
       <button className="btn-export"
-      onClick={() => downloadMP3Project(dataContext.projectName)}
+      onClick={() => exportWavFile()}
       >
       <img 
         src={exportIcon} 
@@ -108,30 +97,6 @@ export default function ProjectEditor ({ dataContext }) {
       ></img>  
     </button>
       )
-    }
-
-    const downloadMP3Project = ( projectName ) => {
-      console.log(projectName)
-      //console.log(masterAudioContext)
-      /*
-      const destination = audioContext.createBuffer(
-        1,
-        audioContext.sampleRate * 10,
-        audioContext.sampleRate
-      );
-  
-      tracks.forEach((track, index) => {
-        destination.getChannelData(0).set(track.getChannelData(0), index * track.length);
-      });
-  
-      const audioBlob = new Blob([destination], { type: 'audio/wav' });
-      const audioUrl = URL.createObjectURL(audioBlob);
-  
-      const downloadLink = document.createElement('a');
-      downloadLink.href = audioUrl;
-      downloadLink.download = 'combined_audio.wav';
-      downloadLink.click();
-      */
     }
 
     return (

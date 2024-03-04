@@ -4,8 +4,19 @@ import MasterAudioContext from '../contexts/MasterAudioContext'
 
 const useWaveform = (src, soundID, containerRef) => {
     const [waveformComponent, setWaveformComponent] = useState(null)
-    const {masterAudioCtx, mainGainNode, addSampleComponentToList} = useContext(MasterAudioContext)
+    const {masterAudioCtx, mainGainNode, updateArrayBuffers} = useContext(MasterAudioContext)
+    const audio = new Audio()
+    audio.crossOrigin = "anonymous"
+    audio.controls = true
+    audio.src = src
+    audio.autoplay = false
+    audio.id = soundID
+    const source = masterAudioCtx.createMediaElementSource(audio);
+    const gain = masterAudioCtx.createGain();
+    source.connect(gain)
     
+    gain.connect(mainGainNode)
+
     useEffect(() => {
       console.log(`[useWaveform].[useEffect].[sample=${soundID}`)
       
@@ -13,12 +24,7 @@ const useWaveform = (src, soundID, containerRef) => {
       
       console.log(`[useWaveform].[useEffect].[containerRef`, containerRef)
 
-      const audio = new Audio()
-      audio.crossOrigin = "anonymous"
-      audio.controls = true
-      audio.src = src
-      audio.autoplay = false
-      audio.id = soundID
+
       //audio.onended = () => stopProject()
 
       const wavesurfer = WaveSurfer.create({
@@ -38,32 +44,26 @@ const useWaveform = (src, soundID, containerRef) => {
         mediaControls: true,
         mediaType: 'audio',
         audioContext: masterAudioCtx,
-        backend: 'MediaElement',
-        closeAudioContext: true    
+        backend: 'WebAudio',
+        //closeAudioContext: true    
       });
 
-      const source = masterAudioCtx.createMediaElementSource(audio);
-      
-      const gain = masterAudioCtx.createGain();
-      source.connect(gain)
-      
-      gain.connect(mainGainNode)
-
-      //updateAudioCtxMerger(merger)
-      wavesurfer.audioElement = audio;
-      wavesurfer.audioCtx = masterAudioCtx;
-      wavesurfer.source = source
-      wavesurfer.gainNode = gain
       wavesurfer.load(audio);
 
-      setWaveformComponent(wavesurfer)
-      addSampleComponentToList(wavesurfer)
+      wavesurfer.on('ready', () => {
+        // Una vez que el audio se haya cargado, puedes acceder al buffer
+        console.log('wavesurfer ready',wavesurfer)
+        wavesurfer.backend.source = source      
+        setWaveformComponent(wavesurfer)
+        updateArrayBuffers(wavesurfer.backend.buffer)
+      });
+      
       return () => {
         wavesurfer.destroy()
       };
-    }, [containerRef]);
+    }, [containerRef,masterAudioCtx]);
 
-    return waveformComponent;
+    return waveformComponent
   }
 
   export default useWaveform;

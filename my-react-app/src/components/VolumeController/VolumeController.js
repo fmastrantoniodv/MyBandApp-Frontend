@@ -3,12 +3,12 @@ import { useState, useRef } from 'react';
 import '../../App.css';
 import '../../views/studio';
 
-function VolumeController({sampleSource}) {
+function VolumeController({waveformObj}) {
     const [volumeValue, setVolumeValue] = useState(0.9);
 
     const handleOnChangeVolume = (e) => {
         setVolumeValue(parseFloat(e.target.value));
-        sampleSource.gainNode.gain.value = volumeValue
+        waveformObj.backend.gainNode.gain.value = volumeValue
       };
 
     return(

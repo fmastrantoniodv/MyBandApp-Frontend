@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import AudioTrack from "./AudioTrack";
+import WaveSurfer from 'wavesurfer.js';
 import useFavouritesSamples from "../hooks/useFavouritesSamples";
 import GenericModal from "./GenericModal";
 import MasterAudioContext from '../contexts/MasterAudioContext'
@@ -11,20 +12,15 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
     const [playing, setPlaying] = useState('false')
     const [favouritesList, setFavouritesList] = useState(null)
     const [sampleSelectorOpen, setSampleSelectorOpen] = useState(false)
-    const [audioContext, setAudioContext] = useState(null);
-    const [destinationNode, setDestinationNode] = useState(null);
-    const {masterAudioCtx, mainGainNode, deleteSampleComponentFromList} = useContext(MasterAudioContext)
+    const {masterAudioCtx, mainGainNode} = useContext(MasterAudioContext)
     
     const favouritesSamples = useFavouritesSamples()
-    //const useAudioMerger = useAudioMerger()
     
     useEffect(() => {
       console.log("[ListOfChannels].[useEffect].channelList", channelList)
       setPlaying(playState)
       console.log("favouritesSamples", favouritesList)
-      console.log("audioContext", audioContext)
       if(sampleList !== null && channelList === null){
-        createDestinationExportNode(masterAudioCtx)
         setFavouritesList(favouritesSamples)
         setChannelList(sampleList)
         initChannelsStates(sampleList)
@@ -107,7 +103,6 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
       let updateArrayChannelStates = channelsStates.filter(value => value.id !== idChannel)
       setChannelList(updateArrayChannelList)
       setChannelsStates(updateArrayChannelStates)
-      deleteSampleComponentFromList(idChannel)
       console.log('ChannelList', channelList)
       console.log('ChannelStates', channelsStates)
     }
@@ -165,14 +160,6 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
       return listFilteredFavs
     }
 
-    const createDestinationExportNode = (audioCtxMaster) => {
-      const context = audioCtxMaster
-      setAudioContext(context);
-      /*
-      const destination = context.destination;
-      setDestinationNode(destination);
-      */
-    }
 
     if(channelList === null || channelList === undefined) return
 
@@ -212,24 +199,19 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
                 margin: '15px'
             }}>+</button>
             <button 
-              onClick={() => console.log(mainGainNode)}
+              onClick={() => {
+                console.log(mainGainNode)
+                console.log(masterAudioCtx)
+                
+              }}
               style={{ 
                 width: '70px',
                 height: '50px',
                 margin: '15px'
             }}>console.log</button>
-            
             </div>
           </>
         )
-}
-
-const getTrackList = () => {
-  const [tracks, setTracks] = useState([]);
-
-  setTracks((prevTracks) => [...prevTracks, audioBuffer]);
-
-  return tracks;
 }
 
 export default ListOfChannels;
