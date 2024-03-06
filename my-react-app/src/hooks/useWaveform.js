@@ -4,7 +4,7 @@ import MasterAudioContext from '../contexts/MasterAudioContext'
 
 const useWaveform = (src, soundID, containerRef) => {
     const [waveformComponent, setWaveformComponent] = useState(null)
-    const {masterAudioCtx, mainGainNode, updateArrayBuffers} = useContext(MasterAudioContext)
+    const {masterAudioCtx, mainGainNode, addArrayBuffers} = useContext(MasterAudioContext)
     const audio = new Audio()
     audio.crossOrigin = "anonymous"
     audio.controls = true
@@ -55,7 +55,7 @@ const useWaveform = (src, soundID, containerRef) => {
         console.log('wavesurfer ready',wavesurfer)
         wavesurfer.backend.source = source      
         setWaveformComponent(wavesurfer)
-        updateArrayBuffers(wavesurfer.backend.buffer)
+        addArrayBuffers(wavesurfer.backend.buffer, soundID)
       });
       
       return () => {

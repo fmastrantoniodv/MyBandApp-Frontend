@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import AudioTrack from "./AudioTrack";
-import WaveSurfer from 'wavesurfer.js';
 import useFavouritesSamples from "../hooks/useFavouritesSamples";
 import GenericModal from "./GenericModal";
 import MasterAudioContext from '../contexts/MasterAudioContext'
@@ -12,7 +11,7 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
     const [playing, setPlaying] = useState('false')
     const [favouritesList, setFavouritesList] = useState(null)
     const [sampleSelectorOpen, setSampleSelectorOpen] = useState(false)
-    const {masterAudioCtx, mainGainNode} = useContext(MasterAudioContext)
+    const {removeArrayBuffers} = useContext(MasterAudioContext)
     
     const favouritesSamples = useFavouritesSamples()
     
@@ -26,7 +25,6 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
         initChannelsStates(sampleList)
         setLoading(false)
       }
-      
     }, [sampleList, playState, channelList]);
 
     const handleChannelStatesOnMute = (sampleID) => {
@@ -99,12 +97,9 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
     }
 
     const handleDeleteChannel = ( idChannel ) => {
-      let updateArrayChannelList = channelList.filter(value => value.id !== idChannel)
-      let updateArrayChannelStates = channelsStates.filter(value => value.id !== idChannel)
-      setChannelList(updateArrayChannelList)
-      setChannelsStates(updateArrayChannelStates)
-      console.log('ChannelList', channelList)
-      console.log('ChannelStates', channelsStates)
+      setChannelList(channelList.filter(value => value.id !== idChannel))
+      setChannelsStates(channelsStates.filter(value => value.id !== idChannel))
+      removeArrayBuffers(idChannel)
     }
 
     const handleAddChannel = (itemId) => {
@@ -200,9 +195,6 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
             }}>+</button>
             <button 
               onClick={() => {
-                console.log(mainGainNode)
-                console.log(masterAudioCtx)
-                
               }}
               style={{ 
                 width: '70px',

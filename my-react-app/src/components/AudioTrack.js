@@ -4,6 +4,7 @@ import Button from './Button.js';
 import VolumeController from './VolumeController/VolumeController';
 import EQControls from "./EQControls"
 import deleteIconSvg from '../img/deleteIcon.svg'
+import MasterAudioContext from '../contexts/MasterAudioContext'
 
 // npx http-server ./public --cors
 const PUBLICROOT = 'http://127.0.0.1:8080/'
@@ -19,6 +20,7 @@ export default function AudioTrack ({
   const [channelState, setChannelsState] = useState({solo: false, muted: false, rec: false})
   const [eqValues, setEqValues] = useState(sample.channelConfig.EQ)
   const containerRef = useRef()
+  const {updateArrayBuffer, addTrackToList} = useContext(MasterAudioContext)
   
   var localAudioSrc;
   //HARDCODE PARA QUE TOME LAS URL LOCALES
@@ -36,7 +38,8 @@ export default function AudioTrack ({
     if(waveformPlayer !== null){
       console.log('[AudioTrack].[useEffect].waveformPlayer', waveformPlayer)
       waveformPlayer.setMute(states.muted)
-      
+      //updateArrayBuffer(waveformPlayer)
+      addTrackToList(waveformPlayer)
     }
     
     if(playing === 'true'){
@@ -90,6 +93,7 @@ export default function AudioTrack ({
                       <div className='channel-settings'>
                         <DeleteButton />
                         <span className='display-name'>{sample.sampleName}</span>
+                        <button onClick={()=>{console.log(waveformPlayer.backend)}}>Test</button>
                       </div>
                       <div className='audio-controls-eq'>
                         <EQControls waveformObj={waveformPlayer} eqValues={eqValues} onChangeEqValues={onChangeEQValues}/>
