@@ -2,13 +2,11 @@ import React, { useEffect, useState, useContext } from "react";
 import AudioTrack from "./AudioTrack";
 import useFavouritesSamples from "../hooks/useFavouritesSamples";
 import GenericModal from "./GenericModal";
-import MasterAudioContext from '../contexts/MasterAudioContext'
 
-const ListOfChannels = ({ sampleList, playState, handleStop }) => {
+const ListOfChannels = ({ sampleList }) => {
     const [channelsStates, setChannelsStates] = useState([])
     const [loading, setLoading] = useState(true)
     const [channelList, setChannelList] = useState(null)
-    const [playing, setPlaying] = useState('false')
     const [favouritesList, setFavouritesList] = useState(null)
     const [sampleSelectorOpen, setSampleSelectorOpen] = useState(false)
     
@@ -16,7 +14,6 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
     
     useEffect(() => {
       console.log("[ListOfChannels].[useEffect].channelList", channelList)
-      setPlaying(playState)
       console.log("favouritesSamples", favouritesList)
       if(sampleList !== null && channelList === null){
         setFavouritesList(favouritesSamples)
@@ -24,7 +21,7 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
         initChannelsStates(sampleList)
         setLoading(false)
       }
-    }, [sampleList, playState, channelList]);
+    }, [sampleList, channelList]);
 
     const handleChannelStatesOnMute = (sampleID) => {
       console.log("Mute: id="+sampleID)
@@ -102,8 +99,6 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
 
     const handleAddChannel = (itemId) => {
       console.log('Nueva pista')
-      handleStop()
-      setPlaying('false')
       var updatedChannelList = channelList
       console.log(favouritesList)
       var newChannel = {
@@ -176,7 +171,6 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
                     handleChannelStatesOnMute={handleChannelStatesOnMute}
                     handleChannelStatesOnSolo={handleChannelStatesOnSolo}
                     states={channelsStates.find(value => value.id === sample.id).states}
-                    playing={playing}
                     handleDeleteChannel={handleDeleteChannel}
                     />
             })

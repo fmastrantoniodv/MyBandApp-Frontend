@@ -13,7 +13,7 @@ export default function ProjectEditor ({ dataContext }) {
     const sampleList = [];
     const [playing, setPlaying] = useState('false')
     const [soundsList, setSoundsList] = useState(null)
-    const { exportWavFile } = useContext(MasterAudioContext)
+    const { exportWavFile, playBackTracks } = useContext(MasterAudioContext)
     
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect]')
@@ -23,17 +23,18 @@ export default function ProjectEditor ({ dataContext }) {
     const playProject = () => {
         console.log('Play')
         if(playing !== 'true'){
-          setPlaying('true')
+          playBackTracks('play')
         }
      }
 
     const stopProject = () => {
-        console.log('Stop')
+        playBackTracks('stop')
         setPlaying('false')
     }
 
     const pauseProject = () => {
         console.log('Pause')
+        playBackTracks('pause')
         setPlaying('pause') 
     }
   
@@ -111,7 +112,7 @@ export default function ProjectEditor ({ dataContext }) {
               </div>
               <CurrentTime playing={playing} />        
             </div>
-            <ListOfChannels sampleList={soundsList} playState={playing} handleStop={stopProject}/>
+            <ListOfChannels sampleList={soundsList}/>
         </>
         )
 }

@@ -31,7 +31,6 @@ const useWaveform = (src, soundID, containerRef) => {
         interact: false,
         cursorColor: 'chartreuse',
         cursorWidth: '2px',
-        sampleRate: 4800,
         key: audio.id,
         fillParent: true,
         minPxPerSec: 10,
@@ -40,7 +39,7 @@ const useWaveform = (src, soundID, containerRef) => {
         mediaControls: true,
         mediaType: 'audio',
         audioContext: masterAudioCtx,
-        backend: 'WebAudio',
+        backend: 'WebAudio'
         //closeAudioContext: true    
       });
 
@@ -65,8 +64,10 @@ const useWaveform = (src, soundID, containerRef) => {
         highFilter.type = 'highshelf';
         highFilter.frequency.value = 10000;
         highFilter.gain.value = 1;
-        
+       
         wavesurfer.backend.setFilter(lowFilter, midFilter, highFilter);      
+
+        //wavesurfer.backend.ac.sampleRate = '44100'
         console.log('wavesurfer ready',wavesurfer)
         addTrackToList(wavesurfer)
         setWaveformComponent(wavesurfer)

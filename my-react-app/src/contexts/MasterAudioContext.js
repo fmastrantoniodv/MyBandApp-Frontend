@@ -26,6 +26,16 @@ export function MasterAudioContextProvider({children, value}){
         setTrackList(trackList.filter(value => value.mediaContainer.id !== trackId))
     } 
 
+    const playBackTracks = ( playBackAction ) => {
+        if(playBackAction === 'play'){
+            trackList.map(track => track.play())
+        }else if(playBackAction === 'stop'){
+            trackList.map(track => track.stop())
+        }else if(playBackAction === 'pause'){
+            trackList.map(track => track.pause())
+        }
+    }
+
     const exportWavFile = () => {
         var arrayBuffersToExport = [];
         trackList.map(track => {
@@ -42,7 +52,8 @@ export function MasterAudioContextProvider({children, value}){
                 exportWavFile,
                 getTrack,
                 addTrackToList,
-                deleteTrack
+                deleteTrack,
+                playBackTracks
             }}>{children}
             </Context.Provider>
 }
