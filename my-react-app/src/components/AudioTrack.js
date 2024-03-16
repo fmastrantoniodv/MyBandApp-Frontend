@@ -18,9 +18,9 @@ export default function AudioTrack ({
   handleDeleteChannel}){
 
   const [channelState, setChannelsState] = useState({solo: false, muted: false, rec: false})
-  const [eqValues, setEqValues] = useState(sample.channelConfig.EQ)
   const containerRef = useRef()
-  const {updateArrayBuffer, addTrackToList} = useContext(MasterAudioContext)
+  const {getTrack, deleteTrack} = useContext(MasterAudioContext)
+  const [loading, setLoading] = useState(true)
   
   var localAudioSrc;
   //HARDCODE PARA QUE TOME LAS URL LOCALES
@@ -33,43 +33,38 @@ export default function AudioTrack ({
   const waveformPlayer = useWaveform(localAudioSrc, sample.id, containerRef)
   
   useEffect(() => {
-
     setChannelsState(states)
+    
     if(waveformPlayer !== null){
-      console.log('[AudioTrack].[useEffect].waveformPlayer', waveformPlayer)
-      waveformPlayer.setMute(states.muted)
-      //updateArrayBuffer(waveformPlayer)
-      addTrackToList(waveformPlayer)
+      console.log('[AudioTrack].getTrack=',getTrack(sample.id))
+      getTrack(sample.id).setMute(states.muted)
+      setLoading(false)
     }
     
     if(playing === 'true'){
-      waveformPlayer.play()
+      getTrack(sample.id).play()
       return
-    }else if(playing === 'false' && waveformPlayer !== null){
-      waveformPlayer.stop()
+    }else if(playing === 'false' && getTrack(sample.id)){
+      getTrack(sample.id).stop()
       return
     }else if(playing === 'pause'){
-      waveformPlayer.pause()
+      getTrack(sample.id).pause()
       return
     }
     
-  }, [waveformPlayer, states, playing]);
-  
+  }, [waveformPlayer, states, playing, containerRef, loading]);
 
   const onClickMute = () => {
-    handleChannelStatesOnMute(waveformPlayer.mediaContainer.id)
+    handleChannelStatesOnMute(getTrack(sample.id).mediaContainer.id)
   }
 
   const onClickSolo = () => {
-    handleChannelStatesOnSolo(waveformPlayer.mediaContainer.id)
+    handleChannelStatesOnSolo(getTrack(sample.id).mediaContainer.id)
   }
 
   const deleteChannel = ( sampleID ) => {
     handleDeleteChannel(sampleID)
-  }
-
-  const onChangeEQValues = ( values ) => {
-    setEqValues(values)
+    deleteTrack(sampleID)
   }
 
   const DeleteButton = () => {
@@ -83,37 +78,47 @@ export default function AudioTrack ({
       </button>        
     )
   }
-
-  return (
+  
+  const ChannelControls = () => {
+    if(loading){
+      console.log('[AudioTrack].loading', loading)
+      return <span>Loading</span>
+    }
+    return (
           <>  
-            <div className='channel-container'>
-              <div className='channel-controls'>
-              <div className='audio-controls-channel'>
+            <div className='channel-controls'>
+                <div className='audio-controls-channel'>
                     <div className='audio-controls-sample'>
                       <div className='channel-settings'>
                         <DeleteButton />
                         <span className='display-name'>{sample.sampleName}</span>
-                        <button onClick={()=>{console.log(waveformPlayer.backend)}}>Test</button>
+                        <button onClick={()=>{console.log(getTrack(sample.id).backend)}}>Test</button>
                       </div>
                       <div className='audio-controls-eq'>
-                        <EQControls waveformObj={waveformPlayer} eqValues={eqValues} onChangeEqValues={onChangeEQValues}/>
+                        <EQControls waveformObj={getTrack(sample.id)}/>
                       </div>
                     </div>
                     <div className='audio-controls-volume'>
-                        <VolumeController waveformObj={waveformPlayer} />
+                        <VolumeController waveformObj={getTrack(sample.id)} />
                     </div>
                     <div className='audio-controls-output-router-buttons'>
-                        <Button faderID={sample.id} textButton='M' state={channelState.muted} onClickButton={() => onClickMute(waveformPlayer)}/>
-                        <Button faderID={sample.id} textButton='S' state={channelState.solo} onClickButton={() => onClickSolo(waveformPlayer)}/>
+                        <Button faderID={sample.id} textButton='M' state={channelState.muted} onClickButton={() => onClickMute(getTrack(sample.id))}/>
+                        <Button faderID={sample.id} textButton='S' state={channelState.solo} onClickButton={() => onClickSolo(getTrack(sample.id))}/>
                     </div>
                 </div>
-              </div>
-              <div className='channel-sprites'>
-                <div className='sprites-container' >      
-                  <div id={sample.id} className="sprite" ref={containerRef} />
-                </div>
-              </div>
-            </div>       
+            </div>
           </>
-        )
+    )
+  }
+
+    return (
+    <div className='channel-container'>
+      <ChannelControls />
+      <div className='channel-sprites'>
+        <div className='sprites-container'>
+          <div id={sample.id} className="sprite" ref={containerRef} />
+        </div>
+      </div>
+    </div>
+    )
   }

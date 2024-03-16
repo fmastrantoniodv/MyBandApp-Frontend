@@ -11,7 +11,6 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
     const [playing, setPlaying] = useState('false')
     const [favouritesList, setFavouritesList] = useState(null)
     const [sampleSelectorOpen, setSampleSelectorOpen] = useState(false)
-    const {removeArrayBuffers} = useContext(MasterAudioContext)
     
     const favouritesSamples = useFavouritesSamples()
     
@@ -99,7 +98,6 @@ const ListOfChannels = ({ sampleList, playState, handleStop }) => {
     const handleDeleteChannel = ( idChannel ) => {
       setChannelList(channelList.filter(value => value.id !== idChannel))
       setChannelsStates(channelsStates.filter(value => value.id !== idChannel))
-      removeArrayBuffers(idChannel)
     }
 
     const handleAddChannel = (itemId) => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import '../../App.css';
 import '../../views/studio';
 
@@ -9,7 +9,7 @@ function VolumeController({waveformObj}) {
     const handleOnChangeVolume = (e) => {
         setVolumeValue(parseFloat(e.target.value));
         waveformObj.backend.gainNode.gain.value = volumeValue
-      };
+    };
 
     return(
         <>
@@ -26,9 +26,7 @@ function VolumeController({waveformObj}) {
                         />
                 </div>
                 <label style={{display: 'flex', marginTop: '5px'}}>Volume</label>
-                
             </div>
-            
         </>
     )
 }

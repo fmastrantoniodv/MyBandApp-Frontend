@@ -8,57 +8,41 @@ const AudioContext = window.AudioContext || window.webkitAudioContext;
 export function MasterAudioContextProvider({children, value}){
     const [masterAudioCtx, setMasterAudioCtx] = useState(new AudioContext())
     const [mainGainNode, setMainGainNode] = useState(masterAudioCtx.createGain())
-    const [arrayBuffers, setArrayBuffers] = useState([])
     const [trackList, setTrackList] = useState([])
 
     useEffect(()=>{
-        console.log('[MasterAudioContextProvider].[useEffect].arrayBuffers', arrayBuffers)
         console.log('[MasterAudioContextProvider].[useEffect].trackList', trackList)
-    },[arrayBuffers, trackList])
-
-    const addArrayBuffers = ( arrayBuffer, soundID ) => {
-        console.log("[MasterAudioContext].updateArrayBuffers.arrayBuffer=", arrayBuffers)
-        setArrayBuffers(prevState => [...prevState, {id: soundID, arrayBuffer}])
-    }
-
-    const removeArrayBuffers = ( soundID ) => {
-        console.log("[MasterAudioContext].updateArrayBuffers.arrayBuffer=", arrayBuffers)
-        setArrayBuffers(arrayBuffers.filter(value => value.id !== soundID))
-    }
-
-    const updateArrayBuffer = ( soundID, arrayBuffer ) => {
-        console.log("[MasterAudioContext].updateArrayBuffer.arrayBuffer=", arrayBuffer)
-        console.log("[MasterAudioContext].updateArrayBuffer.soundID=", soundID)
-    }
+    },[trackList])
 
     const addTrackToList = ( newTrack ) => {
         setTrackList(prevState => [...prevState, newTrack])
     }
 
+    const getTrack = ( trackId ) => {
+        return trackList.find(value => value.mediaContainer.id === trackId)
+    }
+
+    const deleteTrack = ( trackId ) => {
+        setTrackList(trackList.filter(value => value.mediaContainer.id !== trackId))
+    } 
+
     const exportWavFile = () => {
         var arrayBuffersToExport = [];
-        arrayBuffers.map(value => arrayBuffersToExport.push(value.arrayBuffer))
-        var url = window.URL.createObjectURL(exportToWavFile(arrayBuffersToExport).blob)
-        var anchor = document.createElement('a')
-        document.body.appendChild(anchor)
-        anchor.style = 'display: none'
-        anchor.href = url
-        anchor.download = 'audio.wav'
-        anchor.click()
-        window.URL.revokeObjectURL(url)
+        trackList.map(track => {
+            console.log(track)
+            arrayBuffersToExport.push(track.backend.buffer)
+        })
+        exportToWavFile(arrayBuffersToExport)
     }
 
     return  <Context.Provider value={{
                 masterAudioCtx,
                 mainGainNode,
-                setMainGainNode,
-                addArrayBuffers,
-                arrayBuffers,
+                setMainGainNode,             
                 exportWavFile,
-                removeArrayBuffers,
-                updateArrayBuffer,
-                trackList,
-                addTrackToList 
+                getTrack,
+                addTrackToList,
+                deleteTrack
             }}>{children}
             </Context.Provider>
 }

@@ -4,7 +4,8 @@ import MasterAudioContext from '../contexts/MasterAudioContext'
 
 const useWaveform = (src, soundID, containerRef) => {
     const [waveformComponent, setWaveformComponent] = useState(null)
-    const {masterAudioCtx, mainGainNode, addArrayBuffers} = useContext(MasterAudioContext)
+    const {masterAudioCtx, mainGainNode, addArrayBuffers, addTrackToList} = useContext(MasterAudioContext)
+
     const audio = new Audio()
     audio.crossOrigin = "anonymous"
     audio.controls = true
@@ -21,11 +22,6 @@ const useWaveform = (src, soundID, containerRef) => {
       console.log(`[useWaveform].[useEffect].[sample=${soundID}`)
       
       if (!containerRef.current) return 
-      
-      console.log(`[useWaveform].[useEffect].[containerRef`, containerRef)
-
-
-      //audio.onended = () => stopProject()
 
       const wavesurfer = WaveSurfer.create({
         container: containerRef.current,
@@ -52,17 +48,40 @@ const useWaveform = (src, soundID, containerRef) => {
 
       wavesurfer.on('ready', () => {
         // Una vez que el audio se haya cargado, puedes acceder al buffer
+        wavesurfer.backend.source = source
+        const lowFilter = wavesurfer.backend.ac.createBiquadFilter();
+        lowFilter.type = 'lowshelf';
+        lowFilter.frequency.value = 500;
+        lowFilter.gain.value = 1;
+        
+        // MEDIOS
+        const midFilter = wavesurfer.backend.ac.createBiquadFilter();
+        midFilter.type = 'peaking';
+        midFilter.frequency.value = 1600;
+        midFilter.gain.value = 1;
+        
+        // AGUDOS
+        const highFilter = wavesurfer.backend.ac.createBiquadFilter();
+        highFilter.type = 'highshelf';
+        highFilter.frequency.value = 10000;
+        highFilter.gain.value = 1;
+        
+        wavesurfer.backend.setFilter(lowFilter, midFilter, highFilter);      
         console.log('wavesurfer ready',wavesurfer)
-        wavesurfer.backend.source = source      
+        addTrackToList(wavesurfer)
         setWaveformComponent(wavesurfer)
         addArrayBuffers(wavesurfer.backend.buffer, soundID)
       });
       
+
       return () => {
         wavesurfer.destroy()
       };
     }, [containerRef,masterAudioCtx]);
 
+    if(waveformComponent){
+      //addTrackToList(waveformComponent)
+    }
     return waveformComponent
   }
 
