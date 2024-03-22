@@ -22,27 +22,29 @@ export default function EQControls({ waveformObj }) {
   };
 
   return (
-    <div className='eq-container'>
-      <div className='eq-parameter'>
-        <label>Bajos</label>
-        <EQKnob 
-          value={lowFrequency}
-          handleOnChange={handleLowFrequencyChange}>
-        </EQKnob>
-      </div>
-      <div className='eq-parameter'>
-        <label>Medios</label>
-        <EQKnob 
-          value={midFrequency}
-          handleOnChange={handleMidFrequencyChange}>
-        </EQKnob>
-      </div>
-      <div className='eq-parameter'>
-        <label>Agudos</label>
-        <EQKnob 
-          value={highFrequency}
-          handleOnChange={handleHighFrequencyChange}>
-        </EQKnob>
+    <div className='audio-controls-eq'>
+      <div className='eq-container'>
+        <div className='eq-parameter'>
+          <label>Bajos</label>
+          <EQKnob 
+            value={lowFrequency}
+            handleOnChange={handleLowFrequencyChange}>
+          </EQKnob>
+        </div>
+        <div className='eq-parameter'>
+          <label>Medios</label>
+          <EQKnob 
+            value={midFrequency}
+            handleOnChange={handleMidFrequencyChange}>
+          </EQKnob>
+        </div>
+        <div className='eq-parameter'>
+          <label>Agudos</label>
+          <EQKnob 
+            value={highFrequency}
+            handleOnChange={handleHighFrequencyChange}>
+          </EQKnob>
+        </div>
       </div>
     </div>
   );

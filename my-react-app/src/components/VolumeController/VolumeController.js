@@ -12,7 +12,7 @@ function VolumeController({waveformObj}) {
     };
 
     return(
-        <>
+        <div className='audio-controls-volume'>
             <div className='volume-container'>
                 <div style={{display: 'flex', justifyContent: 'center', marginTop: '30px'}}>
                     <input
@@ -27,7 +27,7 @@ function VolumeController({waveformObj}) {
                 </div>
                 <label style={{display: 'flex', marginTop: '5px'}}>Volume</label>
             </div>
-        </>
+        </div>
     )
 }
 

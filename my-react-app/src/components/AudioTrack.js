@@ -79,7 +79,6 @@ export default function AudioTrack ({
         )
     }
     return (
-          <>
             <div className='channel-controls'>
               <div className='audio-controls-channel'>
                 <div className='audio-controls-sample'>
@@ -88,20 +87,15 @@ export default function AudioTrack ({
                     <span className='display-name'>{sample.sampleName}</span>
                     <button onClick={()=>{console.log(getTrack(sample.id).backend)}}>Test</button>
                   </div>
-                  <div className='audio-controls-eq'>
-                    <EQControls waveformObj={getTrack(sample.id)}/>
-                  </div>
+                  <EQControls waveformObj={getTrack(sample.id)}/>
                 </div>
-                <div className='audio-controls-volume'>
-                  <VolumeController waveformObj={getTrack(sample.id)} />
-                </div>
+                <VolumeController waveformObj={getTrack(sample.id)} />
                 <div className='audio-controls-output-router-buttons'>
                   <Button faderID={sample.id} textButton='M' state={channelState.muted} onClickButton={() => onClickMute(getTrack(sample.id))}/>
                   <Button faderID={sample.id} textButton='S' state={channelState.solo} onClickButton={() => onClickSolo(getTrack(sample.id))}/>
                 </div>
               </div>
             </div>
-          </>
     )
   }
 
