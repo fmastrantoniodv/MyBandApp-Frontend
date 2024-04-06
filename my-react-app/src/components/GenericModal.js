@@ -36,6 +36,12 @@ export default function GenericModal({arrayList, handleCloseSamplesSelector, han
     state === 'open' ? htmlTag[0].className = 'background-modal-open' : htmlTag[0].removeAttribute('class')
   }
 
+  const ModalContainer = () => {
+    var modalContainer = document.createElement("div")
+    document.body.insertBefore(modalContainer, document.body.firstChild);
+    return modalContainer
+  }
+
   if(arrayListState === undefined){
     return
   }else{

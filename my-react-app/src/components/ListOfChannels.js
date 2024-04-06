@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from "react";
 import AudioTrack from "./AudioTrack";
 import useFavouritesSamples from "../hooks/useFavouritesSamples";
 import GenericModal from "./GenericModal";
+import { useModal } from "../hooks/useModal";
+import Modal from "./Modals/Modal"
 
 const ListOfChannels = ({ sampleList }) => {
     const [channelsStates, setChannelsStates] = useState([])
@@ -9,7 +11,8 @@ const ListOfChannels = ({ sampleList }) => {
     const [channelList, setChannelList] = useState(null)
     const [favouritesList, setFavouritesList] = useState(null)
     const [sampleSelectorOpen, setSampleSelectorOpen] = useState(false)
-    
+    const [isOpenModalSampleSelector, openModalSampleSelector, closeModalSampleSelector] = useModal(false)
+
     const favouritesSamples = useFavouritesSamples()
     
     useEffect(() => {
@@ -154,14 +157,13 @@ const ListOfChannels = ({ sampleList }) => {
     if(favouritesList === null || favouritesList === undefined) return
     return (
       <>
-      {
-      sampleSelectorOpen && <GenericModal 
+        <Modal isOpen={isOpenModalSampleSelector} closeModal={closeModalSampleSelector}>
+        <GenericModal 
         arrayList={getFavsAvailable(favouritesList)} 
         handleCloseSamplesSelector={handleCloseSamplesSelector}
         handleOnClickSelection={handleAddChannel}
         />
-      }
-
+        </Modal>
         <div className="tracks-container">
           {
             channelList.map(sample => {
@@ -174,25 +176,16 @@ const ListOfChannels = ({ sampleList }) => {
                     handleDeleteChannel={handleDeleteChannel}
                     />
             })
-
           }
           </div>
           <div>
             <button 
-              onClick={() => setSampleSelectorOpen(true)}
+              onClick={() => openModalSampleSelector()}
               style={{ 
                 width: '70px',
                 height: '50px',
                 margin: '15px'
             }}>+</button>
-            <button 
-              onClick={() => {
-              }}
-              style={{ 
-                width: '70px',
-                height: '50px',
-                margin: '15px'
-            }}>console.log</button>
             </div>
           </>
         )

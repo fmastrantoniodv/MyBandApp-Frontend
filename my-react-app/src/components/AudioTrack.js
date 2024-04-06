@@ -85,7 +85,6 @@ export default function AudioTrack ({
                   <div className='channel-settings'>
                     <DeleteButton />
                     <span className='display-name'>{sample.sampleName}</span>
-                    <button onClick={()=>{console.log(getTrack(sample.id).backend)}}>Test</button>
                   </div>
                   <EQControls waveformObj={getTrack(sample.id)}/>
                 </div>
