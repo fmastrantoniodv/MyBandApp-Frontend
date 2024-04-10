@@ -17,7 +17,7 @@ export default function AudioTrack ({
   playing, 
   handleDeleteChannel}){
 
-  const [channelState, setChannelsState] = useState({solo: false, muted: false, rec: false})
+  const [channelState, setChannelsState] = useState({solo: false, muted: false})
   const containerRef = useRef()
   const {getTrack, deleteTrack} = useContext(MasterAudioContext)
   const [loading, setLoading] = useState(true)

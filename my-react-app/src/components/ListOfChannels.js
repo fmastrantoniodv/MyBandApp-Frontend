@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import AudioTrack from "./AudioTrack";
-import useFavouritesSamples from "../hooks/useFavouritesSamples";
-import GenericModal from "./GenericModal";
+import SampleSelector from "./Modals/SampleSelector";
 import { useModal } from "../hooks/useModal";
 import Modal from "./Modals/Modal"
 
@@ -9,17 +8,11 @@ const ListOfChannels = ({ sampleList }) => {
     const [channelsStates, setChannelsStates] = useState([])
     const [loading, setLoading] = useState(true)
     const [channelList, setChannelList] = useState(null)
-    const [favouritesList, setFavouritesList] = useState(null)
-    const [sampleSelectorOpen, setSampleSelectorOpen] = useState(false)
     const [isOpenModalSampleSelector, openModalSampleSelector, closeModalSampleSelector] = useModal(false)
-
-    const favouritesSamples = useFavouritesSamples()
     
     useEffect(() => {
       console.log("[ListOfChannels].[useEffect].channelList", channelList)
-      console.log("favouritesSamples", favouritesList)
       if(sampleList !== null && channelList === null){
-        setFavouritesList(favouritesSamples)
         setChannelList(sampleList)
         initChannelsStates(sampleList)
         setLoading(false)
@@ -28,13 +21,12 @@ const ListOfChannels = ({ sampleList }) => {
 
     const handleChannelStatesOnMute = (sampleID) => {
       console.log("Mute: id="+sampleID)
-      console.log(sampleID)
-      console.log(channelsStates)
+      console.log("channelsStates",channelsStates)
       let newStates = {}
       if(channelsStates.find(value => value.id === sampleID).states.muted === false){    
-        newStates = {muted: true, solo: false, rec: false}
+        newStates = {muted: true, solo: false}
       }else{
-        newStates = {muted: false, solo: false, rec: false}
+        newStates = {muted: false, solo: false}
       }
       changeChannelStates(sampleID,newStates)
     }
@@ -49,9 +41,9 @@ const ListOfChannels = ({ sampleList }) => {
         let updatedStates = []
         channelsStates.map(sampleStates => {
           if(sampleStates.id === sampleID){
-            updatedStates.push({ id: sampleStates.id, states: {solo: true, muted: false, rec: false} })
+            updatedStates.push({ id: sampleStates.id, states: {solo: true, muted: false} })
           }else{
-            updatedStates.push({ id: sampleStates.id, states: {solo: false, muted: true, rec: false} })
+            updatedStates.push({ id: sampleStates.id, states: {solo: false, muted: true} })
           }
         })
         setChannelsStates(updatedStates)  
@@ -62,7 +54,7 @@ const ListOfChannels = ({ sampleList }) => {
     const restartStates = () => {
         let updatedStates = []
         channelsStates.map(sampleStates => {
-            updatedStates.push({ id: sampleStates.id, states: {solo: false, muted: false, rec: false} })
+            updatedStates.push({ id: sampleStates.id, states: {solo: false, muted: false} })
         })
         setChannelsStates(updatedStates)  
     }
@@ -100,20 +92,18 @@ const ListOfChannels = ({ sampleList }) => {
       setChannelsStates(channelsStates.filter(value => value.id !== idChannel))
     }
 
-    const handleAddChannel = (itemId) => {
+    const handleAddChannel = (item) => {
       console.log('Nueva pista')
       var updatedChannelList = channelList
-      console.log(favouritesList)
       var newChannel = {
-        id: itemId,
-        sampleName: favouritesList.find(value => value.id === itemId).displayName,
+        id: item.id,
+        sampleName: item.displayName,
         src: "http:fileserver.com/kick",
         duration: "6452",
         channelConfig: {
           states: {
               "solo": false,
-              "muted": false,
-              "rec": false
+              "muted": false
           },
           volume: 0.7,
           EQ: {
@@ -136,33 +126,19 @@ const ListOfChannels = ({ sampleList }) => {
       
       setChannelList(updatedChannelList)
       setChannelsStates(updatedChannelStates)
-      setSampleSelectorOpen(false)
+      closeModalSampleSelector()
     }
-    
-    const handleCloseSamplesSelector = () =>{
-      setSampleSelectorOpen(false)
-    }
-
-    const getFavsAvailable = (allFavs) => {
-      var listFilteredFavs = new Array;
-      allFavs.map(fav => {
-        if(channelList.find(value => value.id === fav.id) === undefined) listFilteredFavs.push({ id: fav.id, displayName: fav.displayName})
-      })
-      return listFilteredFavs
-    }
-
 
     if(channelList === null || channelList === undefined) return
 
-    if(favouritesList === null || favouritesList === undefined) return
     return (
       <>
         <Modal isOpen={isOpenModalSampleSelector} closeModal={closeModalSampleSelector}>
-        <GenericModal 
-        arrayList={getFavsAvailable(favouritesList)} 
-        handleCloseSamplesSelector={handleCloseSamplesSelector}
-        handleOnClickSelection={handleAddChannel}
-        />
+          <SampleSelector 
+            channelList={channelList} 
+            handleCloseSamplesSelector={closeModalSampleSelector}
+            handleOnClickSelection={handleAddChannel}
+          />
         </Modal>
         <div className="tracks-container">
           {
