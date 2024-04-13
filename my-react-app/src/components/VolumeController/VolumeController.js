@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import '../../App.css';
 import '../../views/studio';
 
 function VolumeController({waveformObj}) {
-    const [volumeValue, setVolumeValue] = useState(0.9);
+    const [volumeValue, setVolumeValue] = useState(null);
 
     const handleOnChangeVolume = (e) => {
         setVolumeValue(parseFloat(e.target.value));

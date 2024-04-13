@@ -5,91 +5,29 @@ import { useModal } from "../hooks/useModal";
 import Modal from "./Modals/Modal"
 
 const ListOfChannels = ({ sampleList }) => {
-    const [channelsStates, setChannelsStates] = useState([])
     const [loading, setLoading] = useState(true)
     const [channelList, setChannelList] = useState(null)
     const [isOpenModalSampleSelector, openModalSampleSelector, closeModalSampleSelector] = useModal(false)
+    const [soloChannelSelected, setSoloChannelSelected] = useState(null)
     
     useEffect(() => {
       console.log("[ListOfChannels].[useEffect].channelList", channelList)
       if(sampleList !== null && channelList === null){
         setChannelList(sampleList)
-        initChannelsStates(sampleList)
         setLoading(false)
       }
     }, [sampleList, channelList]);
 
-    const handleChannelStatesOnMute = (sampleID) => {
-      console.log("Mute: id="+sampleID)
-      console.log("channelsStates",channelsStates)
-      let newStates = {}
-      if(channelsStates.find(value => value.id === sampleID).states.muted === false){    
-        newStates = {muted: true, solo: false}
+    const handleSoloChannel = (idChannel) => {
+      if(soloChannelSelected === idChannel){
+        setSoloChannelSelected(null)
       }else{
-        newStates = {muted: false, solo: false}
+        setSoloChannelSelected(idChannel)
       }
-      changeChannelStates(sampleID,newStates)
-    }
-
-    const handleChannelStatesOnSolo = (sampleID) => {
-      console.log('[HandleSolo]', sampleID)
-      let selectedSampleStates = channelsStates.find(value => value.id === sampleID) 
-      console.log('[HandleSolo].[selectedSampleStates]=', selectedSampleStates)
-      if(selectedSampleStates.states.solo === true){
-        restartStates()
-      }else{
-        let updatedStates = []
-        channelsStates.map(sampleStates => {
-          if(sampleStates.id === sampleID){
-            updatedStates.push({ id: sampleStates.id, states: {solo: true, muted: false} })
-          }else{
-            updatedStates.push({ id: sampleStates.id, states: {solo: false, muted: true} })
-          }
-        })
-        setChannelsStates(updatedStates)  
-      }
-      console.log('Solo '+sampleID)
-    }
-
-    const restartStates = () => {
-        let updatedStates = []
-        channelsStates.map(sampleStates => {
-            updatedStates.push({ id: sampleStates.id, states: {solo: false, muted: false} })
-        })
-        setChannelsStates(updatedStates)  
-    }
-
-    const changeChannelStates = (idSample , newStates) => {
-        console.log('[changeChannelStates]', idSample, newStates)
-        let updatedStates = []
-        channelsStates.map(sampleStates => {
-          let newRowToContext;
-            if(idSample === sampleStates.id){
-              newRowToContext = { id: sampleStates.id, states: newStates }
-            }else{
-              newRowToContext = { id: sampleStates.id, states: sampleStates.states }
-            }
-            updatedStates.push(newRowToContext)
-        })
-        setChannelsStates(updatedStates)
-    }
-
-    const initChannelsStates = (sampleList) => {
-      let newStatesArray = []
-      sampleList.map(sample => {
-        let itemJson = {
-          id: sample.id,
-          states: sample.channelConfig.states
-        }
-        newStatesArray.push(itemJson)
-      })
-      setChannelsStates(newStatesArray)
-      console.log('newStatesArray: ',newStatesArray)
     }
 
     const handleDeleteChannel = ( idChannel ) => {
-      setChannelList(channelList.filter(value => value.id !== idChannel))
-      setChannelsStates(channelsStates.filter(value => value.id !== idChannel))
+      setChannelList(channelList.filter(value => value.id !== idChannel))      
     }
 
     const handleAddChannel = (item) => {
@@ -117,15 +55,7 @@ const ListOfChannels = ({ sampleList }) => {
 
       updatedChannelList.push(newChannel)
       
-      let updatedChannelStates = channelsStates
-      let newSampleStates = {
-        id: newChannel.id,
-        states: newChannel.channelConfig.states
-      }
-      updatedChannelStates.push(newSampleStates)
-      
       setChannelList(updatedChannelList)
-      setChannelsStates(updatedChannelStates)
       closeModalSampleSelector()
     }
 
@@ -146,10 +76,9 @@ const ListOfChannels = ({ sampleList }) => {
                 return <AudioTrack
                     key={sample.id} 
                     sample={sample}
-                    handleChannelStatesOnMute={handleChannelStatesOnMute}
-                    handleChannelStatesOnSolo={handleChannelStatesOnSolo}
-                    states={channelsStates.find(value => value.id === sample.id).states}
                     handleDeleteChannel={handleDeleteChannel}
+                    soloChannelSelectedState={soloChannelSelected}
+                    handleSoloChannel={handleSoloChannel}
                     />
             })
           }

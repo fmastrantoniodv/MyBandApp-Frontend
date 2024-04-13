@@ -44,7 +44,7 @@ const useWaveform = (src, soundID, containerRef) => {
       });
 
       wavesurfer.load(audio);
-
+      wavesurfer.onSolo = false
       wavesurfer.on('ready', () => {
         // Una vez que el audio se haya cargado, puedes acceder al buffer
         wavesurfer.backend.source = source

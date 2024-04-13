@@ -11,15 +11,13 @@ const PUBLICROOT = 'http://127.0.0.1:8080/'
 
 export default function AudioTrack ({ 
   sample, 
-  handleChannelStatesOnSolo, 
-  handleChannelStatesOnMute, 
-  states, 
-  playing, 
-  handleDeleteChannel}){
+  handleDeleteChannel,
+  soloChannelSelected,
+  handleSoloChannel
+}){
 
-  const [channelState, setChannelsState] = useState({solo: false, muted: false})
   const containerRef = useRef()
-  const {getTrack, deleteTrack} = useContext(MasterAudioContext)
+  const {getTrack, deleteTrack, onSoloChannel} = useContext(MasterAudioContext)
   const [loading, setLoading] = useState(true)
   
   var localAudioSrc;
@@ -34,19 +32,19 @@ export default function AudioTrack ({
   
   useEffect(() => {
     if(waveformPlayer !== null){
-      getTrack(sample.id).setMute(states.muted)
       setLoading(false)
     }else{
-      setChannelsState(states)
+      setLoading(true)
     }
-  }, [waveformPlayer, states, containerRef, loading]);
+  }, [waveformPlayer, containerRef, loading]);
 
   const onClickMute = () => {
-    handleChannelStatesOnMute(getTrack(sample.id).mediaContainer.id)
+    getTrack(sample.id).setMute(!getTrack(sample.id).isMuted)
   }
 
   const onClickSolo = () => {
-    handleChannelStatesOnSolo(getTrack(sample.id).mediaContainer.id)
+    onSoloChannel(sample.id)
+    handleSoloChannel(sample.id)
   }
 
   const deleteChannel = ( sampleID ) => {
@@ -90,8 +88,8 @@ export default function AudioTrack ({
                 </div>
                 <VolumeController waveformObj={getTrack(sample.id)} />
                 <div className='audio-controls-output-router-buttons'>
-                  <Button faderID={sample.id} textButton='M' state={channelState.muted} onClickButton={() => onClickMute(getTrack(sample.id))}/>
-                  <Button faderID={sample.id} textButton='S' state={channelState.solo} onClickButton={() => onClickSolo(getTrack(sample.id))}/>
+                  <Button faderID={sample.id} textButton='M' state={getTrack(sample.id).isMuted} onClickButton={() => onClickMute()}/>
+                  <Button faderID={sample.id} textButton='S' state={sample.id === soloChannelSelected} onClickButton={() => onClickSolo(getTrack(sample.id))}/>
                 </div>
               </div>
             </div>

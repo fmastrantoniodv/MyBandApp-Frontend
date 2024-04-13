@@ -35,19 +35,7 @@ export function MasterAudioContextProvider({children, value}){
             trackList.map(track => track.pause())
         }
     }
-    /*
-    function getAudioOfflineBuffer(track) {
-        console.log('getAudioOfflineBuffer.track', track.backend.offlineAc)
-        //var offlineContext = new OfflineAudioContext(track.backend.source.channelCount, track.backend.buffer.duration * track.backend.ac.sampleRate, track.backend.ac.sampleRate);
-        //var offlineContext = new OfflineAudioContext(sourceNode.channelCount, sourceNode.buffer.duration * audioContext.sampleRate, audioContext.sampleRate);
-        // Clone the audio graph into the offline context
-        //track.backend.gainNode.connect(track.backend.offlineAc.destination);
-        var renderedBuffer
-        track.backend.offlineAc.startRendering().then((renderedResult) => {return renderedBuffer = renderedResult})
-        
-        return renderedBuffer
-    }
-*/
+  
     function getAudioOfflineBuffer(waveSurfer) {
         // Create an OfflineAudioContext with the same sample rate and duration as your audio
         console.log('getAudioOfflineBuffer.wavesurfer',waveSurfer)
@@ -127,30 +115,31 @@ export function MasterAudioContextProvider({children, value}){
     }
     
     const exportWavFile = () => {
-        var arrayBuffersToExport = [];
-
         processWaveSurfers(trackList).then((results) => {
             console.log('result',results)
             exportToWavFile(results)
         }).catch((e)=>{
             console.error('Failed to process. error=', e)
         })
-        /*
-        trackList.map(track => {
-            console.log(track)
-            
-            getAudioOfflineBuffer(track).then(function(renderedBuffer) {
-                // Do something with the rendered buffer
-                arrayBuffersToExport.push(renderedBuffer)
-            }).catch(function(error) {
-                console.error('Failed to get audio offline buffer:', error);
-            });
-            
-            //arrayBuffersToExport.push(track.backend.buffer)
-        })
-        */
-        
-        //exportToWavFile(arrayBuffersToExport)
+    }
+
+    const onSoloChannel = (trackId) => {
+        if(getTrack(trackId).onSolo){
+            trackList.map(value => {
+                    value.setMute(false)
+                    value.onSolo = false                
+            })
+        }else{
+            trackList.map(value => {
+                if(value.mediaContainer.id === trackId){
+                    value.setMute(false)
+                    value.onSolo = true
+                }else{
+                    value.setMute(true)
+                    value.onSolo = false
+                }
+            })
+        }
     }
 
     return  <Context.Provider value={{
@@ -161,7 +150,8 @@ export function MasterAudioContextProvider({children, value}){
                 getTrack,
                 addTrackToList,
                 deleteTrack,
-                playBackTracks
+                playBackTracks,
+                onSoloChannel
             }}>{children}
             </Context.Provider>
 }
