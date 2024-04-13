@@ -127,7 +127,7 @@ export function MasterAudioContextProvider({children, value}){
         if(getTrack(trackId).onSolo){
             trackList.map(value => {
                     value.setMute(false)
-                    value.onSolo = false                
+                    value.onSolo = false
             })
         }else{
             trackList.map(value => {

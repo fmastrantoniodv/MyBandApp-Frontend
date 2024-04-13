@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import knobSvg from '../img/knob.svg'
 
 export default function EQControls({ waveformObj }) {
-  const [lowFrequency, setLowFrequency] = useState(0);
-  const [midFrequency, setMidFrequency] = useState(0);
-  const [highFrequency, setHighFrequency] = useState(0);
+  const [lowFrequency, setLowFrequency] = useState(waveformObj.backend.filters[0].gain.value);
+  const [midFrequency, setMidFrequency] = useState(waveformObj.backend.filters[1].gain.value);
+  const [highFrequency, setHighFrequency] = useState(waveformObj.backend.filters[2].gain.value);
 
   const handleLowFrequencyChange = (e) => {
     waveformObj.backend.filters[0].gain.value = e.target.value

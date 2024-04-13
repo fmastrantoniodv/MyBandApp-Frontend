@@ -12,6 +12,7 @@ const ListOfChannels = ({ sampleList }) => {
     
     useEffect(() => {
       console.log("[ListOfChannels].[useEffect].channelList", channelList)
+      
       if(sampleList !== null && channelList === null){
         setChannelList(sampleList)
         setLoading(false)

@@ -4,11 +4,12 @@ import '../../App.css';
 import '../../views/studio';
 
 function VolumeController({waveformObj}) {
-    const [volumeValue, setVolumeValue] = useState(null);
+    const [volumeValue, setVolumeValue] = useState(waveformObj.savedVolume);
 
     const handleOnChangeVolume = (e) => {
         setVolumeValue(parseFloat(e.target.value));
         waveformObj.backend.gainNode.gain.value = volumeValue
+        waveformObj.savedVolume = volumeValue
     };
 
     return(

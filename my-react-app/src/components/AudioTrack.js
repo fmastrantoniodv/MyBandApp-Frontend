@@ -28,7 +28,7 @@ export default function AudioTrack ({
     localAudioSrc = PUBLICROOT+'samples/'+sample.id+".mp3";
   }
 
-  const waveformPlayer = useWaveform(localAudioSrc, sample.id, containerRef)
+  const waveformPlayer = useWaveform(localAudioSrc, sample, containerRef)
   
   useEffect(() => {
     if(waveformPlayer !== null){

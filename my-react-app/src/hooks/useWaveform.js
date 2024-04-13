@@ -2,9 +2,11 @@ import { useEffect, useState, useContext } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import MasterAudioContext from '../contexts/MasterAudioContext'
 
-const useWaveform = (src, soundID, containerRef) => {
+const useWaveform = (src, sampleProps, containerRef) => {
     const [waveformComponent, setWaveformComponent] = useState(null)
     const {masterAudioCtx, mainGainNode, addArrayBuffers, addTrackToList} = useContext(MasterAudioContext)
+
+    const soundID = sampleProps.id
 
     const audio = new Audio()
     audio.crossOrigin = "anonymous"
@@ -19,7 +21,7 @@ const useWaveform = (src, soundID, containerRef) => {
     gain.connect(mainGainNode)
 
     useEffect(() => {
-      console.log(`[useWaveform].[useEffect].[sample=${soundID}`)
+      console.log('[useWaveform].[useEffect].[sampleProps=',sampleProps)
       
       if (!containerRef.current) return 
 
@@ -51,22 +53,23 @@ const useWaveform = (src, soundID, containerRef) => {
         const lowFilter = wavesurfer.backend.ac.createBiquadFilter();
         lowFilter.type = 'lowshelf';
         lowFilter.frequency.value = 500;
-        lowFilter.gain.value = 1;
+        lowFilter.gain.value = sampleProps.channelConfig.EQ.low;
         
         // MEDIOS
         const midFilter = wavesurfer.backend.ac.createBiquadFilter();
         midFilter.type = 'peaking';
         midFilter.frequency.value = 1600;
-        midFilter.gain.value = 1;
+        midFilter.gain.value = sampleProps.channelConfig.EQ.mid;
         
         // AGUDOS
         const highFilter = wavesurfer.backend.ac.createBiquadFilter();
         highFilter.type = 'highshelf';
         highFilter.frequency.value = 10000;
-        highFilter.gain.value = 1;
+        highFilter.gain.value = sampleProps.channelConfig.EQ.high;
        
         wavesurfer.backend.setFilter(lowFilter, midFilter, highFilter);      
-
+        wavesurfer.backend.gainNode.gain.value = sampleProps.channelConfig.volume
+        wavesurfer.savedVolume = sampleProps.channelConfig.volume
         //wavesurfer.backend.ac.sampleRate = '44100'
         console.log('wavesurfer ready',wavesurfer)
         addTrackToList(wavesurfer)
