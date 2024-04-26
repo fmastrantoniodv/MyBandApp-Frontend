@@ -3,12 +3,14 @@ import AudioTrack from "./AudioTrack";
 import SampleSelector from "./Modals/SampleSelector";
 import { useModal } from "../hooks/useModal";
 import Modal from "./Modals/Modal"
+import MasterAudioContext from '../contexts/MasterAudioContext'
 
 const ListOfChannels = ({ sampleList }) => {
     const [loading, setLoading] = useState(true)
     const [channelList, setChannelList] = useState(null)
     const [isOpenModalSampleSelector, openModalSampleSelector, closeModalSampleSelector] = useModal(false)
     const [soloChannelSelected, setSoloChannelSelected] = useState(null)
+    const { playBackTracks } = useContext(MasterAudioContext)
     
     useEffect(() => {
       console.log("[ListOfChannels].[useEffect].channelList", channelList)
@@ -33,6 +35,7 @@ const ListOfChannels = ({ sampleList }) => {
 
     const handleAddChannel = (item) => {
       console.log('Nueva pista')
+      playBackTracks("stop")
       var updatedChannelList = channelList
       var newChannel = {
         id: item.id,
@@ -46,9 +49,9 @@ const ListOfChannels = ({ sampleList }) => {
           },
           volume: 0.7,
           EQ: {
-              low: 0.5,
-              mid: 0.5,
-              high: 0.5
+              low: 0,
+              mid: 0,
+              high: 0
           }
           
       }}

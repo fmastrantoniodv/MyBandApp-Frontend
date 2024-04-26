@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import '../../App.css';
 import '../../views/studio';
 
@@ -7,8 +6,11 @@ function VolumeController({waveformObj}) {
     const [volumeValue, setVolumeValue] = useState(waveformObj.savedVolume);
 
     const handleOnChangeVolume = (e) => {
+        if(!waveformObj.isMuted){
+            waveformObj.backend.gainNode.gain.value = volumeValue
+        }
+
         setVolumeValue(parseFloat(e.target.value));
-        waveformObj.backend.gainNode.gain.value = volumeValue
         waveformObj.savedVolume = volumeValue
     };
 
@@ -19,8 +21,8 @@ function VolumeController({waveformObj}) {
                     <input
                         className='volume-range-controller'
                         type="range"
-                        min="0"
-                        max="1"
+                        min="-0.02"
+                        max="1.02"
                         step="0.01"
                         value={volumeValue}
                         onChange={handleOnChangeVolume}

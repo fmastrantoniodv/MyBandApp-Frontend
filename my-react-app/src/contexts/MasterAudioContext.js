@@ -9,6 +9,7 @@ export function MasterAudioContextProvider({children, value}){
     const [masterAudioCtx, setMasterAudioCtx] = useState(new AudioContext())
     const [mainGainNode, setMainGainNode] = useState(masterAudioCtx.createGain())
     const [trackList, setTrackList] = useState([])
+    const [playBackCurrentTime, setPlayBackCurrentTime] = useState(0)
 
     useEffect(()=>{
         console.log('[MasterAudioContextProvider].[useEffect].trackList', trackList)
@@ -24,8 +25,13 @@ export function MasterAudioContextProvider({children, value}){
 
     const deleteTrack = ( trackId ) => {
         setTrackList(trackList.filter(value => value.mediaContainer.id !== trackId))
-    } 
-
+    }
+    /*
+    const getPlayBackCurrentTime = () => {
+        setPlayBackCurrentTime(trackList[0].backend.ac.currentTime)
+        return playBackCurrentTime
+    }
+*/
     const playBackTracks = ( playBackAction ) => {
         if(playBackAction === 'play'){
             trackList.map(track => track.play())
@@ -37,14 +43,9 @@ export function MasterAudioContextProvider({children, value}){
     }
   
     function getAudioOfflineBuffer(waveSurfer) {
-        // Create an OfflineAudioContext with the same sample rate and duration as your audio
         console.log('getAudioOfflineBuffer.wavesurfer',waveSurfer)
-        var offlineContext = new OfflineAudioContext(waveSurfer.backend.source.channelCount, waveSurfer.backend.buffer.duration * waveSurfer.backend.ac.sampleRate, waveSurfer.backend.ac.sampleRate);
-        
-        // Get audio buffer
+        var offlineContext = new OfflineAudioContext(waveSurfer.backend.source.channelCount, waveSurfer.backend.buffer.duration * waveSurfer.backend.ac.sampleRate, waveSurfer.backend.ac.sampleRate);        
         var buffer = waveSurfer.backend.buffer;
-
-        // Create a buffer source
         var source = offlineContext.createBufferSource();
         source.buffer = buffer;
         console.log('getAudioOfflineBuffer.source',source)
@@ -55,11 +56,8 @@ export function MasterAudioContextProvider({children, value}){
         }else{
             gainNode.gain.value = waveSurfer.backend.gainNode.gain.value;
         }
-        // Connect the buffer source to the gainNode
         source.connect(gainNode);
         console.log('getAudioOfflineBuffer.gainNode', gainNode)
-
-        //gainNode.connect(offlineContext.destination)
 
         const lowFilter = offlineContext.createBiquadFilter();
         lowFilter.type = 'lowshelf';
@@ -82,41 +80,31 @@ export function MasterAudioContextProvider({children, value}){
         
         // Start rendering
         return new Promise(function(resolve, reject) {
-            // Listen for the complete event to resolve the promise
             offlineContext.oncomplete = function(event) {
                 resolve(event.renderedBuffer);
             };
-
-            // Start rendering
             source.start();
             offlineContext.startRendering();
         });
     }
 
     async function processWaveSurfers(waveSurfers) {
-        // Create an array to store the results
         var results = [];
-    
-        // Map over each WaveSurfer instance and call getAudioOfflineBuffer
         var promises = waveSurfers.map(function(waveSurfer) {
             return getAudioOfflineBuffer(waveSurfer).then(function(renderedBuffer) {
-                // Save the result to the array
                 results.push(renderedBuffer);
             }).catch(function(error) {
                 console.error('Failed to get audio offline buffer:', error);
             });
-        });
-    
-        // Wait for all promises to resolve
+        })
+
         return Promise.all(promises).then(function() {
-            // Return the array of results
             return results;
         });
     }
     
     const exportWavFile = () => {
         processWaveSurfers(trackList).then((results) => {
-            console.log('result',results)
             exportToWavFile(results)
         }).catch((e)=>{
             console.error('Failed to process. error=', e)
@@ -152,6 +140,7 @@ export function MasterAudioContextProvider({children, value}){
                 deleteTrack,
                 playBackTracks,
                 onSoloChannel
+                //getPlayBackCurrentTime
             }}>{children}
             </Context.Provider>
 }

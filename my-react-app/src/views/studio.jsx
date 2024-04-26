@@ -10,9 +10,10 @@ const Studio = () => {
       const [dataContext, setDataContext] = useState(null); // El estado del contexto
       
       useEffect(()=>{
-        fetch("https://demo1388249.mockable.io/")
+        fetch("http://localhost:3001/api/project/213")
         .then(response => response.json())
         .then(json => {
+          console.log(json)
           setDataContext(json)
         })
       },[])

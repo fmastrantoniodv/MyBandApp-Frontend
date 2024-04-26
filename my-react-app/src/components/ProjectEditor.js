@@ -21,15 +21,16 @@ export default function ProjectEditor ({ dataContext }) {
     }, [sounds]);
       
     const playProject = () => {
-        console.log('Play')
-        if(playing !== 'true'){
-          playBackTracks('play')
-        }
+      console.log('Play')
+      setPlaying('true')
+      if(playing !== 'true'){
+        playBackTracks('play')
+      }
      }
 
     const stopProject = () => {
-        playBackTracks('stop')
-        setPlaying('false')
+      setPlaying('false')
+      playBackTracks('stop')
     }
 
     const pauseProject = () => {

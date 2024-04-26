@@ -7,7 +7,10 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
   const [avaibleFavs, setAvaibleFavs] = useState(null)
   const favouritesSamples = useFavouritesSamples()
 
+  
   useEffect(()=>{
+    if(favouritesSamples === null) return
+    console.log('[SampleSelector].favouritesSamples',favouritesSamples)
     if(avaibleFavs === null) setAvaibleFavs(getFavsAvailable(favouritesSamples))
 
     if(avaibleFavs && avaibleFavs.length === 0){
@@ -16,7 +19,7 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
       setTitleMsg("Selecciona una muestra para crear el canal")
       setAvaibleFavs(getFavsAvailable(favouritesSamples))
     }
-  },[channelList])
+  },[favouritesSamples,channelList])
 
   const handleCloseAction = () => {
     handleCloseSamplesSelector()
