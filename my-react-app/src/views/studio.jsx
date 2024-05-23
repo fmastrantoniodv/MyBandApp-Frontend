@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import '../App.css';
-import './studio';
 import ProjectEditor from '../components/ProjectEditor';
 import { SettingsProvider } from '../contexts/SettingsContext'
 import { MasterAudioContextProvider } from "../contexts/MasterAudioContext";

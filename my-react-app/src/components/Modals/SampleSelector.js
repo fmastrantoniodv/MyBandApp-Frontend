@@ -43,7 +43,7 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
     var listFilteredFavs = new Array;
     if(!allFavs) return
     allFavs.map(fav => {
-      if(channelList.find(value => value.id === fav.id) === undefined) listFilteredFavs.push({ id: fav.id, displayName: fav.displayName})
+      if(channelList.find(value => value.sampleId === fav.sampleId) === undefined) listFilteredFavs.push({ sampleId: fav.sampleId, sampleName: fav.sampleName})
     })
     return listFilteredFavs
   }
@@ -57,10 +57,10 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
           <ul>
             { 
             avaibleFavs.map(item => {
-              return  <li key={item.id} 
+              return  <li key={item.sampleId} 
                 onClick={()=>handleSelectItem(item)} 
-                {... itemSelected && item.id === itemSelected.id ? {className: "selected"} : ""}
-                >{item.displayName}
+                {... itemSelected && item.sampleId === itemSelected.sampleId ? {className: "selected"} : ""}
+                >{item.sampleName}
                 </li>
                 })
                 }

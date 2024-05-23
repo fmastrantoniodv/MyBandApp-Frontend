@@ -22,6 +22,7 @@ export default function AudioTrack ({
   
   var localAudioSrc;
   //HARDCODE PARA QUE TOME LAS URL LOCALES
+  console.log('buscando archivos', sample)
   if(sample.id === "sample1"){
     localAudioSrc = PUBLICROOT+'samples/'+sample.id+".wav";
   }else{
