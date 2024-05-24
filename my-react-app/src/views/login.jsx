@@ -1,25 +1,30 @@
 import React from 'react'
+import googleIcon from '../img/googleIcon.svg'
 import {FormButton, FormCard, FormInput, Header} from '../components/Register/Form'
 
-const Register = () => {
+const Login = () => {
     return (
         <>
+            <Header textPrimaryButton={'Registrarse'} textSecondaryButton={'Volver a la página principal'}/>
             <div class={'container'}>
-                <Header textPrimaryButton={'Iniciar sesión'} textSecondaryButton={'Volver a la página principal'}/>
-                <FormCard type={'register'} title={'Registrarse'}>
+                <FormCard title={'Iniciar sesión'}>
                     <div style={{
                         width: '100%',
                         gap: '21px',
                         display: 'flex',
                         'flex-direction': 'column'
                     }}>
-                            <FormInput title={'Nombre'}/>
                             <FormInput title={'Correo electrónico'}/>
-                            <FormInput title={'Repita correo electrónico'}/>
                             <FormInput title={'Contraseña'}/>
-                            <FormInput title={'Repita Contraseña'}/>
-                            <FormInput title={'Suscripción'}/>
                     </div>
+                    <button style={{
+                        'background-color':'rgba(0, 0, 0, 0)',
+                        'font-size': '20px',
+                        border: '0px',
+                        'margin-top':'9px'
+                    }}>
+                        Olvidé mi contraseña
+                    </button>
                     <div style={{
                         width: '100%',
                         gap: '13px',
@@ -27,13 +32,17 @@ const Register = () => {
                         'flex-direction': 'column',
                         'margin-top':'38px'
                     }}>
-                            <FormButton text={'Crear usuario'} type={'primary'}/>
-                            <FormButton text={'Volver'} type={'secondary'}/>
+                            <FormButton text={'Ingresar'} type={'primary'}/>
+                            <FormButton text={'Registrarse'} type={'secondary'}/>
                     </div>
+                    <button class='form-btn secondary icon'>
+                        Iniciar con google
+                        <img src={googleIcon}/>
+                    </button>
                 </FormCard>
             </div>
         </>
     )
 }
 
-export default Register
+export default Login

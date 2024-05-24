@@ -2,8 +2,9 @@ import './App.css';
 import './components/Register/Register.css';
 import React from 'react';
 import Studio from './views/studio.jsx'
-import Register from './views/register.jsx';
+import Login from './views/login.jsx';
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
+import Register from './views/register.jsx';
 
 function App() {
 
@@ -11,7 +12,8 @@ function App() {
     <BrowserRouter>
       <Routes>
       <Route path='/studio' element={<Studio></Studio>}></Route>
-      <Route path='/' element={<Register texto={"Hola mundo"}/>}></Route>
+      <Route path='/login' element={<Login/>}></Route>
+      <Route path='/register' element={<Register/>}></Route>
       </Routes>
       </BrowserRouter>
      );
