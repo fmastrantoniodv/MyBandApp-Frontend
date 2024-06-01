@@ -1,8 +1,9 @@
 import React from 'react'
 import logo from '../../img/logo.svg'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 
-export const Header = ({ type, textPrimaryButton, textSecondaryButton }) => {
+export const Header = ({ type, textPrimaryButton, textSecondaryButton, route1, route2 }) => {
     
     //TODO: revisar, comentario en FormButton
     const className = 'main-header ' + `${(type === 'home') ? 'home'
@@ -20,32 +21,39 @@ export const Header = ({ type, textPrimaryButton, textSecondaryButton }) => {
                     transform: 'translateX(-80%)'
                     }}
                 >
-                    <ButtonText type={'secondary'} text={textSecondaryButton}/>
-                    <ButtonText type={'primary'} text={textPrimaryButton}/>
+                    <ButtonText type={'secondary'} text={textSecondaryButton} route={route2}/>
+                    <ButtonText type={'primary'} text={textPrimaryButton} route={route1}/>
                 </div>
         </header>
     )
 }
 
-export const ButtonText = ({ text, type })  => {
+export const ButtonText = ({ text, type, route })  => {
 
     const className = 'text-btn ' + `${(type === 'primary') ? 'primary'
     : (type === 'secondary') ?  'secondary' : 'secondary'}`
 
+    const navigate = useNavigate ();
+
+    const handleClick = () => {
+        navigate(route); 
+    };
+
     return (
-        <button class={className}>{text}</button>
+        <button class={className} onClick={handleClick}>{text}</button>
     )
 }
 
 export const FormCard = ({ type, title, children, inputs }) => {
 
-    const { register, handleSubmit } = useForm()
+    const { register, handleSubmit, formState: {errors} } = useForm()
 
     const className = 'card ' + `${(type === 'register') ? 'register'
     : (type === 'login') ?  'login' : ''}`
 
     const onSubmit = handleSubmit((data) => {
         console.log(data)
+        console.log(errors)
     })
 
     return (
@@ -58,7 +66,7 @@ export const FormCard = ({ type, title, children, inputs }) => {
                 'flex-direction': 'column'
             }}>
                 {
-                    inputs.map(({ title, options, name, type }) => (
+                    inputs.map(({ title, options, name, type, required, validate }) => (
                     type === 'dropdown' ? (
                         <InputDropdown
                             title={title}
@@ -71,6 +79,9 @@ export const FormCard = ({ type, title, children, inputs }) => {
                             name={name}
                             type={type}
                             register={register}
+                            errors={errors}
+                            required={required}
+                            validate={validate}
                         />
                     ))
                 }
@@ -90,7 +101,7 @@ export const FormButton = ({ text, type }) => {
     )
 }
 
-export const FormInput = ({ title, type, name, register }) => {
+export const FormInput = ({ title, type, name, register, required, validate, errors }) => {
 
     const inputType = (type === 'email') ? 'email'
     : (type === 'password') ?  'password' : (type === 'list') ?  'list' : 'text'
@@ -110,7 +121,15 @@ export const FormInput = ({ title, type, name, register }) => {
             }}>{title}
             </h3>
             
-            <input class={'form-input'} type={inputType} { ...register(name) }/>
+            <input class={'form-input'} type={inputType} { ...register(name, 
+                required? {required: {
+                    value: required.value,
+                    message: required.message
+                }} : {}
+            ) }/>
+            { errors[name] && (
+                <span style={{color: '#000000', display: 'block'}}>{errors[name].message}</span>
+            ) }
         </div>
     )
 }
@@ -119,11 +138,12 @@ export const InputDropdown = ({ title, name, options, register}) => {
     return (
         <div>
             <h3 style={{
-            color: '#000000',
-            margin: '0px 0px 7px 0px',
-            'font-size': '20px',
-            'font-style': 'normal'
-            }}>{title}
+                color: '#000000',
+                margin: '0px 0px 7px 0px',
+                'font-size': '20px',
+                'font-style': 'normal'
+            }}>
+                {title}
             </h3>
             <select class={'form-input dropdown'}  { ...register(name) }>
                 {options.map(option => (
