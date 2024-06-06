@@ -3,78 +3,88 @@ import logo from '../../img/logo.svg'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
-export const Header = ({ type, textPrimaryButton, textSecondaryButton, route1, route2 }) => {
-    
-    //TODO: revisar, comentario en FormButton
-    const className = 'main-header ' + `${(type === 'home') ? 'home'
-    : (type === 'register') ?  'register' : 'register'}`
-    
+export const Header = ({ textPrimaryButton, textSecondaryButton, route1, route2 }) => {
     return (
-        <header class={className}>
-                <img src={logo} class={'logo'}></img>
-                <div
+        <header class={'main-header'}>
+            <img src={logo} class={'logo'}></img>
+            <div
                 style={{
                     display: 'flex',
                     gap: '16px',
                     position: 'relative',
                     left: '80%',
                     transform: 'translateX(-80%)'
-                    }}
-                >
-                    <ButtonText type={'secondary'} text={textSecondaryButton} route={route2}/>
-                    <ButtonText type={'primary'} text={textPrimaryButton} route={route1}/>
-                </div>
+                }}
+            >
+                <ButtonText type={'secondary'} text={textSecondaryButton} route={route2} />
+                <ButtonText type={'primary'} text={textPrimaryButton} route={route1} />
+            </div>
         </header>
     )
 }
 
-export const ButtonText = ({ text, type, route })  => {
+export const ButtonText = ({ text, type, route }) => {
 
-    const className = 'text-btn ' + `${(type === 'primary') ? 'primary'
-    : (type === 'secondary') ?  'secondary' : 'secondary'}`
-
-    const navigate = useNavigate ();
+    const navigate = useNavigate()
 
     const handleClick = () => {
-        navigate(route); 
-    };
+        navigate(route);
+    }
 
     return (
-        <button class={className} onClick={handleClick}>{text}</button>
+        <button class={'text-btn ' + `${type}`} onClick={handleClick}>{text}</button>
     )
 }
 
-export const FormCard = ({ type, title, children, inputs }) => {
+export const FormCard = ({ title, children, inputs, url, request }) => {
 
-    const { register, handleSubmit, formState: {errors} } = useForm()
-
-    const className = 'card ' + `${(type === 'register') ? 'register'
-    : (type === 'login') ?  'login' : ''}`
+    const { register, handleSubmit, formState: { errors }, watch } = useForm()
 
     const onSubmit = handleSubmit((data) => {
-        console.log(data)
-        console.log(errors)
+        console.log(data);
+
+        const dataHC = {
+            "email": "newswdasddUser@kkk.com",
+            "usrName": "12fghwwwasdasdsdhsfgds",
+            "password": "asda2asadsssssddff",
+            "plan": "free"
+        }
+
+        fetch('http://localhost:3001/api/users/register', {
+            method: 'POST',
+            body: dataHC
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error !response.ok: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Salió ok ", data);
+        })
+        .catch(err => console.error("Error:", err));
     })
 
     return (
-        <form class={className} onSubmit={onSubmit}>
+        <form class={'card scale-up-center'} onSubmit={onSubmit}>
             <h1 class={'title'}>{title}</h1>
             <div style={{
                 width: '100%',
-                gap: '21px',
+                gap: '12px',
                 display: 'flex',
                 'flex-direction': 'column'
             }}>
                 {
                     inputs.map(({ title, options, name, type, required, validate }) => (
-                    type === 'dropdown' ? (
-                        <InputDropdown
-                            title={title}
-                            name={name}
-                            options={options}
-                            register={register}
-                        />
-                    ) : <FormInput
+                        type === 'dropdown' ? (
+                            <InputDropdown
+                                title={title}
+                                name={name}
+                                options={options}
+                                register={register}
+                            />
+                        ) : <FormInput
                             title={title}
                             name={name}
                             type={type}
@@ -82,6 +92,7 @@ export const FormCard = ({ type, title, children, inputs }) => {
                             errors={errors}
                             required={required}
                             validate={validate}
+                            watch={watch}
                         />
                     ))
                 }
@@ -92,62 +103,63 @@ export const FormCard = ({ type, title, children, inputs }) => {
 }
 
 export const FormButton = ({ text, type }) => {
-    //TODO: no mg esto, ver algo estilo enum ?
-    const className = 'form-btn ' + `${(type === 'primary') ? 'primary'
-    : (type === 'secondary') ?  'secondary' : 'secondary'}`
-
     return (
-        <button class={className} type={(type === 'primary') ? 'submit' : 'button'}>{text}</button>
+        <button class={'form-btn ' + `${type}`} type={(type === 'primary') ? 'submit' : 'button'}>{text}</button>
     )
 }
 
-export const FormInput = ({ title, type, name, register, required, validate, errors }) => {
+export const FormInput = ({ title, type, name, register, required, validate, errors, watch }) => {
 
     const inputType = (type === 'email') ? 'email'
-    : (type === 'password') ?  'password' : (type === 'list') ?  'list' : 'text'
+        : (type === 'password') ? 'password'  : 'text'
 
     return (
         <div style={{
             display: 'flex',
             'flex-direction': 'column',
-            'align-items':'flex-start',
+            'align-items': 'flex-start',
             width: '100%'
         }}>
             <h3 style={{
-            color: '#000000',
-            margin: '0px 0px 7px 0px',
-            'font-size': '20px',
-            'font-style': 'normal'
+                color: '#000000',
+                margin: '0px 0px 5px 0px',
+                'font-size': '14px',
+                'font-family': 'Inter-SemiBold , sans-serif'
             }}>{title}
             </h3>
-            
-            <input class={'form-input'} type={inputType} { ...register(name, 
-                required? {required: {
-                    value: required.value,
-                    message: required.message
-                }} : {}
-            ) }/>
-            { errors[name] && (
-                <span style={{color: '#000000', display: 'block'}}>{errors[name].message}</span>
-            ) }
+
+            <input class={'form-input'} type={inputType} {...register(name,
+                {
+                    required: required ? {
+                        value: required.value,
+                        message: required.message
+                    } : false,
+                    validate: validate ? {
+                        validate: (value) => validate(value, watch)
+                    } : undefined
+                }
+            )} />
+            {errors[name] && (
+                <span style={{ color: '#000000', display: 'block', 'font-size': '12px' }}>{errors[name].message}</span>
+            )}
         </div>
     )
 }
 
-export const InputDropdown = ({ title, name, options, register}) => {
+export const InputDropdown = ({ title, name, options, register }) => {
     return (
         <div>
             <h3 style={{
                 color: '#000000',
-                margin: '0px 0px 7px 0px',
-                'font-size': '20px',
-                'font-style': 'normal'
+                margin: '0px 0px 5px 0px',
+                'font-size': '14px',
+                'font-family': 'Inter-SemiBold , sans-serif'
             }}>
                 {title}
             </h3>
-            <select class={'form-input dropdown'}  { ...register(name) }>
+            <select class={'form-input dropdown'}  {...register(name)}>
                 {options.map(option => (
-                    <option key={option} value={option}>{option}</option>
+                    <option value={option.key}>{option.value}</option>
                 ))}
             </select>
         </div>

@@ -1,32 +1,41 @@
 import React from 'react'
 import googleIcon from '../img/googleIcon.svg'
 import {FormButton, FormCard, FormInput, Header} from '../components/Register/Form'
-import { Input } from '../components/Register/Input'
 import { routes } from '../const/constants'
 
 const Login = () => {
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
     const inputs = [
-        new Input('Correo electrónico',
-            'email',
-            'email',
-            {
+        {
+            title: 'Correo electrónico',
+            name: 'email',
+            type: 'email',
+            required: {
                 value: true,
-                message: 'Por favor ingrese su correo electrónico' 
-            }
-        ),
-        new Input('Contraseña',
-            'password',
-            'password',
-            {
+                message: 'Por favor ingrese su correo electrónico'
+            },
+            validate: (value) => emailRegex.test(value) || 'El formato del correo electrónico no es válido'
+        },
+        {
+            title: 'Contraseña',
+            name: 'password',
+            type: 'password',
+            required: {
                 value: true,
-                message: 'Por favor ingrese su contraseña' 
+                message: 'Por favor ingrese su contraseña'
             }
-        )
-    ]
+        }
+    ];
 
     return (
-        <>
+        <div style={{
+            display: 'flex',
+            'flex-direction': 'column',
+            'background-color':'#262529',
+            'min-height': '100vh'
+        }}>
             <Header 
                 textPrimaryButton={'Registrarse'} 
                 textSecondaryButton={'Volver a la página principal'}
@@ -37,7 +46,7 @@ const Login = () => {
                 <FormCard title={'Iniciar sesión'} inputs={inputs}>
                     <button style={{
                         'background-color':'rgba(0, 0, 0, 0)',
-                        'font-size': '20px',
+                        'font-size': '14px',
                         border: '0px',
                         'margin-top':'9px'
                     }}>
@@ -48,7 +57,8 @@ const Login = () => {
                         gap: '13px',
                         display: 'flex',
                         'flex-direction': 'column',
-                        'margin-top':'38px'
+                        'margin-top':'38px',
+                        'align-items':'center'
                     }}>
                             <FormButton text={'Ingresar'} type={'primary'}/>
                             <FormButton text={'Registrarse'} type={'secondary'}/>
@@ -59,7 +69,7 @@ const Login = () => {
                     </button>
                 </FormCard>
             </div>
-        </>
+        </div>
     )
 }
 

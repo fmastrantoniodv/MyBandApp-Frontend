@@ -1,81 +1,118 @@
 import React from 'react'
-import {FormButton, FormCard, Header, InputDropdown} from '../components/Register/Form'
-import { Input, InputOptions } from '../components/Register/Input'
+import { FormButton, FormCard, Header } from '../components/Register/Form'
 import { routes } from '../const/constants'
 
+
+export const requestPOSTUser = (data) => {
+
+    return {
+        method: 'POST',
+        body: JSON.stringify({
+            "usrName": data.name,
+            "email": data.email,
+            "password": data.password,
+            "plan": data.suscription
+        })
+    }
+}
+
 const Register = () => {
-    
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const passwordRegex = /^[a-zA-Z0-9]+$/
+    const suscriptions = [
+        { "key": "free", "value": "Free" },
+        { "key": "trial", "value": "Trial" },
+        { "key": "pro", "value": "Pro" }
+    ]
+
     const inputs = [
-        new Input('Nombre',
-            'name',
-            undefined,
-            {
+        {
+            title: 'Nombre',
+            name: 'name',
+            type: 'text',
+            required: {
                 value: true,
-                message: 'El campo nombre no puede ser vacío' 
+                message: 'El campo nombre no puede ser vacío'
             }
-        ),
-        new Input('Correo electrónico',
-            'email',
-            'email',
-            {
+        },
+        {
+            title: 'Correo electrónico',
+            name: 'email',
+            type: 'email',
+            required: {
                 value: true,
-                message: 'El campo correo electrónico no puede ser vacío' 
-            }
-        ),
-        new Input('Repita correo electrónico',
-            'repemail',
-            'email',
-            {
-                value: true,
-                message: 'El campo correo electrónico no puede ser vacío' 
+                message: 'El campo correo electrónico no puede ser vacío'
             },
-        ),
-        new Input('Contraseña',
-            'password',
-            'password',
-            {
+            validate: (value) => emailRegex.test(value) || 'El formato del correo electrónico no es válido'
+        },
+        {
+            title: 'Repita correo electrónico',
+            name: 'repemail',
+            type: 'email',
+            required: {
                 value: true,
-                message: 'El campo contraseña no puede ser vacío' 
-            }
-        ),
-        new Input('Repita Contraseña',
-            'reppassword',
-            'password',
-            {
+                message: 'El campo correo electrónico no puede ser vacío'
+            },
+            validate: (value, watch) => value === watch('email') || 'Los correos electrónicos no coinciden'
+        },
+        {
+            title: 'Contraseña',
+            name: 'password',
+            type: 'password',
+            required: {
                 value: true,
-                message: 'Las contraseñas no coinciden' 
-            }
-        ),
-        new InputOptions('Suscripción',
-            'suscription',
-            ["Full", "Standard"]
-        )
+                message: 'El campo contraseña no puede ser vacío'
+            },
+            validate: (value) => passwordRegex.test(value) || 'La contraseña debe ser alfanumérica'
+        },
+        {
+            title: 'Repita Contraseña',
+            name: 'reppassword',
+            type: 'password',
+            required: {
+                value: true,
+                message: 'Campo obligatorio'
+            },
+            validate: (value, watch) => value === watch('password') || 'Las contraseñas no coinciden'
+        },
+        {
+            title: 'Suscripción',
+            name: 'suscription',
+            type: 'dropdown',
+            options: suscriptions
+
+        }
     ]
 
     return (
-        <>
-            <div class={'container'}>
-                <Header 
-                    textPrimaryButton={'Iniciar sesión'} 
-                    textSecondaryButton={'Volver a la página principal'}
-                    route1 = {routes.login}
-                    route2 = {routes.home}
-                />
-                <FormCard type={'register'} title={'Registrarse'} inputs={inputs}>
+        <div style={{
+            display: 'flex',
+            'flex-direction': 'column',
+            'background-color':'#262529'
+        }}>
+            <Header
+                textPrimaryButton={'Iniciar sesión'}
+                textSecondaryButton={'Volver a la página principal'}
+                route1={routes.login}
+                route2={routes.home}
+            />
+            <div class={'container register'}>
+                <FormCard title={'Registrarse'} inputs={inputs} url={'http://localhost:3001/api/users/register'} request={requestPOSTUser}>
                     <div style={{
                         width: '100%',
                         gap: '13px',
                         display: 'flex',
                         'flex-direction': 'column',
-                        'margin-top':'38px',
+                        'margin-top': '30px',
                         'align-items': 'center'
                     }}>
-                            <FormButton text={'Crear usuario'} type={'primary'}/>
-                            <FormButton text={'Volver'} type={'secondary'}/>
+                        <FormButton text={'Crear usuario'} type={'primary'} />
+                        <FormButton text={'Volver'} type={'secondary'} />
                     </div>
                 </FormCard>
             </div>
-        </>
+        </div>
     )
 }
 
