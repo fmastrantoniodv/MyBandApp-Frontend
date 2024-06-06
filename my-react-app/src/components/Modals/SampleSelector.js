@@ -7,7 +7,6 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
   const [avaibleFavs, setAvaibleFavs] = useState(null)
   const favouritesSamples = useFavouritesSamples()
 
-  
   useEffect(()=>{
     if(favouritesSamples === null) return
     console.log('[SampleSelector].favouritesSamples',favouritesSamples)

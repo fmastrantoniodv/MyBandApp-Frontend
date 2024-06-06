@@ -6,9 +6,6 @@ import EQControls from "./EQControls"
 import deleteIconSvg from '../img/deleteIcon.svg'
 import MasterAudioContext from '../contexts/MasterAudioContext'
 
-// npx http-server ./public --cors
-const PUBLICROOT = 'http://127.0.0.1:8080/'
-
 export default function AudioTrack ({ 
   sample, 
   handleDeleteChannel,
@@ -20,16 +17,9 @@ export default function AudioTrack ({
   const {getTrack, deleteTrack, onSoloChannel} = useContext(MasterAudioContext)
   const [loading, setLoading] = useState(true)
   
-  var localAudioSrc;
-  //HARDCODE PARA QUE TOME LAS URL LOCALES
-  console.log('buscando archivos', sample)
-  if(sample.id === "sample1"){
-    localAudioSrc = PUBLICROOT+'samples/'+sample.id+".wav";
-  }else{
-    localAudioSrc = PUBLICROOT+'samples/'+sample.id+".mp3";
-  }
+  const url = `http://localhost:3001/api/samples/${sample.pathFolder}/${sample.sampleId}`
 
-  const waveformPlayer = useWaveform(localAudioSrc, sample, containerRef)
+  const waveformPlayer = useWaveform(url, sample, containerRef)
   
   useEffect(() => {
     if(waveformPlayer !== null){
@@ -37,15 +27,15 @@ export default function AudioTrack ({
     }else{
       setLoading(true)
     }
-  }, [waveformPlayer, containerRef, loading]);
+  }, [waveformPlayer, containerRef]);
 
   const onClickMute = () => {
-    getTrack(sample.id).setMute(!getTrack(sample.id).isMuted)
+    getTrack(sample.sampleId).setMute(!getTrack(sample.sampleId).isMuted)
   }
 
   const onClickSolo = () => {
-    onSoloChannel(sample.id)
-    handleSoloChannel(sample.id)
+    onSoloChannel(sample.sampleId)
+    handleSoloChannel(sample.sampleId)
   }
 
   const deleteChannel = ( sampleID ) => {
@@ -56,7 +46,7 @@ export default function AudioTrack ({
   const DeleteButton = () => {
     return(
       <button className="btn-delete-channel" 
-        onClick={() => deleteChannel(sample.id)}>
+        onClick={() => deleteChannel(sample.sampleId)}>
         <img 
           src={deleteIconSvg} 
           alt="icono de borrar"
@@ -85,24 +75,24 @@ export default function AudioTrack ({
                     <DeleteButton />
                     <span className='display-name'>{sample.sampleName}</span>
                   </div>
-                  <EQControls waveformObj={getTrack(sample.id)}/>
+                  <EQControls waveformObj={getTrack(sample.sampleId)}/>
                 </div>
-                <VolumeController waveformObj={getTrack(sample.id)} />
+                <VolumeController waveformObj={getTrack(sample.sampleId)} />
                 <div className='audio-controls-output-router-buttons'>
-                  <Button faderID={sample.id} textButton='M' state={getTrack(sample.id).isMuted} onClickButton={() => onClickMute()}/>
-                  <Button faderID={sample.id} textButton='S' state={sample.id === soloChannelSelected} onClickButton={() => onClickSolo(getTrack(sample.id))}/>
+                  <Button faderID={sample.sampleId} textButton='M' state={getTrack(sample.sampleId).isMuted} onClickButton={() => onClickMute()}/>
+                  <Button faderID={sample.sampleId} textButton='S' state={sample.sampleId === soloChannelSelected} onClickButton={() => onClickSolo(getTrack(sample.sampleId))}/>
                 </div>
               </div>
             </div>
-    )
-  }
+            )
+    }
 
     return (
     <div className='channel-container'>
       <ChannelControls />
       <div className='channel-sprites'>
         <div className='sprites-container'>
-          <div id={sample.id} className="sprite" ref={containerRef} />
+          <div id={sample.sampleId} className="sprite" ref={containerRef} />
         </div>
       </div>
     </div>

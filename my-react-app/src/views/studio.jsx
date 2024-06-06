@@ -3,38 +3,37 @@ import '../App.css';
 import ProjectEditor from '../components/ProjectEditor';
 import { SettingsProvider } from '../contexts/SettingsContext'
 import { MasterAudioContextProvider } from "../contexts/MasterAudioContext";
+import useProject from '../hooks/useProject'
+
 
 const Studio = () => {
       //TODO: Obtener información de la BD con el ID del proyecto
       const [dataContext, setDataContext] = useState(null); // El estado del contexto
+      const projectData = useProject(213)
       
       useEffect(()=>{
-        fetch("http://localhost:3001/api/project/213")
-        .then(response => response.json())
-        .then(json => {
-          console.log(json)
-          setDataContext(json)
-        })
-      },[])
+        setDataContext(projectData)
+      },[projectData])
+      
+      console.log('dataContext=', dataContext)
+      if(dataContext === null) return <h1 style={{color: '#fff'}}>LOADING</h1>
       
       const initialSettings = {
-        projectName: 'firstProject',
+        projectName: dataContext.projectInfo.projectName,
         dataContext: dataContext
-        }
+      }
 
-      if(dataContext === null) return <h1>LOADING</h1>
-
-    return(
-        <>
-          <div className='container'>
-            <SettingsProvider settings={initialSettings}>
-              <MasterAudioContextProvider value={{}}>
-                <ProjectEditor dataContext={dataContext} />
-              </MasterAudioContextProvider>
-            </SettingsProvider>
-          </div>
-        </>
-    )
+      return(
+          <>
+            <div className='container'>
+              <SettingsProvider settings={initialSettings}>
+                <MasterAudioContextProvider value={{}}>
+                  <ProjectEditor dataContext={dataContext} />
+                </MasterAudioContextProvider>
+              </SettingsProvider>
+            </div>
+          </>
+      )
 }
 
 export default Studio;
