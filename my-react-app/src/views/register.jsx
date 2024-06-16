@@ -1,18 +1,22 @@
 import React from 'react'
 import { FormButton, FormCard, Header } from '../components/Register/Form'
 import { routes } from '../const/constants'
+import axios from 'axios'
 
 
-export const requestPOSTUser = (data) => {
-
-    return {
-        method: 'POST',
-        body: JSON.stringify({
+export const postUser = async (data) => {
+    try {
+        const url = 'http://localhost:3001/api/users/register'   
+        const body = {
             "usrName": data.name,
             "email": data.email,
             "password": data.password,
             "plan": data.suscription
-        })
+        }
+        const response = await axios.post(url, body)
+        console.log(response)
+    } catch (error) {
+        console.log(error)
     }
 }
 
@@ -81,7 +85,6 @@ const Register = () => {
             name: 'suscription',
             type: 'dropdown',
             options: suscriptions
-
         }
     ]
 
@@ -98,7 +101,7 @@ const Register = () => {
                 route2={routes.home}
             />
             <div class={'container register'}>
-                <FormCard title={'Registrarse'} inputs={inputs} url={'http://localhost:3001/api/users/register'} request={requestPOSTUser}>
+                <FormCard title={'Registrarse'} inputs={inputs} url={'http://localhost:3001/api/users/register'} request={postUser}>
                     <div style={{
                         width: '100%',
                         gap: '13px',

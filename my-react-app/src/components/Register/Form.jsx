@@ -42,28 +42,7 @@ export const FormCard = ({ title, children, inputs, url, request }) => {
 
     const onSubmit = handleSubmit((data) => {
         console.log(data);
-
-        const dataHC = {
-            "email": "newswdasddUser@kkk.com",
-            "usrName": "12fghwwwasdasdsdhsfgds",
-            "password": "asda2asadsssssddff",
-            "plan": "free"
-        }
-
-        fetch('http://localhost:3001/api/users/register', {
-            method: 'POST',
-            body: dataHC
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error !response.ok: ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Salió ok ", data);
-        })
-        .catch(err => console.error("Error:", err));
+        request(data)
     })
 
     return (
