@@ -104,7 +104,7 @@ export default function ProjectEditor ({ dataContext }) {
     return (
         <>
             <div className='project-controls' >
-              <h1>{dataContext.projectName}</h1>
+              <h1>{dataContext.projectInfo.projectName}</h1>
               <ExportProject />
               <div className="project-controls-btn-container">
                 <PlayButton />

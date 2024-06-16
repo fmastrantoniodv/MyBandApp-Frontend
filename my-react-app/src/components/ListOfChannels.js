@@ -38,8 +38,8 @@ const ListOfChannels = ({ sampleList }) => {
       playBackTracks("stop")
       var updatedChannelList = channelList
       var newChannel = {
-        id: item.id,
-        sampleName: item.displayName,
+        id: item.sampleId,
+        sampleName: item.sampleName,
         src: "http:fileserver.com/kick",
         duration: "6452",
         channelConfig: {
