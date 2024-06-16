@@ -1,98 +1,54 @@
 import React from 'react'
 import { FormButton, FormCard, Header } from '../components/Register/Form'
-import { routes } from '../const/constants'
+import { routes, inputsRegister } from '../const/constants'
 import axios from 'axios'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import LottieAnimation from '../components/Register/LoadingAnimation';
 
+export const LoadingScreen = ({ loading }) => {
+    return (
+        <div className="loading-screen" style={{ display: loading ? 'flex' : 'none' }}>
+            <div className="loading-overlay">
+                <LottieAnimation width={200} height={200} />
+                Cargando...
+            </div>
+        </div>
+    );
+};
 
-export const postUser = async (data) => {
+export const postUser = async (data, setLoading) => {
+    setLoading(true);
     try {
-        const url = 'http://localhost:3001/api/users/register'   
+        const url = 'http://localhost:3001/api/users/register';
         const body = {
             "usrName": data.name,
             "email": data.email,
             "password": data.password,
             "plan": data.suscription
-        }
-        const response = await axios.post(url, body)
-        console.log(response)
+        };
+        const response = await axios.post(url, body);
+        console.log(response);
+        return response;
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        throw error;
+    } finally {
+        setLoading(false);
     }
 }
 
 const Register = () => {
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    const passwordRegex = /^[a-zA-Z0-9]+$/
-    const suscriptions = [
-        { "key": "free", "value": "Free" },
-        { "key": "trial", "value": "Trial" },
-        { "key": "pro", "value": "Pro" }
-    ]
+    const [loading, setLoading] = useState(false);
 
-    const inputs = [
-        {
-            title: 'Nombre',
-            name: 'name',
-            type: 'text',
-            required: {
-                value: true,
-                message: 'El campo nombre no puede ser vacío'
-            }
-        },
-        {
-            title: 'Correo electrónico',
-            name: 'email',
-            type: 'email',
-            required: {
-                value: true,
-                message: 'El campo correo electrónico no puede ser vacío'
-            },
-            validate: (value) => emailRegex.test(value) || 'El formato del correo electrónico no es válido'
-        },
-        {
-            title: 'Repita correo electrónico',
-            name: 'repemail',
-            type: 'email',
-            required: {
-                value: true,
-                message: 'El campo correo electrónico no puede ser vacío'
-            },
-            validate: (value, watch) => value === watch('email') || 'Los correos electrónicos no coinciden'
-        },
-        {
-            title: 'Contraseña',
-            name: 'password',
-            type: 'password',
-            required: {
-                value: true,
-                message: 'El campo contraseña no puede ser vacío'
-            },
-            validate: (value) => passwordRegex.test(value) || 'La contraseña debe ser alfanumérica'
-        },
-        {
-            title: 'Repita Contraseña',
-            name: 'reppassword',
-            type: 'password',
-            required: {
-                value: true,
-                message: 'Campo obligatorio'
-            },
-            validate: (value, watch) => value === watch('password') || 'Las contraseñas no coinciden'
-        },
-        {
-            title: 'Suscripción',
-            name: 'suscription',
-            type: 'dropdown',
-            options: suscriptions
-        }
-    ]
+    const navigate = useNavigate()
 
     return (
         <div style={{
             display: 'flex',
-            'flex-direction': 'column',
-            'background-color':'#262529'
+            flexDirection: 'column',
+            backgroundColor: '#262529'
         }}>
             <Header
                 textPrimaryButton={'Iniciar sesión'}
@@ -101,17 +57,18 @@ const Register = () => {
                 route2={routes.home}
             />
             <div class={'container register'}>
-                <FormCard title={'Registrarse'} inputs={inputs} url={'http://localhost:3001/api/users/register'} request={postUser}>
+                <LoadingScreen loading={loading} />
+                <FormCard title={'Registrarse'} inputs={inputsRegister} request={(data) => postUser(data, setLoading)} urlForm={routes.login}>
                     <div style={{
                         width: '100%',
                         gap: '13px',
                         display: 'flex',
-                        'flex-direction': 'column',
-                        'margin-top': '30px',
-                        'align-items': 'center'
+                        flexDirection: 'column',
+                        marginTop: '30px',
+                        alignItems: 'center'
                     }}>
                         <FormButton text={'Crear usuario'} type={'primary'} />
-                        <FormButton text={'Volver'} type={'secondary'} />
+                        <FormButton text={'Volver'} type={'secondary'} action={() => navigate(routes.home)} />
                     </div>
                 </FormCard>
             </div>

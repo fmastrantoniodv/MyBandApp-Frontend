@@ -13,6 +13,7 @@
     "file-loader": "^6.2.0",
     "howler": "^2.2.3",
     "http-server": "^14.1.1",
+    "lottie-web": "^5.12.2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.1",
     "react-dom": "^18.2.0",

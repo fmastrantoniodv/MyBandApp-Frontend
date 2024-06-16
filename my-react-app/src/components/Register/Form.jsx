@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 export const Header = ({ textPrimaryButton, textSecondaryButton, route1, route2 }) => {
     return (
         <header class={'main-header'}>
-            <img src={logo} class={'logo'}></img>
+            <img src={logo} alt='my band app logo' class={'logo'}></img>
             <div
                 style={{
                     display: 'flex',
@@ -32,27 +32,39 @@ export const ButtonText = ({ text, type, route }) => {
     }
 
     return (
-        <button class={'text-btn ' + `${type}`} onClick={handleClick}>{text}</button>
+        <button class={`text-btn ${type}`} onClick={handleClick}>{text}</button>
     )
 }
 
-export const FormCard = ({ title, children, inputs, url, request }) => {
+export const FormCard = ({ title, children, inputs, request, urlForm }) => {
 
     const { register, handleSubmit, formState: { errors }, watch } = useForm()
+    const navigate = useNavigate()
 
-    const onSubmit = handleSubmit((data) => {
+    const onSubmitForm = handleSubmit(async (data) => {
         console.log(data);
-        request(data)
-    })
+        try {
+            const resp = await request(data);
+            if (resp.status === 200) {
+                console.log('http status ok');
+                navigate(urlForm);
+
+            } else {
+                console.log('http status not ok');
+            }
+        } catch (error) {
+            console.error('Error: ', error);
+        }
+    });
 
     return (
-        <form class={'card scale-up-center'} onSubmit={onSubmit}>
+        <form class={'card scale-up-center'} onSubmit={onSubmitForm}>
             <h1 class={'title'}>{title}</h1>
             <div style={{
                 width: '100%',
                 gap: '12px',
                 display: 'flex',
-                'flex-direction': 'column'
+                flexDirection: 'column'
             }}>
                 {
                     inputs.map(({ title, options, name, type, required, validate }) => (
@@ -81,29 +93,46 @@ export const FormCard = ({ title, children, inputs, url, request }) => {
     )
 }
 
-export const FormButton = ({ text, type }) => {
+export const FormButton = ({ text, type, action }) => {
+
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        if (typeof action === 'string') {
+            navigate(action);
+        } else if (typeof action === 'function') {
+            action();
+        }
+    };
+
     return (
-        <button class={'form-btn ' + `${type}`} type={(type === 'primary') ? 'submit' : 'button'}>{text}</button>
-    )
+        <button
+            className={`form-btn ${type}`}
+            type={type === 'primary' ? 'submit' : 'button'}
+            onClick={type === 'secondary' ? handleClick : null}
+        >
+            {text}
+        </button>
+    );
 }
 
 export const FormInput = ({ title, type, name, register, required, validate, errors, watch }) => {
 
     const inputType = (type === 'email') ? 'email'
-        : (type === 'password') ? 'password'  : 'text'
+        : (type === 'password') ? 'password' : 'text'
 
     return (
         <div style={{
             display: 'flex',
-            'flex-direction': 'column',
-            'align-items': 'flex-start',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
             width: '100%'
         }}>
             <h3 style={{
                 color: '#000000',
                 margin: '0px 0px 5px 0px',
-                'font-size': '14px',
-                'font-family': 'Inter-SemiBold , sans-serif'
+                fontSize: '14px',
+                fontFamily: 'Inter-SemiBold , sans-serif'
             }}>{title}
             </h3>
 
@@ -119,7 +148,7 @@ export const FormInput = ({ title, type, name, register, required, validate, err
                 }
             )} />
             {errors[name] && (
-                <span style={{ color: '#000000', display: 'block', 'font-size': '12px' }}>{errors[name].message}</span>
+                <span style={{ color: '#000000', display: 'block', fontSize: '12px' }}>{errors[name].message}</span>
             )}
         </div>
     )
@@ -131,14 +160,14 @@ export const InputDropdown = ({ title, name, options, register }) => {
             <h3 style={{
                 color: '#000000',
                 margin: '0px 0px 5px 0px',
-                'font-size': '14px',
-                'font-family': 'Inter-SemiBold , sans-serif'
+                fontSize: '14px',
+                fontFamily: 'Inter-SemiBold , sans-serif'
             }}>
                 {title}
             </h3>
             <select class={'form-input dropdown'}  {...register(name)}>
                 {options.map(option => (
-                    <option value={option.key}>{option.value}</option>
+                    <option key={option.key} value={option.key}>{option.value}</option>
                 ))}
             </select>
         </div>

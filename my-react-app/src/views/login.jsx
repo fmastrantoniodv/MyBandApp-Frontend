@@ -1,54 +1,33 @@
 import React from 'react'
 import googleIcon from '../img/googleIcon.svg'
-import {FormButton, FormCard, FormInput, Header} from '../components/Register/Form'
-import { routes } from '../const/constants'
+import { FormButton, FormCard, Header } from '../components/Register/Form'
+import { routes, inputsLogin } from '../const/constants'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-    const inputs = [
-        {
-            title: 'Correo electrónico',
-            name: 'email',
-            type: 'email',
-            required: {
-                value: true,
-                message: 'Por favor ingrese su correo electrónico'
-            },
-            validate: (value) => emailRegex.test(value) || 'El formato del correo electrónico no es válido'
-        },
-        {
-            title: 'Contraseña',
-            name: 'password',
-            type: 'password',
-            required: {
-                value: true,
-                message: 'Por favor ingrese su contraseña'
-            }
-        }
-    ];
+    const navigate = useNavigate()
 
     return (
         <div style={{
             display: 'flex',
-            'flex-direction': 'column',
-            'background-color':'#262529',
-            'min-height': '100vh'
+            flexDirection: 'column',
+            backgroundColor: '#262529',
+            minHeight: '100vh'
         }}>
-            <Header 
-                textPrimaryButton={'Registrarse'} 
+            <Header
+                textPrimaryButton={'Registrarse'}
                 textSecondaryButton={'Volver a la página principal'}
-                route1 = {routes.register}
-                route2 = {routes.home}
+                route1={routes.register}
+                route2={routes.home}
             />
             <div class={'container'}>
-                <FormCard title={'Iniciar sesión'} inputs={inputs}>
+                <FormCard title={'Iniciar sesión'} inputs={inputsLogin} urlForm={routes.home}>
                     <button style={{
-                        'background-color':'rgba(0, 0, 0, 0)',
-                        'font-size': '14px',
+                        backgroundColor: 'rgba(0, 0, 0, 0)',
+                        fontSize: '14px',
                         border: '0px',
-                        'margin-top':'9px'
+                        marginTop: '9px'
                     }}>
                         Olvidé mi contraseña
                     </button>
@@ -56,16 +35,16 @@ const Login = () => {
                         width: '100%',
                         gap: '13px',
                         display: 'flex',
-                        'flex-direction': 'column',
-                        'margin-top':'38px',
-                        'align-items':'center'
+                        flexDirection: 'column',
+                        marginTop: '38px',
+                        alignItems: 'center'
                     }}>
-                            <FormButton text={'Ingresar'} type={'primary'}/>
-                            <FormButton text={'Registrarse'} type={'secondary'}/>
+                        <FormButton text={'Ingresar'} type={'primary'} />
+                        <FormButton text={'Registrarse'} type={'secondary'} action={() => navigate(routes.register)} />
                     </div>
                     <button class='form-btn secondary icon' type='button'>
                         Iniciar con google
-                        <img src={googleIcon}/>
+                        <img alt='google icon' src={googleIcon} />
                     </button>
                 </FormCard>
             </div>
