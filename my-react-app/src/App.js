@@ -1,21 +1,27 @@
 import './App.css';
 import './components/Register/Register.css';
+import './components/Home/Home.css';
 import React from 'react';
 import Studio from './views/studio.jsx'
 import Login from './views/login.jsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Register from './views/register.jsx';
+import { Home } from './views/home';
+import { UserProvider } from './contexts/UserContext';
 
 function App() {
 
       return (
-            <BrowserRouter>
-                  <Routes>
-                        <Route path='/login' element={<Login />}></Route>
-                        <Route path='/register' element={<Register />}></Route>
-                        <Route path='/' element={<Studio></Studio>}></Route>
-                  </Routes>
-            </BrowserRouter>
+            <UserProvider>
+                  <BrowserRouter>
+                        <Routes>
+                              <Route path='/login' element={<Login />}></Route>
+                              <Route path='/register' element={<Register />}></Route>
+                              <Route path='/' element={<Studio></Studio>}></Route>
+                              <Route path='/home' element={<Home></Home>}></Route>
+                        </Routes>
+                  </BrowserRouter>
+            </UserProvider>
       );
 }
 

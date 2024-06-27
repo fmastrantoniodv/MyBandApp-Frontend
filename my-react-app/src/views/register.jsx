@@ -44,6 +44,20 @@ const Register = () => {
 
     const navigate = useNavigate()
 
+    const handleRegisterSubmit = async (data) => {
+        try {
+            const resp = await postUser(data, setLoading);
+            if (resp.status === 200) {
+                console.log('http status ok, resp: ' + JSON.stringify(resp.data));
+                navigate(routes.login);
+            } else {
+                console.log('http status not ok');
+            }
+        } catch (error) {
+            console.error('Error: ', error);
+        }
+    }
+
     return (
         <div style={{
             display: 'flex',
@@ -56,9 +70,9 @@ const Register = () => {
                 route1={routes.login}
                 route2={routes.home}
             />
-            <div class={'container register'}>
+            <div class={'container'}>
                 <LoadingScreen loading={loading} />
-                <FormCard title={'Registrarse'} inputs={inputsRegister} request={(data) => postUser(data, setLoading)} urlForm={routes.login}>
+                <FormCard title={'Registrarse'} inputs={inputsRegister} onSubmit={handleRegisterSubmit}>
                     <div style={{
                         width: '100%',
                         gap: '13px',

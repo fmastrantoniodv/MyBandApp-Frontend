@@ -23,7 +23,8 @@ button:hover {
     align-items: center;
     top: 0;
     left: 0;
-    position: sticky;
+    position: fixed;
+    width: 100%;
 }
 
 .logo {
@@ -105,10 +106,8 @@ button:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: 68px;
     min-height: calc(100vh - 68px);
-}
-
-.container.register {
     padding: 15px 0px 15px 0px;
 }
 

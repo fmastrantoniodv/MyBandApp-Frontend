@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from 'react';
-import lottie from 'lottie-web';
-import animationData from '../../img/loading-lottie.json'; // Ruta al archivo JSON de Lottie
+import React, { useEffect, useRef } from 'react'
+import lottie from 'lottie-web'
+import animationData from '../../img/loading-lottie.json'
 
 const LottieAnimation = ({ width, height }) => {
-    const containerRef = useRef(null);
+    const containerRef = useRef(null)
 
     useEffect(() => {
         const anim = lottie.loadAnimation({
@@ -11,15 +11,16 @@ const LottieAnimation = ({ width, height }) => {
             renderer: 'svg',
             loop: true,
             autoplay: true,
-            animationData: animationData // Utiliza el archivo JSON de Lottie importado
-        });
+            animationData: animationData 
+        })
 
         return () => {
-            anim.destroy(); // Limpia la animación al desmontar el componente
-        };
-    }, []);
+            anim.destroy() 
+        }
+    }, [])
 
-    return <div ref={containerRef} style={{ width, height }} />;
-};
+    return <div ref={containerRef} style={{ width, height }} />
+}
 
 export default LottieAnimation;
+

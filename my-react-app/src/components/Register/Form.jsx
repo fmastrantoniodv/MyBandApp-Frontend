@@ -36,29 +36,12 @@ export const ButtonText = ({ text, type, route }) => {
     )
 }
 
-export const FormCard = ({ title, children, inputs, request, urlForm }) => {
+export const FormCard = ({ title, children, inputs, onSubmit }) => {
 
     const { register, handleSubmit, formState: { errors }, watch } = useForm()
-    const navigate = useNavigate()
-
-    const onSubmitForm = handleSubmit(async (data) => {
-        console.log(data);
-        try {
-            const resp = await request(data);
-            if (resp.status === 200) {
-                console.log('http status ok');
-                navigate(urlForm);
-
-            } else {
-                console.log('http status not ok');
-            }
-        } catch (error) {
-            console.error('Error: ', error);
-        }
-    });
 
     return (
-        <form class={'card scale-up-center'} onSubmit={onSubmitForm}>
+        <form class={'card scale-up-center'} onSubmit={handleSubmit(onSubmit)}>
             <h1 class={'title'}>{title}</h1>
             <div style={{
                 width: '100%',
