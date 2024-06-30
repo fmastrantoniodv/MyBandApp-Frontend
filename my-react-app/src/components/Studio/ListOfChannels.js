@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import AudioTrack from "./AudioTrack";
-import SampleSelector from "./Modals/SampleSelector";
-import { useModal } from "../hooks/useModal";
-import Modal from "./Modals/Modal"
-import MasterAudioContext from '../contexts/MasterAudioContext'
+import SampleSelector from "../Modals/SampleSelector";
+import { useModal } from "../../hooks/useModal";
+import Modal from "../Modals/Modal"
+import MasterAudioContext from '../../contexts/MasterAudioContext'
 
 const ListOfChannels = ({ sampleList }) => {
     const [loading, setLoading] = useState(true)

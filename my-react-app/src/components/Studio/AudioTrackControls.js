@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import '../views/studio';
+import '../../views/studio';
 import Button from './Button.js';
-import VolumeController from './VolumeController/VolumeController';
+import VolumeController from '../VolumeController/VolumeController';
 import EQControls from "./EQControls"
-import useSettings from '../hooks/useSettings';
+import useSettings from '../../hooks/useSettings';
 
 const AudioTrackControls = ({sampleComponent, onClickMute, onClickSolo, states, onChangeChannelStates, sampleName}) => {
     //const displayName = formatUpperFirstCase(sampleName);

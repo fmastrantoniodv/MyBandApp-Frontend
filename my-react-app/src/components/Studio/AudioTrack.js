@@ -1,10 +1,10 @@
 import React, { useRef, useContext, useEffect, useState } from "react";
-import useWaveform from "../hooks/useWaveform";
+import useWaveform from "../../hooks/useWaveform";
 import Button from './Button.js';
 import VolumeController from './VolumeController/VolumeController';
 import EQControls from "./EQControls"
-import deleteIconSvg from '../img/deleteIcon.svg'
-import MasterAudioContext from '../contexts/MasterAudioContext'
+import deleteIconSvg from '../../img/deleteIcon.svg'
+import MasterAudioContext from '../../contexts/MasterAudioContext'
 
 export default function AudioTrack ({ 
   sample, 

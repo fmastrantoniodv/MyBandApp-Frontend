@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import MasterAudioContext from "../contexts/MasterAudioContext";
+import MasterAudioContext from "../../contexts/MasterAudioContext";
 
 const CurrentTime = ({ playing }) => {
     const [tiempo, setTiempo] = useState();

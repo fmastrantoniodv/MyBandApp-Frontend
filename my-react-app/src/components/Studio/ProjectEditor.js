@@ -2,14 +2,14 @@ import React, { useEffect, useState, useContext } from "react";
 import 'react-range-slider-input/dist/style.css';
 import ListOfChannels from "./ListOfChannels"
 import CurrentTime from "./CurrentTime";
-import playIcon from '../img/playIcon.svg'
-import stopIcon from '../img/stopIcon.svg'
-import pauseIcon from '../img/pauseIcon.svg'
-import exportIcon from '../img/exportIcon.svg'
-import MasterAudioContext from '../contexts/MasterAudioContext'
+import playIcon from '../../img/playIcon.svg'
+import stopIcon from '../../img/stopIcon.svg'
+import pauseIcon from '../../img/pauseIcon.svg'
+import exportIcon from '../../img/exportIcon.svg'
+import MasterAudioContext from '../../contexts/MasterAudioContext'
 
-export default function ProjectEditor ({ dataContext }) {
-    const sounds = dataContext.soundsList;
+export default function ProjectEditor ({ projectDataContext }) {
+    const sounds = projectDataContext.channelList;
     const sampleList = [];
     const [playing, setPlaying] = useState('false')
     const [soundsList, setSoundsList] = useState(null)
@@ -104,7 +104,7 @@ export default function ProjectEditor ({ dataContext }) {
     return (
         <>
             <div className='project-controls' >
-              <h1>{dataContext.projectInfo.projectName}</h1>
+              <h1>{projectDataContext.projectName}</h1>
               <ExportProject />
               <div className="project-controls-btn-container">
                 <PlayButton />

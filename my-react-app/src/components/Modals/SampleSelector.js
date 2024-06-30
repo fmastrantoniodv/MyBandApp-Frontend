@@ -1,14 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import useFavouritesSamples from "../../hooks/useFavouritesSamples";
+import { getUserFavs } from '../../services/users/getUserFavs';
 
 export default function SampleSelector({channelList, handleCloseSamplesSelector, handleOnClickSelection}) {
   const [itemSelected, setItemSelected] = useState(null)
   const [titleMsg, setTitleMsg] = useState(null)
   const [avaibleFavs, setAvaibleFavs] = useState(null)
-  const favouritesSamples = useFavouritesSamples()
-
+  const [loading, setLoading] = useState(true)
+  const [favouritesSamples, setFavouritesSamples] = useState(null)
+  //const favouritesSamples = useFavouritesSamples()
+  const userId = '665b28e287fa373281f47938'
   useEffect(()=>{
-    if(favouritesSamples === null) return
+    console.log('[SampleSelector.js].[useEffect]')
+    if(favouritesSamples !== null) return
+    setLoading(true)
+    getUserFavs(userId).then(favs =>{
+      console.log('[SampleSelector.js].[useEffect].favs=', favs)
+      setFavouritesSamples(favs)
+      setLoading(false)
+    })
     console.log('[SampleSelector].favouritesSamples',favouritesSamples)
     if(avaibleFavs === null) setAvaibleFavs(getFavsAvailable(favouritesSamples))
 
@@ -18,7 +28,7 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
       setTitleMsg("Selecciona una muestra para crear el canal")
       setAvaibleFavs(getFavsAvailable(favouritesSamples))
     }
-  },[favouritesSamples,channelList])
+  },[channelList])
 
   const handleCloseAction = () => {
     handleCloseSamplesSelector()
@@ -42,23 +52,25 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
     var listFilteredFavs = new Array;
     if(!allFavs) return
     allFavs.map(fav => {
-      if(channelList.find(value => value.sampleId === fav.sampleId) === undefined) listFilteredFavs.push({ sampleId: fav.sampleId, sampleName: fav.sampleName})
-    })
+      if(channelList.find(value => value.id === fav.id) === undefined) listFilteredFavs.push(fav)
     return listFilteredFavs
+    })
   }
 
-  if(!channelList || avaibleFavs === null) return
+    if(!channelList || avaibleFavs === null) return
 
-  return (
+    return (
       <>
         <div className='msg-card-container'>
           <h3 className='subtitle-text'>{titleMsg}</h3>
           <ul>
-            { 
+            {
+            avaibleFavs === undefined || avaibleFavs.length === 0 ?
+            'cargando' : 
             avaibleFavs.map(item => {
-              return  <li key={item.sampleId} 
+              return  <li key={item.id} 
                 onClick={()=>handleSelectItem(item)} 
-                {... itemSelected && item.sampleId === itemSelected.sampleId ? {className: "selected"} : ""}
+                {... itemSelected && item.id === itemSelected.id ? {className: "selected"} : ""}
                 >{item.sampleName}
                 </li>
                 })

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import knobSvg from '../img/knob.svg'
+import knobSvg from '../../img/knob.svg'
 
 export default function EQControls({ waveformObj }) {
   const [lowFrequency, setLowFrequency] = useState(waveformObj.backend.filters[0].gain.value);

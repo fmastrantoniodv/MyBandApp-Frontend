@@ -1,34 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import '../App.css';
-import ProjectEditor from '../components/ProjectEditor';
+import '../css/studio.css';
+import ProjectEditor from '../components/Studio/ProjectEditor';
 import { SettingsProvider } from '../contexts/SettingsContext'
 import { MasterAudioContextProvider } from "../contexts/MasterAudioContext";
-import useProject from '../hooks/useProject'
-
+import { getProject } from '../services/projects/getProject';
 
 const Studio = () => {
       //TODO: Obtener información de la BD con el ID del proyecto
-      const [dataContext, setDataContext] = useState(null); // El estado del contexto
-      const projectData = useProject(213)
-      
+      const [projectDataContext, setProjectDataContext] = useState(null); // El estado del contexto
+      const [loading, setLoading] = useState(true)
+      const projectId = '6670f16ce0514db5f7b74e1e'
       useEffect(()=>{
-        setDataContext(projectData)
-      },[projectData])
+       console.log('[studio.jsx].[useEffect]')
+       if(projectDataContext !== null) return
+       setLoading(true)
+       getProject(projectId).then(project => {
+        console.log('[studio.jsx].[useEffect].project=', project)
+        setProjectDataContext(project)
+        setLoading(false)
+       })
+      },[])
       
-      console.log('dataContext=', dataContext)
-      if(dataContext === null) return <h1 style={{color: '#fff'}}>LOADING</h1>
+      if(loading) return <h1 style={{color: '#fff'}}>LOADING</h1>
       
       const initialSettings = {
-        projectName: dataContext.projectInfo.projectName,
-        dataContext: dataContext
+        projectName: projectDataContext.projectName,
+        projectDataContext: projectDataContext
       }
 
       return(
           <>
-            <div className='container'>
+            <div className='studio-container'>
               <SettingsProvider settings={initialSettings}>
                 <MasterAudioContextProvider value={{}}>
-                  <ProjectEditor dataContext={dataContext} />
+                  <ProjectEditor projectDataContext={projectDataContext} />
                 </MasterAudioContextProvider>
               </SettingsProvider>
             </div>

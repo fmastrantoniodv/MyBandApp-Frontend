@@ -7,10 +7,10 @@ const useFavouritesSamples = () => {
     useEffect(() => {
         console.log(`[useFavouritesSamples].[useEffect]`)
         if(loading){
-            fetch("http://localhost:3001/api/fav")
+            fetch("http://localhost:3001/api/users/getUserFavsList/665b28e287fa373281f47938")
             .then(response => response.json())
             .then(json => {
-              console.log(json)
+              console.log(`[useFavouritesSamples].[useEffect].result=`,json)
               setFavouritesList(json)
               setLoading(false)
             })
