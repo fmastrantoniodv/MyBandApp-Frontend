@@ -6,28 +6,30 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
   const [itemSelected, setItemSelected] = useState(null)
   const [titleMsg, setTitleMsg] = useState(null)
   const [avaibleFavs, setAvaibleFavs] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(null)
   const [favouritesSamples, setFavouritesSamples] = useState(null)
   //const favouritesSamples = useFavouritesSamples()
   const userId = '665b28e287fa373281f47938'
   useEffect(()=>{
     console.log('[SampleSelector.js].[useEffect]')
-    if(favouritesSamples !== null) return
-    setLoading(true)
-    getUserFavs(userId).then(favs =>{
-      console.log('[SampleSelector.js].[useEffect].favs=', favs)
-      setFavouritesSamples(favs)
-      setLoading(false)
-    })
-    console.log('[SampleSelector].favouritesSamples',favouritesSamples)
-    if(avaibleFavs === null) setAvaibleFavs(getFavsAvailable(favouritesSamples))
-
+    console.log('[SampleSelector.js].[useEffect].avaibleFavs',avaibleFavs)
+    console.log('[SampleSelector.js].[useEffect].favouritesSamples',favouritesSamples)
     if(avaibleFavs && avaibleFavs.length === 0){
       setTitleMsg("No hay muestras disponibles")
     }else{
       setTitleMsg("Selecciona una muestra para crear el canal")
       setAvaibleFavs(getFavsAvailable(favouritesSamples))
     }
+    if(favouritesSamples !== null || loading === true) return
+    setLoading(true)
+    getUserFavs(userId).then(favs =>{
+      console.log('[SampleSelector.js].[useEffect].favs=', favs)
+      setFavouritesSamples(favs)
+      setAvaibleFavs(getFavsAvailable(favs))
+      setLoading(false)
+    })
+    console.log('[SampleSelector].favouritesSamples',favouritesSamples)
+    console.log('[SampleSelector].avaibleFavs',avaibleFavs)
   },[channelList])
 
   const handleCloseAction = () => {
@@ -50,11 +52,12 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
 
   const getFavsAvailable = (allFavs) => {
     var listFilteredFavs = new Array;
+    console.log('getFavsAvailable.allFavs',allFavs)
     if(!allFavs) return
     allFavs.map(fav => {
       if(channelList.find(value => value.id === fav.id) === undefined) listFilteredFavs.push(fav)
-    return listFilteredFavs
-    })
+      })
+      return listFilteredFavs
   }
 
     if(!channelList || avaibleFavs === null) return

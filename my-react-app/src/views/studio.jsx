@@ -8,20 +8,22 @@ import { getProject } from '../services/projects/getProject';
 const Studio = () => {
       //TODO: Obtener información de la BD con el ID del proyecto
       const [projectDataContext, setProjectDataContext] = useState(null); // El estado del contexto
-      const [loading, setLoading] = useState(true)
+      const [loading, setLoading] = useState(null)
       const projectId = '6670f16ce0514db5f7b74e1e'
+
       useEffect(()=>{
-       console.log('[studio.jsx].[useEffect]')
-       if(projectDataContext !== null) return
-       setLoading(true)
-       getProject(projectId).then(project => {
-        console.log('[studio.jsx].[useEffect].project=', project)
-        setProjectDataContext(project)
-        setLoading(false)
-       })
+        console.log('[studio.jsx].[useEffect]')
+        console.log('[studio.jsx].[useEffect].projectDataContext=',projectDataContext)
+        if(projectDataContext !== null || loading === true) return
+        setLoading(true)
+        getProject(projectId).then(project => {
+          console.log('[studio.jsx].[useEffect].project=', project)
+          setProjectDataContext(project)
+          setLoading(false)
+        })
       },[])
       
-      if(loading) return <h1 style={{color: '#fff'}}>LOADING</h1>
+      if(loading || projectDataContext === null) return <h1 style={{color: '#fff'}}>LOADING</h1>
       
       const initialSettings = {
         projectName: projectDataContext.projectName,
