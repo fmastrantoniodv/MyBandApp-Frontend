@@ -9,7 +9,7 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
   const [loading, setLoading] = useState(null)
   const [favouritesSamples, setFavouritesSamples] = useState(null)
   //const favouritesSamples = useFavouritesSamples()
-  const userId = '665b28e287fa373281f47938'
+  
   useEffect(()=>{
     console.log('[SampleSelector.js].[useEffect]')
     console.log('[SampleSelector.js].[useEffect].avaibleFavs',avaibleFavs)
@@ -22,12 +22,7 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
     }
     if(favouritesSamples !== null || loading === true) return
     setLoading(true)
-    getUserFavs(userId).then(favs =>{
-      console.log('[SampleSelector.js].[useEffect].favs=', favs)
-      setFavouritesSamples(favs)
-      setAvaibleFavs(getFavsAvailable(favs))
-      setLoading(false)
-    })
+
     console.log('[SampleSelector].favouritesSamples',favouritesSamples)
     console.log('[SampleSelector].avaibleFavs',avaibleFavs)
   },[channelList])
@@ -50,16 +45,7 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
     setAvaibleFavs(getFavsAvailable(favouritesSamples))
   }
 
-  const getFavsAvailable = (allFavs) => {
-    var listFilteredFavs = new Array;
-    console.log('getFavsAvailable.allFavs',allFavs)
-    if(!allFavs) return
-    allFavs.map(fav => {
-      if(channelList.find(value => value.id === fav.id) === undefined) listFilteredFavs.push(fav)
-      })
-      return listFilteredFavs
-  }
-
+  
     if(!channelList || avaibleFavs === null) return
 
     return (
