@@ -70,16 +70,7 @@ export const Home = () => {
     const [favList, setFavList] = useState([])
 
     useEffect(() => {
-        const fetchFavList = async () => {
-            try {
-                const favs = await getFavList(user.id);
-                setFavList(favs)
-            } catch (error) {
-                console.error('Error fetchFavList:', error)
-            }
-        };
-
-        fetchFavList();
+        setFavList(user.favList)  
     }, [])
 
     const handleUnfav = async (sampleId) => {
@@ -131,15 +122,15 @@ export const Home = () => {
                     </div>
                     {
                         favList.map(({ id, sampleName, collectionCode }) => (
-                         <FavItem
-                            key={id}
-                            id={id}
-                            name={sampleName}
-                            pack={collectionCode}
-                            onUnfav={() => handleUnfav(id)}
-                        />
-                    ))
-                }
+                            <FavItem
+                                key={id}
+                                id={id}
+                                name={sampleName}
+                                pack={collectionCode}
+                                onUnfav={() => handleUnfav(id)}
+                            />
+                        ))
+                    }
                     
                 </div>
             </div>

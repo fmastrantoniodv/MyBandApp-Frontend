@@ -18,23 +18,23 @@ export const LoadingScreen = ({ loading }) => {
 };
 
 export const postUser = async (data, setLoading) => {
-    setLoading(true);
+    setLoading(true)
     try {
-        const url = 'http://localhost:3001/api/users/register';
+        const url = 'http://localhost:3001/api/users/register'
         const body = {
             "usrName": data.name,
             "email": data.email,
             "password": data.password,
             "plan": data.suscription
         };
-        const response = await axios.post(url, body);
-        console.log(response);
-        return response;
+        const response = await axios.post(url, body)
+        console.log(response)
+        return response
     } catch (error) {
-        console.log(error);
-        throw error;
+        console.log(error)
+        throw error
     } finally {
-        setLoading(false);
+        setLoading(false)
     }
 }
 
@@ -48,13 +48,13 @@ const Register = () => {
         try {
             const resp = await postUser(data, setLoading);
             if (resp.status === 200) {
-                console.log('http status ok, resp: ' + JSON.stringify(resp.data));
-                navigate(routes.login);
+                console.log('http status ok, resp: ' + JSON.stringify(resp.data))
+                navigate(routes.login)
             } else {
-                console.log('http status not ok');
+                console.log('http status not ok')
             }
         } catch (error) {
-            console.error('Error: ', error);
+            console.error('Error: ', error)
         }
     }
 
@@ -82,7 +82,7 @@ const Register = () => {
                         alignItems: 'center'
                     }}>
                         <FormButton text={'Crear usuario'} type={'primary'} />
-                        <FormButton text={'Volver'} type={'secondary'} action={() => navigate(routes.home)} />
+                        <FormButton text={'Volver'} type={'secondary'} action={() => navigate(routes.login)} />
                     </div>
                 </FormCard>
             </div>
