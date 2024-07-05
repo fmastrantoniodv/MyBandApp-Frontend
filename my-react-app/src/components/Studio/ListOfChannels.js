@@ -5,16 +5,15 @@ import { useModal } from "../../hooks/useModal";
 import Modal from "../Modals/Modal"
 import MasterAudioContext from '../../contexts/MasterAudioContext'
 
-const ListOfChannels = ({ sampleList }) => {
+const ListOfChannels = ({ sampleList, openModalSampleSelector, closeModalSampleSelector, setCallbackAddChannel }) => {
     const [loading, setLoading] = useState(true)
     const [channelList, setChannelList] = useState(null)
-    const [isOpenModalSampleSelector, openModalSampleSelector, closeModalSampleSelector] = useModal(false)
     const [soloChannelSelected, setSoloChannelSelected] = useState(null)
     const { playBackTracks } = useContext(MasterAudioContext)
     
     useEffect(() => {
       console.log("[ListOfChannels].[useEffect].channelList", channelList)
-      
+      setCallbackAddChannel(()=>handleAddChannel)
       if(sampleList !== null && channelList === null){
         setChannelList(sampleList)
         setLoading(false)
@@ -34,11 +33,11 @@ const ListOfChannels = ({ sampleList }) => {
     }
 
     const handleAddChannel = (item) => {
-      console.log('Nueva pista')
+      console.log('Nueva pista', item)
       playBackTracks("stop")
       var updatedChannelList = channelList
       var newChannel = {
-        id: item.sampleId,
+        id: item.id,
         sampleName: item.sampleName,
         src: "http:fileserver.com/kick",
         duration: "6452",
@@ -63,17 +62,11 @@ const ListOfChannels = ({ sampleList }) => {
       closeModalSampleSelector()
     }
 
+
     if(channelList === null || channelList === undefined) return
 
     return (
       <>
-        <Modal isOpen={isOpenModalSampleSelector} closeModal={closeModalSampleSelector}>
-          <SampleSelector 
-            channelList={channelList} 
-            handleCloseSamplesSelector={closeModalSampleSelector}
-            handleOnClickSelection={handleAddChannel}
-          />
-        </Modal>
         <div className="tracks-container">
           {
             channelList.map(sample => {

@@ -5,33 +5,37 @@ import { getUserFavs } from '../../services/users/getUserFavs';
 export default function SampleSelector({channelList, handleCloseSamplesSelector, handleOnClickSelection}) {
   const [itemSelected, setItemSelected] = useState(null)
   const [titleMsg, setTitleMsg] = useState(null)
-  const [avaibleFavs, setAvaibleFavs] = useState(null)
   const [loading, setLoading] = useState(null)
+  const favsSamples = useFavouritesSamples({channelList})
+  //const [avaibleFavs, setAvaibleFavs] = useState(favsSamples.avaibleFavs)
+  const [avaibleFavs, setAvaibleFavs] = useState(null)
+  //const [avaibleFavs, setAvaibleFavs] = useState(favsSamples.avaibleFavs)
   const [favouritesSamples, setFavouritesSamples] = useState(null)
-  //const favouritesSamples = useFavouritesSamples()
-  
+
   useEffect(()=>{
     console.log('[SampleSelector.js].[useEffect]')
+    console.log('[SampleSelector.js].[useEffect].favsSamples',favsSamples)
     console.log('[SampleSelector.js].[useEffect].avaibleFavs',avaibleFavs)
     console.log('[SampleSelector.js].[useEffect].favouritesSamples',favouritesSamples)
-    if(avaibleFavs && avaibleFavs.length === 0){
+    setLoading(true)
+    if(favsSamples === undefined) return
+    setAvaibleFavs(favsSamples.avaibleFavs)
+    if(favsSamples.avaibleFavs && favsSamples.avaibleFavs.length === 0){
       setTitleMsg("No hay muestras disponibles")
     }else{
       setTitleMsg("Selecciona una muestra para crear el canal")
-      setAvaibleFavs(getFavsAvailable(favouritesSamples))
     }
-    if(favouritesSamples !== null || loading === true) return
-    setLoading(true)
-
-    console.log('[SampleSelector].favouritesSamples',favouritesSamples)
-    console.log('[SampleSelector].avaibleFavs',avaibleFavs)
-  },[channelList])
+    setLoading(false)
+    console.log('[SampleSelector].favouritesSamples',favsSamples.favouritesSamples)
+    console.log('[SampleSelector].avaibleFavs',favsSamples.avaibleFavs)
+  },[channelList, favsSamples])
 
   const handleCloseAction = () => {
     handleCloseSamplesSelector()
   }
 
   const handleSelectItem = (item) => {
+    console.log('[handleSelectItem]',item)
     if(itemSelected === null || item !== itemSelected){
       setItemSelected(item)
     }else{
@@ -45,7 +49,7 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
     setAvaibleFavs(getFavsAvailable(favouritesSamples))
   }
 
-  
+    console.log('[SampleSelector.js].[linea46].avaibleFavs=', avaibleFavs)  
     if(!channelList || avaibleFavs === null) return
 
     return (
@@ -54,7 +58,7 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
           <h3 className='subtitle-text'>{titleMsg}</h3>
           <ul>
             {
-            avaibleFavs === undefined || avaibleFavs.length === 0 ?
+            avaibleFavs === undefined || avaibleFavs === null || avaibleFavs.length === 0 ?
             'cargando' : 
             avaibleFavs.map(item => {
               return  <li key={item.id} 

@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import 'react-range-slider-input/dist/style.css';
-import ListOfChannels from "./ListOfChannels"
 import CurrentTime from "./CurrentTime";
 import playIcon from '../../img/playIcon.svg'
 import stopIcon from '../../img/stopIcon.svg'
@@ -16,7 +15,7 @@ export default function ProjectEditor ({ projectDataContext }) {
     const { exportWavFile, playBackTracks } = useContext(MasterAudioContext)
     
     useEffect(() => {
-      console.log('[ProjectEditor].[useEffect]')
+      console.log('[ProjectEditor].[useEffect].projectDataContext', projectDataContext)
       setSoundsList(sounds)
     }, [sounds]);
       
@@ -113,7 +112,6 @@ export default function ProjectEditor ({ projectDataContext }) {
               </div>
               <CurrentTime playing={playing} />        
             </div>
-            <ListOfChannels sampleList={soundsList}/>
         </>
         )
 }
