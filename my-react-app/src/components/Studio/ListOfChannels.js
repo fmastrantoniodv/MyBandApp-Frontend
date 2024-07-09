@@ -1,23 +1,15 @@
 import React, { useEffect, useState, useContext } from "react";
 import AudioTrack from "./AudioTrack";
-import SampleSelector from "../Modals/SampleSelector";
-import { useModal } from "../../hooks/useModal";
-import Modal from "../Modals/Modal"
 import MasterAudioContext from '../../contexts/MasterAudioContext'
 
-const ListOfChannels = ({ sampleList, openModalSampleSelector, closeModalSampleSelector, setCallbackAddChannel }) => {
-    const [loading, setLoading] = useState(true)
+const ListOfChannels = ({ sampleList, openModalSampleSelector, handleDeleteChannel }) => {
     const [channelList, setChannelList] = useState(null)
     const [soloChannelSelected, setSoloChannelSelected] = useState(null)
     const { playBackTracks } = useContext(MasterAudioContext)
     
     useEffect(() => {
-      console.log("[ListOfChannels].[useEffect].channelList", channelList)
-      setCallbackAddChannel(()=>handleAddChannel)
-      if(sampleList !== null && channelList === null){
+      console.log("[ListOfChannels].[useEffect].sampleList", sampleList)
         setChannelList(sampleList)
-        setLoading(false)
-      }
     }, [sampleList, channelList]);
 
     const handleSoloChannel = (idChannel) => {
@@ -27,44 +19,10 @@ const ListOfChannels = ({ sampleList, openModalSampleSelector, closeModalSampleS
         setSoloChannelSelected(idChannel)
       }
     }
-
-    const handleDeleteChannel = ( idChannel ) => {
-      setChannelList(channelList.filter(value => value.id !== idChannel))      
-    }
-
-    const handleAddChannel = (item) => {
-      console.log('Nueva pista', item)
-      playBackTracks("stop")
-      var updatedChannelList = channelList
-      var newChannel = {
-        id: item.id,
-        sampleName: item.sampleName,
-        src: "http:fileserver.com/kick",
-        duration: "6452",
-        channelConfig: {
-          states: {
-              "solo": false,
-              "muted": false
-          },
-          volume: 0.7,
-          EQ: {
-              low: 0,
-              mid: 0,
-              high: 0
-          }
-          
-      }}
-      console.log(newChannel)
-
-      updatedChannelList.push(newChannel)
-      
-      setChannelList(updatedChannelList)
-      closeModalSampleSelector()
-    }
-
-
+/** */
+    console.log('[ListOfChannels].pre.channelList=', channelList)
     if(channelList === null || channelList === undefined) return
-
+    console.log('[ListOfChannels].post.channelList=', channelList)
     return (
       <>
         <div className="tracks-container">

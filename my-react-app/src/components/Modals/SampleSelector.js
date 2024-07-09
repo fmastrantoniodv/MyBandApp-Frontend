@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import useFavouritesSamples from "../../hooks/useFavouritesSamples";
-import { getUserFavs } from '../../services/users/getUserFavs';
 
 export default function SampleSelector({channelList, handleCloseSamplesSelector, handleOnClickSelection}) {
   const [itemSelected, setItemSelected] = useState(null)
   const [titleMsg, setTitleMsg] = useState(null)
   const [loading, setLoading] = useState(null)
   const favsSamples = useFavouritesSamples({channelList})
-  //const [avaibleFavs, setAvaibleFavs] = useState(favsSamples.avaibleFavs)
   const [avaibleFavs, setAvaibleFavs] = useState(null)
-  //const [avaibleFavs, setAvaibleFavs] = useState(favsSamples.avaibleFavs)
   const [favouritesSamples, setFavouritesSamples] = useState(null)
 
   useEffect(()=>{
@@ -52,7 +49,7 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
   }
 
     console.log('[SampleSelector.js].[linea46].avaibleFavs=', avaibleFavs)  
-    if(!channelList || avaibleFavs === null) return
+    if(channelList === undefined || avaibleFavs === null) return
 
     return (
       <>

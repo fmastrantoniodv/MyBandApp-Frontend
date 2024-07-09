@@ -12,16 +12,16 @@ export default function AudioTrack ({
   soloChannelSelected,
   handleSoloChannel
 }){
-
   const containerRef = useRef()
   const {getTrack, deleteTrack, onSoloChannel} = useContext(MasterAudioContext)
   const [loading, setLoading] = useState(true)
-  
-  const url = `http://localhost:3001/api/samples/${sample.pathFolder}/${sample.sampleId}`
+  console.log(sample)
+  const url = `http://localhost:3001/api/samples/${sample.collectionCode}/${sample.sampleName}`
 
   const waveformPlayer = useWaveform(url, sample, containerRef)
   
   useEffect(() => {
+    console.log('[AudioTrack.js].useEffect.waveformPlayer', waveformPlayer)
     if(waveformPlayer !== null){
       setLoading(false)
     }else{
@@ -75,12 +75,12 @@ export default function AudioTrack ({
                     <DeleteButton />
                     <span className='display-name'>{sample.sampleName}</span>
                   </div>
-                  <EQControls waveformObj={getTrack(sample.sampleId)}/>
+                  <EQControls waveformObj={getTrack(sample.id)}/>
                 </div>
-                <VolumeController waveformObj={getTrack(sample.sampleId)} />
+                <VolumeController waveformObj={getTrack(sample.id)} />
                 <div className='audio-controls-output-router-buttons'>
-                  <Button faderID={sample.sampleId} textButton='M' state={getTrack(sample.sampleId).isMuted} onClickButton={() => onClickMute()}/>
-                  <Button faderID={sample.sampleId} textButton='S' state={sample.sampleId === soloChannelSelected} onClickButton={() => onClickSolo(getTrack(sample.sampleId))}/>
+                  <Button faderID={sample.id} textButton='M' state={getTrack(sample.id).isMuted} onClickButton={() => onClickMute()}/>
+                  <Button faderID={sample.id} textButton='S' state={sample.id === soloChannelSelected} onClickButton={() => onClickSolo(getTrack(sample.id))}/>
                 </div>
               </div>
             </div>
@@ -92,7 +92,7 @@ export default function AudioTrack ({
       <ChannelControls />
       <div className='channel-sprites'>
         <div className='sprites-container'>
-          <div id={sample.sampleId} className="sprite" ref={containerRef} />
+          <div id={sample.id} className="sprite" ref={containerRef} />
         </div>
       </div>
     </div>

@@ -3,13 +3,14 @@ import '../css/studio.css';
 import ProjectEditor from '../components/Studio/ProjectEditor';
 import { SettingsProvider } from '../contexts/SettingsContext'
 import { MasterAudioContextProvider } from "../contexts/MasterAudioContext";
-import { getProject } from '../services/projects/getProject';
 import { useModal } from "../hooks/useModal"
 import ListOfChannels from "../components/Studio/ListOfChannels"
 import Modal from "../components/Modals/Modal"
 import GenericMsg from "../components/Modals/GenericMsg";
 import useSettings from '../hooks/useSettings';
 import SampleSelector from "../components/Modals/SampleSelector"
+import { getProject } from '../services/projects/getProject';
+import { useSampleList } from '../hooks/useSampleList';
 
 const Studio = () => {
       //TODO: Obtener información de la BD con el ID del proyecto
@@ -17,9 +18,9 @@ const Studio = () => {
       const [loading, setLoading] = useState(null)
       const [isOpenModalSampleSelector, openModalSampleSelector, closeModalSampleSelector] = useModal(false)
       const [isOpenGenericModal, openGenericModal, closeGenericModal] = useModal(false)
-      const [callbackAddChannel, setCallbackAddChannel] = useState(null)
       const [modalMsg, setModalMsg] = useState(null)
       const [soundsList, setSoundsList] = useState(null)
+      const [initProjectChannelList, addChannelToList, deleteChannelFromList, getSampleList] = useSampleList()
       const projectId = '6670f16ce0514db5f7b74e1e';
 
       const initialSettings = {
@@ -28,10 +29,8 @@ const Studio = () => {
       }
 
       useEffect(()=>{
-        console.log('[studio.jsx].[useEffect]')
         console.log('[studio.jsx].[useEffect].projectDataContext=',projectDataContext)
-        console.log('[studio.jsx].[useEffect].callbackAddChannel=',callbackAddChannel)
-        //if(projectDataContext !== null || loading === true) return
+        if(projectDataContext !== null || loading === true) return
         setLoading(true)
         setInitValues(projectId)
       }, [])
@@ -39,39 +38,27 @@ const Studio = () => {
       const setInitValues = async (projectId) => {
         console.log('setInitValues.loading', loading)
         if(loading) return
-        var resultProject = await getProject(projectId)
-        if(resultProject === undefined){
-          setLoading(false)
-          setModalMsg('No se pudo obtener la información del proyecto. Reintente nuevamente')
-          openGenericModal()
-          return
-        }
-        if(resultProject.status != 200){
-          console.log('[studio.jsx].[useEffect].setInitValues.resultProject=', resultProject)
-          setLoading(false)
-          setModalMsg(resultProject.data.errorCode)
-          openGenericModal()
-          return
-        }else{
-          console.log('[studio.jsx].[useEffect].setInitValues.resultProject=', resultProject)
-          setProjectDataContext(resultProject.data)
-          setSoundsList(resultProject.data.channelList)          
-          initialSettings.projectName = resultProject.data.projectName
-        }
+        const projectData = await getProject(projectId)
+        console.log('projectDatita', projectData)
+        setProjectDataContext(projectData)
+        initProjectChannelList(projectData.channelList)
+        setSoundsList(projectData.channelList)
         console.log('[studio.jsx].[useEffect].setInitValues.#####MEDIO#######.loading=', loading)
         console.log('[studio.jsx].[useEffect].setInitValues.#####MEDIO#######.ProjectDataContext=', projectDataContext)
         setLoading(false)
       }
 
-      const handleOnClickSelection = () => {
-        console.log('[studio.jsx].[handleOnClickSelection].callbackAddChannel',callbackAddChannel)
-        return callbackAddChannel()
+      const handleOnClickSelection = (item) => {
+        console.log('[studio.jsx].[handleOnClickSelection].item',item)
+        addChannelToList(item)
+        console.log('[studio.jsx].[getSampleList].result',getSampleList())
+        setSoundsList(getSampleList())
+        closeModalSampleSelector()
       }
 
-      
       if(loading) return <h1 style={{color: '#fff'}}>LOADING</h1>
 
-      if(projectDataContext === null){ 
+      if(projectDataContext === null ){ 
         return( 
           <Modal isOpen={isOpenGenericModal} closeModal={closeGenericModal}>
             <GenericMsg 
@@ -104,8 +91,8 @@ const Studio = () => {
                     <ListOfChannels 
                       sampleList={soundsList} 
                       openModalSampleSelector={openModalSampleSelector} 
-                      closeModalSampleSelector={closeModalSampleSelector}
-                      setCallbackAddChannel={setCallbackAddChannel}/>
+                      handleDeleteChannel={deleteChannelFromList}
+                      />
                   </MasterAudioContextProvider>
                 </SettingsProvider>
               </div>

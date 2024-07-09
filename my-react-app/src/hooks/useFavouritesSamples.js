@@ -30,7 +30,7 @@ const useFavouritesSamples = ({ channelList }) => {
   const getFavsAvailable = (allFavs, channelList) => {
     var listFilteredFavs = new Array;
     console.log('getFavsAvailable.allFavs',allFavs)
-    if(!allFavs) return
+    if(!allFavs || channelList === undefined) return
     allFavs.map(fav => {
       if(channelList.find(value => value.id === fav.id) === undefined) listFilteredFavs.push(fav)
       })
