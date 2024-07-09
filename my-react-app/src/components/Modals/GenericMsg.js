@@ -2,25 +2,16 @@ import React, { useEffect, useState } from 'react';
 import useFavouritesSamples from "../../hooks/useFavouritesSamples";
 import { getUserFavs } from '../../services/users/getUserFavs';
 
-export default function GenericMsg({type, msg, handleCloseSamplesSelector, handleOnClickSelection}) {
+export default function GenericMsg({type, msg, handleCloseModal, buttonsConfig}) {
   const [titleMsg, setTitleMsg] = useState(null)
   const [bodyMsg, setBodyMsg] = useState(msg)
-  const [loading, setLoading] = useState(null)
-  
+
   useEffect(()=>{
     console.log('[GenericMsg.js].[useEffect]')
     console.log('[GenericMsg.js].[useEffect].msg',msg)
     console.log('[GenericMsg.js].[useEffect].type',type)
     initGenericModal(type, msg)
   },[])
-
-  const handleCloseAction = () => {
-    handleCloseSamplesSelector()
-  }
-
-  const handleApplySelection = () => {
-    return
-  }
 
   const initGenericModal = (type, msg) => {
     switch (type) {
@@ -37,14 +28,40 @@ export default function GenericMsg({type, msg, handleCloseSamplesSelector, handl
     <>
       <div className='msg-card-container'>
         <h3 className='subtitle-text'>{titleMsg}</h3>
-        <div>
+        <div className='msg-text-container'>
           <span>{msg}</span>
         </div>
-        <div className='msg-buttons-container'>
-          <button className='msg-button btn-positive' onClick={() => handleApplySelection()}>Aceptar</button>
-          <button className='msg-button btn-negative' onClick={() => handleCloseAction()}>Cerrar</button>
-        </div>
+        <ButtonsGroup type={type} buttonsConfig={buttonsConfig} handleCloseModal={handleCloseModal}/>
       </div>
     </>
   );
+}
+
+const ButtonsGroup = ({type, buttonsConfig,handleCloseModal}) => {
+  const {positiveAction, negativeAction, positiveTextBtn, negativeTextBtn} = buttonsConfig
+  
+  const PositiveButton = ({actionToExec, textValue}) => <button className='msg-button btn-positive' onClick={() => {
+    handleCloseModal()
+    actionToExec()
+  }}>{textValue}</button>
+  
+  const NegativeButton = ({actionToExec, textValue}) => <button className='msg-button btn-negative' onClick={() => {
+    handleCloseModal()
+    actionToExec()
+  }}>{textValue}</button>
+
+  if(type === 'ERRORes'){
+    return(
+      <div className='msg-buttons-container'>
+        <PositiveButton actionToExec={negativeAction} textValue={positiveTextBtn}/>
+      </div>
+    )
+  }else{
+    return(
+      <div className='msg-buttons-container'>
+        <PositiveButton actionToExec={positiveAction} textValue={positiveTextBtn}/>
+        <NegativeButton actionToExec={negativeAction} textValue={negativeTextBtn}/>
+      </div>
+    )
+  }
 }

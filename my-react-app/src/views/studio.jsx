@@ -40,6 +40,12 @@ const Studio = () => {
         console.log('setInitValues.loading', loading)
         if(loading) return
         var resultProject = await getProject(projectId)
+        if(resultProject === undefined){
+          setLoading(false)
+          setModalMsg('No se pudo obtener la información del proyecto. Reintente nuevamente')
+          openGenericModal()
+          return
+        }
         if(resultProject.status != 200){
           console.log('[studio.jsx].[useEffect].setInitValues.resultProject=', resultProject)
           setLoading(false)
@@ -71,8 +77,14 @@ const Studio = () => {
             <GenericMsg 
               type="ERROR" 
               msg={modalMsg}
-              handleCloseSamplesSelector={closeGenericModal} 
-              //handleOnClickSelection 
+              handleCloseModal={closeGenericModal}
+              buttonsConfig={{
+                positiveTextBtn: "Reintentar",
+                negativeTextBtn: "Cerrar",
+                positiveAction: setInitValues,
+                negativeAction: closeGenericModal
+              }
+              } 
             />
           </Modal>
           )}else{
