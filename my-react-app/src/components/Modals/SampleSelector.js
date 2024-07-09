@@ -46,7 +46,9 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
   const handleApplySelection = () => {
     handleOnClickSelection(itemSelected)
     setItemSelected(null)
+    /**
     setAvaibleFavs(getFavsAvailable(favouritesSamples))
+     */
   }
 
     console.log('[SampleSelector.js].[linea46].avaibleFavs=', avaibleFavs)  

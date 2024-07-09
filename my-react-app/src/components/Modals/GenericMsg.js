@@ -5,7 +5,6 @@ import { getUserFavs } from '../../services/users/getUserFavs';
 export default function GenericMsg({type, msg, handleCloseSamplesSelector, handleOnClickSelection}) {
   const [titleMsg, setTitleMsg] = useState(null)
   const [bodyMsg, setBodyMsg] = useState(msg)
-  const [avaibleFavs, setAvaibleFavs] = useState(null)
   const [loading, setLoading] = useState(null)
   
   useEffect(()=>{
@@ -20,7 +19,7 @@ export default function GenericMsg({type, msg, handleCloseSamplesSelector, handl
   }
 
   const handleApplySelection = () => {
-    handleOnClickSelection(itemSelected)
+    return
   }
 
   const initGenericModal = (type, msg) => {
