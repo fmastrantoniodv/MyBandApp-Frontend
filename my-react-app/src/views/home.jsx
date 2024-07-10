@@ -8,11 +8,17 @@ import { UserContext } from '../contexts/UserContext';
 import { useModal } from "../hooks/useModal";
 import Modal from "../components/Modals/Modal"
 import axios from 'axios'
+import LottieAnimation from '../components/Register/LoadingAnimation'
 
-export const LibCard = ({ name, img }) => {
+export const LibCard = ({ id, name, img }) => {
     return (
-        <div className='libs-card'>
-
+        <div id={id} className='lib-card'>
+            <div style={{
+                height: '180px',
+                width: '180px',
+                backgroundColor: '#00FF00'
+            }}/>
+            {name}
         </div>
     )
 }
@@ -24,7 +30,7 @@ export const FavItem = ({ id, name, pack, onUnfav }) => {
             <span className='fav-item'>{pack}</span>
             <div style={{ display: 'flex', gap: '5px' }}>
                 <img className='fav-item-icon' src={playIcon} />
-                <img className='fav-item-icon' src={unFavButtonIcon} onClick={onUnfav}/>
+                <img className='fav-item-icon' src={unFavButtonIcon} onClick={onUnfav} />
             </div>
         </div>
     )
@@ -34,7 +40,7 @@ export const getFavList = async (userId) => {
     try {
         const url = `http://localhost:3001/api/users/getUserFavsList/${userId}`
         const response = await axios.get(url)
-        console.log("favlist:"+ JSON.stringify(response.data))
+        console.log("favlist:" + JSON.stringify(response.data))
         return response.data
     } catch (error) {
         console.log(error)
@@ -42,7 +48,7 @@ export const getFavList = async (userId) => {
     }
 }
 
-export const updateFav = async (userId, sampleId, action, callback) => {
+export const updateFav = async ( userId, sampleId, action, callback ) => {
     try {
         const url = 'http://localhost:3001/api/users/updateFav'
         const body = {
@@ -61,7 +67,22 @@ export const updateFav = async (userId, sampleId, action, callback) => {
     }
 }
 
+export const getCollections = async ( plan ) => {
+    try {
+        const url = `http://localhost:3001/api/collections/plan/${plan}`
+        const response = await axios.get(url)
+        console.log("getCollections:" + JSON.stringify(response))
+        return response.data
+    } catch (error) {   
+        console.log(error)
+        throw error
+    }
+}
+
 export const Home = () => {
+
+    const [loadingFavs, setLoadingFavs] = useState(false)
+    const [loadingCollections, setLoadingCollections] = useState(false)
 
     const { user } = useContext(UserContext);
 
@@ -69,14 +90,30 @@ export const Home = () => {
 
     const [favList, setFavList] = useState([])
 
+    const [collections, setCollections] = useState([])
+
     useEffect(() => {
-        setFavList(user.favList)  
+        setLoadingCollections(true)
+        setFavList(user.favList)
+        const fetchCollections = async () => {
+            try {
+                const colls = await getCollections(user.plan)
+                setCollections(colls)
+                setLoadingCollections(false)
+            }
+            catch (error) {
+                console.log("Error al obtener collections")
+            }
+        }
+        fetchCollections()
     }, [])
 
     const handleUnfav = async (sampleId) => {
+        setLoadingFavs(true)
         await updateFav(user.id, sampleId, 'UNFAV', async () => {
             const updatedFavs = await getFavList(user.id)
             setFavList(updatedFavs)
+            setLoadingFavs(false)
         })
     }
 
@@ -96,42 +133,68 @@ export const Home = () => {
             <div className={'home-container'}>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <h3 className='libs-title'>Últimas librerias</h3>
-                    <div style={{ display: 'flex' }}>
-                        <div className='libs-card' style={{
-                            padding: '11px 16px 11px 16px',
-                            gap: '5px'
-                        }}>
-                            <img src={seeMoreIcon} />
-                            <span style={{
-                                fontFamily: 'Inter-Regular',
-                                fontSize: '16px'
+                    {loadingCollections ?
+                        <div className='loading-collections'>
+                            <LottieAnimation width={200} height={200} />
+                        </div> : null
+                    }
+                    <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+                        {
+                            collections.map(({ id, collectionName }) => (
+                                <LibCard
+                                    key={id}
+                                    id={id}
+                                    name={collectionName}
+                                />
+                            ))
+                        }
+                        {
+                            collections.length > 3 ? 
+                            <div className='lib-card' style={{
+                                padding: '11px 16px 11px 16px',
+                                gap: '5px',
+                                height: 'fit-content'
                             }}>
-                                Ver más
-                            </span>
-                        </div>
+                                <img src={seeMoreIcon} />
+                                <span style={{
+                                    fontFamily: 'Inter-Regular',
+                                    fontSize: '16px'
+                                }}>
+                                    Ver más
+                                </span>
+                            </div>
+                            : null
+                        }
                     </div>
                 </div>
                 <div className='favs-card'>
-                    <h3 className='favs-title'>Mis favoritos</h3>
-                    <div style={{
-                        display: 'flex',
-                        margin: '7px 0px 9px 0px'
-                    }}>
-                        <span className='fav-item'>Nombre de muestra</span>
-                        <span className='fav-item'>Pack origen</span>
-                    </div>
-                    {
-                        favList.map(({ id, sampleName, collectionCode }) => (
-                            <FavItem
-                                key={id}
-                                id={id}
-                                name={sampleName}
-                                pack={collectionCode}
-                                onUnfav={() => handleUnfav(id)}
-                            />
-                        ))
-                    }
-                    
+                        {loadingFavs ?
+                            <div className='loading-favs'>
+                                <LottieAnimation width={200} height={200} />
+                            </div> : <div> </div>
+
+                        }
+                        <div style={{padding: "6px 20px 6px 20px"}}>
+                            <h3 className='favs-title'>Mis favoritos</h3>
+                            <div style={{
+                                display: 'flex',
+                                margin: '7px 0px 9px 0px'
+                            }}>
+                                <span className='fav-item'>Nombre de muestra</span>
+                                <span className='fav-item'>Pack origen</span>
+                            </div>
+                            {
+                                favList.map(({ id, sampleName, collectionCode }) => (
+                                    <FavItem
+                                        key={id}
+                                        id={id}
+                                        name={sampleName}
+                                        pack={collectionCode}
+                                        onUnfav={() => handleUnfav(id)}
+                                    />
+                                ))
+                            }
+                        </div>
                 </div>
             </div>
         </div>
