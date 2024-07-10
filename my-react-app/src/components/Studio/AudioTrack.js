@@ -30,12 +30,12 @@ export default function AudioTrack ({
   }, [waveformPlayer, containerRef]);
 
   const onClickMute = () => {
-    getTrack(sample.sampleId).setMute(!getTrack(sample.sampleId).isMuted)
+    getTrack(sample.id).setMute(!getTrack(sample.id).isMuted)
   }
 
   const onClickSolo = () => {
-    onSoloChannel(sample.sampleId)
-    handleSoloChannel(sample.sampleId)
+    onSoloChannel(sample.id)
+    handleSoloChannel(sample.id)
   }
 
   const deleteChannel = ( sampleID ) => {
@@ -46,7 +46,7 @@ export default function AudioTrack ({
   const DeleteButton = () => {
     return(
       <button className="btn-delete-channel" 
-        onClick={() => deleteChannel(sample.sampleId)}>
+        onClick={() => deleteChannel(sample.id)}>
         <img 
           src={deleteIconSvg} 
           alt="icono de borrar"
