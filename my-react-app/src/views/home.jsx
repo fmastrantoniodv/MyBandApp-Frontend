@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import unFavButtonIcon from '../img/unFavButtonIcon.svg'
+import favButtonIcon from '../img/favButtonIcon.svg'
 import seeMoreIcon from '../img/seeMoreIcon.svg'
 import playIcon from '../img/playIcon.svg'
 import { Header } from '../components/Register/Form'
@@ -10,7 +11,7 @@ import Modal from "../components/Modals/Modal"
 import axios from 'axios'
 import LottieAnimation from '../components/Register/LoadingAnimation'
 
-export const LibCard = ({ id, name, img }) => {
+export const LibCard = ({ id, name, img, onFavCollection }) => {
     return (
         <div id={id} className='lib-card'>
             <div style={{
@@ -18,7 +19,17 @@ export const LibCard = ({ id, name, img }) => {
                 width: '180px',
                 backgroundColor: '#00FF00'
             }}/>
-            {name}
+            <span style={{width: '100%', fontFamily: 'Inter-Medium, sans-serif', fontSize: '14px'}}>{name}</span>
+            <div style={{display: 'flex', width: '180px', height: '67px', gap: '10px', fontSize: '12px', textAlign: 'center', marginTop:'13px', fontFamily: 'Inter-Regular, sans-serif'}}>
+                <div className='fav-item-container' style={{width: '100%', flexDirection: 'column', justifyContent: 'center'}}>
+                    <img className='fav-item-icon' src={playIcon} />
+                    Escuchar muestra
+                </div>
+                <div className='fav-item-container' style={{width: '100%', flexDirection: 'column', justifyContent: 'center'}} onClick={onFavCollection}>
+                    <img className='fav-item-icon' src={favButtonIcon} />
+                    Marcar Favorito
+                </div>
+            </div>
         </div>
     )
 }
@@ -117,6 +128,22 @@ export const Home = () => {
         })
     }
 
+    const handleFavCollection = async (collectionId) => {
+        setLoadingFavs(true)
+
+        const collection = collections.find(collection => collection.id === collectionId)
+
+        for (const sample of collection.sampleList) {
+            await updateFav(user.id, sample.id, 'FAV', () => {
+                return
+            })
+        }
+
+        const updatedFavs = await getFavList(user.id)
+        setFavList(updatedFavs)
+        setLoadingFavs(false)
+    }
+
     return (
 
         <div style={{
@@ -131,7 +158,7 @@ export const Home = () => {
                 route2={routes.login}
             />
             <div className={'home-container'}>
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', width: '60%' }}>
                     <h3 className='libs-title'>Últimas librerias</h3>
                     {loadingCollections ?
                         <div className='loading-collections'>
@@ -145,6 +172,7 @@ export const Home = () => {
                                     key={id}
                                     id={id}
                                     name={collectionName}
+                                    onFavCollection={() => handleFavCollection(id)}
                                 />
                             ))
                         }
