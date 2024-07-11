@@ -19,7 +19,6 @@ const ListOfChannels = ({ sampleList, openModalSampleSelector, handleDeleteChann
         setSoloChannelSelected(idChannel)
       }
     }
-/** */
     console.log('[ListOfChannels].pre.channelList=', channelList)
     if(channelList === null || channelList === undefined) return
     console.log('[ListOfChannels].post.channelList=', channelList)
