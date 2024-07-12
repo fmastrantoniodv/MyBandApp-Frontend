@@ -11,22 +11,22 @@ import Modal from "../components/Modals/Modal"
 import axios from 'axios'
 import LottieAnimation from '../components/Register/LoadingAnimation'
 
-export const LibCard = ({ id, name, img, onFavCollection }) => {
+export const CollectionCard = ({ id, name, img, onFavCollection }) => {
     return (
-        <div id={id} className='lib-card'>
+        <div id={id} className='collection-card'>
             <div style={{
                 height: '180px',
                 width: '180px',
                 backgroundColor: '#00FF00'
             }}/>
-            <span style={{width: '100%', fontFamily: 'Inter-Medium, sans-serif', fontSize: '14px'}}>{name}</span>
-            <div style={{display: 'flex', width: '180px', height: '67px', gap: '10px', fontSize: '12px', textAlign: 'center', marginTop:'13px', fontFamily: 'Inter-Regular, sans-serif'}}>
-                <div className='fav-item-container' style={{width: '100%', flexDirection: 'column', justifyContent: 'center'}}>
-                    <img className='fav-item-icon' src={playIcon} />
+            <span className='collection-name'>{name}</span>
+            <div className='collection-btn-container'>
+                <div className='collection-button'>
+                    <img className='fav-play-icon' src={playIcon} />
                     Escuchar muestra
                 </div>
-                <div className='fav-item-container' style={{width: '100%', flexDirection: 'column', justifyContent: 'center'}} onClick={onFavCollection}>
-                    <img className='fav-item-icon' src={favButtonIcon} />
+                <div className='collection-button' onClick={onFavCollection}>
+                    <img className='fav-play-icon' src={favButtonIcon} />
                     Marcar Favorito
                 </div>
             </div>
@@ -40,8 +40,8 @@ export const FavItem = ({ id, name, pack, onUnfav }) => {
             <span className='fav-item'>{name}</span>
             <span className='fav-item'>{pack}</span>
             <div style={{ display: 'flex', gap: '5px' }}>
-                <img className='fav-item-icon' src={playIcon} />
-                <img className='fav-item-icon' src={unFavButtonIcon} onClick={onUnfav} />
+                <img className='fav-play-icon' src={playIcon} />
+                <img className='fav-play-icon' src={unFavButtonIcon} onClick={onUnfav} />
             </div>
         </div>
     )
@@ -158,41 +158,63 @@ export const Home = () => {
                 route2={routes.login}
             />
             <div className={'home-container'}>
-                <div style={{ display: 'flex', flexDirection: 'column', width: '60%' }}>
-                    <h3 className='libs-title'>Últimas librerias</h3>
-                    {loadingCollections ?
-                        <div className='loading-collections'>
-                            <LottieAnimation width={200} height={200} />
-                        </div> : null
-                    }
-                    <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-                        {
-                            collections.map(({ id, collectionName }) => (
-                                <LibCard
-                                    key={id}
-                                    id={id}
-                                    name={collectionName}
-                                    onFavCollection={() => handleFavCollection(id)}
-                                />
-                            ))
+                <div style={{display: 'flex',
+                    'gap': '50px',
+                    'width': '60%',
+                    'flex-direction': 'column'}}>
+                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                        <h3 className='collections-title'>Últimas librerias</h3>
+                        {loadingCollections ?
+                            <div className='loading-collections'>
+                                <LottieAnimation width={200} height={200} />
+                            </div> : null
                         }
-                        {
-                            collections.length > 3 ? 
-                            <div className='lib-card' style={{
-                                padding: '11px 16px 11px 16px',
-                                gap: '5px',
-                                height: 'fit-content'
-                            }}>
-                                <img src={seeMoreIcon} />
-                                <span style={{
-                                    fontFamily: 'Inter-Regular',
-                                    fontSize: '16px'
+                        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+                            {
+                                collections.map(({ id, collectionName }) => (
+                                    <CollectionCard
+                                        key={id}
+                                        id={id}
+                                        name={collectionName}
+                                        onFavCollection={() => handleFavCollection(id)}
+                                    />
+                                ))
+                            }
+                            {
+                                collections.length > 3 ? 
+                                <div className='collection-card' style={{
+                                    padding: '11px 16px 11px 16px',
+                                    gap: '5px',
+                                    height: 'fit-content'
                                 }}>
-                                    Ver más
-                                </span>
+                                    <img src={seeMoreIcon} />
+                                    <span style={{
+                                        fontFamily: 'Inter-Regular',
+                                        fontSize: '16px'
+                                    }}>
+                                        Ver más
+                                    </span>
+                                </div>
+                                : null
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        <div className='projects-background' />
+                        <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '296px' }}>
+                            <h3 style={{marginTop: '15px', zIndex: '10'}} className='favs-title'>Mis proyectos</h3>
+                            <div className='projects-container'>
+                                <div className='new-project-btn'>
+                                    <img src={seeMoreIcon} />
+                                    <span style={{
+                                        fontFamily: 'Inter-Regular',
+                                        fontSize: '16px'
+                                    }}>
+                                        Nuevo
+                                    </span>
+                                </div>
                             </div>
-                            : null
-                        }
+                        </div>
                     </div>
                 </div>
                 <div className='favs-card'>
