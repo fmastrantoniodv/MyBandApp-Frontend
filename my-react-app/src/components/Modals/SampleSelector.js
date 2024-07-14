@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import useFavouritesSamples from "../../hooks/useFavouritesSamples";
+import ProjectContext from "../../contexts/ProjectContext"
 
-export default function SampleSelector({channelList, handleCloseSamplesSelector, handleOnClickSelection}) {
+export default function SampleSelector({handleCloseSamplesSelector}) {
   const [itemSelected, setItemSelected] = useState(null)
   const [titleMsg, setTitleMsg] = useState(null)
   const [loading, setLoading] = useState(null)
-  const favsSamples = useFavouritesSamples({channelList})
+  const {getSoundList, addChannelToList} = useContext(ProjectContext)
+  const favsSamples = useFavouritesSamples({})
   const [avaibleFavs, setAvaibleFavs] = useState(null)
   const [favouritesSamples, setFavouritesSamples] = useState(null)
 
@@ -25,7 +27,7 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
     setLoading(false)
     console.log('[SampleSelector].favouritesSamples',favsSamples.favouritesSamples)
     console.log('[SampleSelector].avaibleFavs',favsSamples.avaibleFavs)
-  },[channelList, favsSamples])
+  },[favsSamples])
 
   const handleCloseAction = () => {
     handleCloseSamplesSelector()
@@ -41,15 +43,16 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
   }
 
   const handleApplySelection = () => {
-    handleOnClickSelection(itemSelected)
+    addChannelToList(itemSelected)
     setItemSelected(null)
+    handleCloseAction()
     /**
     setAvaibleFavs(getFavsAvailable(favouritesSamples))
      */
   }
 
     console.log('[SampleSelector.js].[linea46].avaibleFavs=', avaibleFavs)  
-    if(channelList === undefined || avaibleFavs === null) return
+    if(getSoundList() === undefined || avaibleFavs === null) return
 
     return (
       <>

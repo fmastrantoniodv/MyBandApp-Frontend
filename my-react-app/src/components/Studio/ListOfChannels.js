@@ -1,16 +1,18 @@
 import React, { useEffect, useState, useContext } from "react";
 import AudioTrack from "./AudioTrack";
 import MasterAudioContext from '../../contexts/MasterAudioContext'
+import ProjectContext from '../../contexts/ProjectContext'
+import { useModal } from "../../hooks/useModal"
+import Modal from "../../components/Modals/Modal"
+import SampleSelector from "../Modals/SampleSelector"
 
-const ListOfChannels = ({ sampleList, openModalSampleSelector, handleDeleteChannel }) => {
-    const [channelList, setChannelList] = useState(null)
+const ListOfChannels = ({ }) => {
     const [soloChannelSelected, setSoloChannelSelected] = useState(null)
-    const { playBackTracks } = useContext(MasterAudioContext)
-    
+    const { getSoundList } = useContext(ProjectContext)
+    const [isOpenModalSampleSelector, openModalSampleSelector, closeModalSampleSelector] = useModal(false)
+
     useEffect(() => {
-      console.log("[ListOfChannels].[useEffect].sampleList", sampleList)
-        setChannelList(sampleList)
-    }, [sampleList, channelList]);
+    }, []);
 
     const handleSoloChannel = (idChannel) => {
       if(soloChannelSelected === idChannel){
@@ -19,18 +21,28 @@ const ListOfChannels = ({ sampleList, openModalSampleSelector, handleDeleteChann
         setSoloChannelSelected(idChannel)
       }
     }
-    console.log('[ListOfChannels].pre.channelList=', channelList)
-    if(channelList === null || channelList === undefined) return
-    console.log('[ListOfChannels].post.channelList=', channelList)
+
+    const handleOnClickSelection = (item) => {
+      console.log('[studio.jsx].[handleOnClickSelection].item',item)
+      addChannelToList(item)
+      console.log('[studio.jsx].[getSampleList].result',getSampleList())
+      closeModalSampleSelector()
+    }
+
     return (
-      <>
+      <>                
+        <Modal isOpen={isOpenModalSampleSelector} closeModal={closeModalSampleSelector}>
+          <SampleSelector 
+            handleCloseSamplesSelector={closeModalSampleSelector}
+            handleOnClickSelection={handleOnClickSelection}
+          />
+        </Modal>
         <div className="tracks-container">
           {
-            channelList.map(sample => {
+            getSoundList().map(sample => {
                 return <AudioTrack
                     key={sample.id} 
                     sample={sample}
-                    handleDeleteChannel={handleDeleteChannel}
                     soloChannelSelectedState={soloChannelSelected}
                     handleSoloChannel={handleSoloChannel}
                     />

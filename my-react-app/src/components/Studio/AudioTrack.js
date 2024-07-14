@@ -5,15 +5,16 @@ import VolumeController from './VolumeController/VolumeController';
 import EQControls from "./EQControls"
 import deleteIconSvg from '../../img/deleteIcon.svg'
 import MasterAudioContext from '../../contexts/MasterAudioContext'
+import ProjectContext from "../../contexts/ProjectContext";
 
 export default function AudioTrack ({ 
-  sample, 
-  handleDeleteChannel,
+  sample,
   soloChannelSelected,
   handleSoloChannel
 }){
   const containerRef = useRef()
   const {getTrack, deleteTrack, onSoloChannel} = useContext(MasterAudioContext)
+  const { deleteChannel } = useContext(ProjectContext)
   const [loading, setLoading] = useState(true)
   console.log(sample)
   const url = `http://localhost:3001/api/samples/${sample.collectionCode}/${sample.sampleName}`
@@ -38,15 +39,15 @@ export default function AudioTrack ({
     handleSoloChannel(sample.id)
   }
 
-  const deleteChannel = ( sampleID ) => {
-    handleDeleteChannel(sampleID)
+  const handleDeleteChannel = ( sampleID ) => {
     deleteTrack(sampleID)
+    deleteChannel(sampleID)
   }
 
   const DeleteButton = () => {
     return(
       <button className="btn-delete-channel" 
-        onClick={() => deleteChannel(sample.id)}>
+        onClick={() => handleDeleteChannel(sample.id)}>
         <img 
           src={deleteIconSvg} 
           alt="icono de borrar"
@@ -86,7 +87,8 @@ export default function AudioTrack ({
             </div>
             )
     }
-
+    console.log('[AudioTrack.js].pre-render.sample=', sample)
+    if(sample === undefined) return
     return (
     <div className='channel-container'>
       <ChannelControls />
