@@ -67,12 +67,19 @@
     justify-content: center;
 }
 
+.collection-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
 .projects-background {
     background-color: #FFFFFF;
     height: 296px;
     width: 57%;
     position: absolute;
     left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .favs-title {
@@ -120,7 +127,7 @@
     height: 100%;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
+    z-index: 300;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -143,6 +150,28 @@
     height: 100%;
     align-items: center;
     margin-bottom: 30px;
+    gap: 30px;
+}
+
+.project-card {
+    width: 229px;
+    height: 131px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid;
+    border-radius: 5px;
+    background: linear-gradient(to bottom, red, transparent);
+}
+
+.project-name {
+    font-family: 'Inter-SemiBold', sans-serif;
+    font-size: 16px;
+}
+
+.project-last-change {
+    font-family: 'Inter-Regular', sans-serif;
+    font-size: 12px;
 }
 
 .new-project-btn {
@@ -156,3 +185,8 @@
     height: min-content;
     width: min-content;
 }
+
+.new-project-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+

@@ -1,7 +1,10 @@
+import Studio from "../views/studio"
+
 export const routes = {
     login: '/',
     register: '/register',
-    home: '/home'
+    home: '/home',
+    studio: '/studio'
 }
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
