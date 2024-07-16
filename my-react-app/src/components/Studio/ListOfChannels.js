@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import AudioTrack from "./AudioTrack";
-import MasterAudioContext from '../../contexts/MasterAudioContext'
 import ProjectContext from '../../contexts/ProjectContext'
 import { useModal } from "../../hooks/useModal"
 import Modal from "../../components/Modals/Modal"
@@ -8,7 +7,7 @@ import SampleSelector from "../Modals/SampleSelector"
 
 const ListOfChannels = ({ }) => {
     const [soloChannelSelected, setSoloChannelSelected] = useState(null)
-    const { getSoundList } = useContext(ProjectContext)
+    const {getSoundList} = useContext(ProjectContext)
     const [isOpenModalSampleSelector, openModalSampleSelector, closeModalSampleSelector] = useModal(false)
 
     useEffect(() => {
@@ -22,19 +21,12 @@ const ListOfChannels = ({ }) => {
       }
     }
 
-    const handleOnClickSelection = (item) => {
-      console.log('[studio.jsx].[handleOnClickSelection].item',item)
-      addChannelToList(item)
-      console.log('[studio.jsx].[getSampleList].result',getSampleList())
-      closeModalSampleSelector()
-    }
-
     return (
       <>                
         <Modal isOpen={isOpenModalSampleSelector} closeModal={closeModalSampleSelector}>
           <SampleSelector 
             handleCloseSamplesSelector={closeModalSampleSelector}
-            handleOnClickSelection={handleOnClickSelection}
+            openModalSampleSelector={openModalSampleSelector}
           />
         </Modal>
         <div className="tracks-container">
@@ -53,9 +45,9 @@ const ListOfChannels = ({ }) => {
             <button 
               onClick={() => openModalSampleSelector()}
               style={{ 
-                width: '70px',
+                width: '50px',
                 height: '50px',
-                margin: '15px'
+                margin: '20px'
             }}>+</button>
             </div>
           </>

@@ -10,8 +10,6 @@ import MasterAudioContext from '../../contexts/MasterAudioContext'
 import ProjectContext from '../../contexts/ProjectContext'
 
 export default function ProjectEditor ({}) {
-
-    const sampleList = [];
     const [playing, setPlaying] = useState('false')
     const { exportWavFile, playBackTracks } = useContext(MasterAudioContext)
     const { loading, getProjectInfo } = useContext(ProjectContext)
