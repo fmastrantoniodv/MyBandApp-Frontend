@@ -11,6 +11,10 @@ const suscriptions = [
     { "key": "trial", "value": "Trial" },
     { "key": "pro", "value": "Pro" }
 ]
+const templates = [
+    { "key": "default", "value": "En blanco" },
+    { "key": "asd", "value": "Proyecto 123" }
+]
 
 export const inputsLogin = [
     {
@@ -89,5 +93,23 @@ export const inputsRegister = [
         name: 'suscription',
         type: 'dropdown',
         options: suscriptions
+    }
+]
+
+export const inputsNewProject = [
+    {
+        title: 'Nombre del proyecto',
+        name: 'projectName',
+        type: 'text',
+        required: {
+            value: true,
+            message: 'Por favor ingrese un nombre para el proyecto'
+        }
+    },
+    {
+        title: 'Template',
+        name: 'template',
+        type: 'dropdown',
+        options: templates
     }
 ]

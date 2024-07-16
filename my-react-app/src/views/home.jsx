@@ -3,12 +3,13 @@ import unFavButtonIcon from '../img/unFavButtonIcon.svg'
 import favButtonIcon from '../img/favButtonIcon.svg'
 import seeMoreIcon from '../img/seeMoreIcon.svg'
 import playIcon from '../img/playIcon.svg'
-import { Header } from '../components/Register/Form'
-import { routes } from '../const/constants'
+import { Header, FormButton, FormInput, InputDropdown } from '../components/Register/Form'
+import { routes, inputsNewProject } from '../const/constants'
 import { UserContext } from '../contexts/UserContext';
 import { useModal } from "../hooks/useModal";
 import Modal from "../components/Modals/Modal"
 import axios from 'axios'
+import { useForm } from 'react-hook-form'
 import LottieAnimation from '../components/Register/LoadingAnimation'
 
 export const CollectionCard = ({ id, name, img, onFavCollection }) => {
@@ -18,7 +19,7 @@ export const CollectionCard = ({ id, name, img, onFavCollection }) => {
                 height: '180px',
                 width: '180px',
                 backgroundColor: '#00FF00'
-            }}/>
+            }} />
             <span className='collection-name'>{name}</span>
             <div className='collection-btn-container'>
                 <div className='collection-button'>
@@ -59,7 +60,7 @@ export const getFavList = async (userId) => {
     }
 }
 
-export const updateFav = async ( userId, sampleId, action, callback ) => {
+export const updateFav = async (userId, sampleId, action, callback) => {
     try {
         const url = 'http://localhost:3001/api/users/updateFav'
         const body = {
@@ -78,13 +79,13 @@ export const updateFav = async ( userId, sampleId, action, callback ) => {
     }
 }
 
-export const getCollections = async ( plan ) => {
+export const getCollections = async (plan) => {
     try {
         const url = `http://localhost:3001/api/collections/plan/${plan}`
         const response = await axios.get(url)
         console.log("getCollections:" + JSON.stringify(response))
         return response.data
-    } catch (error) {   
+    } catch (error) {
         console.log(error)
         throw error
     }
@@ -97,11 +98,13 @@ export const Home = () => {
 
     const { user } = useContext(UserContext);
 
-    const [isOpenModalFavs, openModalFavs, closeModalFavs] = useModal(false)
+    const [isOpenModalNewProject, openModalNewProject, closeModalNewProject] = useModal(false)
 
     const [favList, setFavList] = useState([])
 
     const [collections, setCollections] = useState([])
+
+    const { register, handleSubmit, formState: { errors }, watch } = useForm()
 
     useEffect(() => {
         setLoadingCollections(true)
@@ -144,6 +147,15 @@ export const Home = () => {
         setLoadingFavs(false)
     }
 
+    const handleOpenModalNewProject = () => {
+        openModalNewProject()
+    }
+
+    const handleNewProjectSubmit = () => {
+        console.log('ok')
+        closeModalNewProject()
+    }
+
     return (
 
         <div style={{
@@ -158,10 +170,12 @@ export const Home = () => {
                 route2={routes.login}
             />
             <div className={'home-container'}>
-                <div style={{display: 'flex',
+                <div style={{
+                    display: 'flex',
                     'gap': '50px',
                     'width': '60%',
-                    'flex-direction': 'column'}}>
+                    'flex-direction': 'column'
+                }}>
                     <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                         <h3 className='collections-title'>Últimas librerias</h3>
                         {loadingCollections ?
@@ -181,30 +195,30 @@ export const Home = () => {
                                 ))
                             }
                             {
-                                collections.length > 3 ? 
-                                <div className='collection-card' style={{
-                                    padding: '11px 16px 11px 16px',
-                                    gap: '5px',
-                                    height: 'fit-content'
-                                }}>
-                                    <img src={seeMoreIcon} />
-                                    <span style={{
-                                        fontFamily: 'Inter-Regular',
-                                        fontSize: '16px'
+                                collections.length > 3 ?
+                                    <div className='collection-card' style={{
+                                        padding: '11px 16px 11px 16px',
+                                        gap: '5px',
+                                        height: 'fit-content'
                                     }}>
-                                        Ver más
-                                    </span>
-                                </div>
-                                : null
+                                        <img src={seeMoreIcon} />
+                                        <span style={{
+                                            fontFamily: 'Inter-Regular',
+                                            fontSize: '16px'
+                                        }}>
+                                            Ver más
+                                        </span>
+                                    </div>
+                                    : null
                             }
                         </div>
                     </div>
                     <div>
                         <div className='projects-background' />
                         <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '296px' }}>
-                            <h3 style={{marginTop: '15px', zIndex: '10'}} className='favs-title'>Mis proyectos</h3>
+                            <h3 style={{ marginTop: '15px', zIndex: '10' }} className='favs-title'>Mis proyectos</h3>
                             <div className='projects-container'>
-                                <div className='new-project-btn'>
+                                <div className='new-project-btn' onClick={() => handleOpenModalNewProject()}>
                                     <img src={seeMoreIcon} />
                                     <span style={{
                                         fontFamily: 'Inter-Regular',
@@ -217,34 +231,82 @@ export const Home = () => {
                         </div>
                     </div>
                 </div>
-                <div className='favs-card'>
-                        {loadingFavs ?
-                            <div className='loading-favs'>
-                                <LottieAnimation width={200} height={200} />
-                            </div> : <div> </div>
-
-                        }
-                        <div style={{padding: "6px 20px 6px 20px"}}>
-                            <h3 className='favs-title'>Mis favoritos</h3>
-                            <div style={{
-                                display: 'flex',
-                                margin: '7px 0px 9px 0px'
-                            }}>
-                                <span className='fav-item'>Nombre de muestra</span>
-                                <span className='fav-item'>Pack origen</span>
+                {
+                    <Modal isOpen={isOpenModalNewProject} closeModal={closeModalNewProject}>
+                        <form style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center'
+                        }} onSubmit={handleSubmit(handleNewProjectSubmit)}>
+                            <div>
+                                <h3 className='favs-title'>Crear proyecto</h3>
                             </div>
-                            {
-                                favList.map(({ id, sampleName, collectionCode }) => (
-                                    <FavItem
-                                        key={id}
-                                        id={id}
-                                        name={sampleName}
-                                        pack={collectionCode}
-                                        onUnfav={() => handleUnfav(id)}
-                                    />
-                                ))
-                            }
+                            <div style={{
+                                gap: '54px', display: 'flex',
+                                flexDirection: 'column',
+                                margin: '0px 101px',
+                                maxWidth: '664px',
+                                minWidth: '354px'
+                            }}>
+                                <div style={{gap: '18px', display: 'flex', flexDirection: 'column'}}>
+                                    {
+                                        inputsNewProject.map(({ title, options, name, type, required, validate }) => (
+                                            type === 'dropdown' ? (
+                                                <InputDropdown
+                                                    title={title}
+                                                    name={name}
+                                                    options={options}
+                                                    register={register}
+                                                />
+                                            ) : <FormInput
+                                                title={title}
+                                                name={name}
+                                                type={type}
+                                                register={register}
+                                                errors={errors}
+                                                required={required}
+                                                validate={validate}
+                                                watch={watch}
+                                            />
+                                        ))
+                                    }
+                                </div>
+                                <div style={{gap: '18px', display: 'flex'}}>
+                                    <FormButton style={{ maxWidth: '222px', minWidth: '150px' }} text='Cancelar' type='secondary' action={() => closeModalNewProject()} />
+                                    <FormButton style={{ maxWidth: '222px', minWidth: '150px' }} text='Crear proyecto' type='primary' />
+                                </div>
+                            </div>
+                        </form>
+                    </Modal>
+                }
+                <div className='favs-card'>
+                    {loadingFavs ?
+                        <div className='loading-favs'>
+                            <LottieAnimation width={200} height={200} />
+                        </div> : <div> </div>
+
+                    }
+                    <div style={{ padding: "6px 20px 6px 20px" }}>
+                        <h3 className='favs-title'>Mis favoritos</h3>
+                        <div style={{
+                            display: 'flex',
+                            margin: '7px 0px 9px 0px'
+                        }}>
+                            <span className='fav-item'>Nombre de muestra</span>
+                            <span className='fav-item'>Pack origen</span>
                         </div>
+                        {
+                            favList.map(({ id, sampleName, collectionCode }) => (
+                                <FavItem
+                                    key={id}
+                                    id={id}
+                                    name={sampleName}
+                                    pack={collectionCode}
+                                    onUnfav={() => handleUnfav(id)}
+                                />
+                            ))
+                        }
+                    </div>
                 </div>
             </div>
         </div>

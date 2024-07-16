@@ -25,7 +25,7 @@
 .collections-title {
     color: #E9E9E9;
     font-size: 32px;
-    font-family: 'Inter-Bold', sans-serif;
+    font-family: 'Inter-SemiBold', sans-serif;
     margin: 0px;
     margin-bottom: 12px;
 }
@@ -78,7 +78,7 @@
 .favs-title {
     color: #000000;
     font-size: 32px;
-    font-family: 'Inter-Bold', sans-serif;
+    font-family: 'Inter-SemiBold', sans-serif;
     margin: 0px;
 }
 
@@ -138,7 +138,7 @@
 }
 
 .projects-container {
-    z-index: 1000;
+    z-index: 400;
     display: flex;
     height: 100%;
     align-items: center;
