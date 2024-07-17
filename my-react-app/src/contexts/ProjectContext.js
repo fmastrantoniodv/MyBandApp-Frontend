@@ -6,7 +6,7 @@ import GenericMsg from "../components/Modals/GenericMsg"
 
 const ProjectContext = React.createContext()
 
-export function ProjectContextProvider({children, value}){
+export function ProjectContextProvider({children, projectInfoEntry}){
     const [soundList, setSoundList] = useState(null)
     const [projectInfo, setProjectInfo] = useState(null); // El estado del contexto
     const [loading, setLoading] = useState(null)
@@ -15,7 +15,8 @@ export function ProjectContextProvider({children, value}){
 
     useEffect(()=>{
         console.log('[ProjectContextProvider].[useEffect].soundList', soundList)
-        setInitValues(value.projectId)
+        console.log('[ProjectContextProvider].[useEffect].projectInfoEntry', projectInfoEntry)
+        setInitValues(projectInfoEntry)
     }, [])
 
     const getSoundList = () => {
@@ -56,24 +57,38 @@ export function ProjectContextProvider({children, value}){
         setSoundList(soundList.filter(value => value.id !== channelId))      
     }
 
-    const setInitValues = async (projectId) => {
-        console.log('setInitValues.loading', loading)
+    const setInitValues = async (projectInfoEntryParam) => {
+        console.log('[ProjectContextProvider].[setInitValues].loading', loading)
+        console.log('[ProjectContextProvider].[setInitValues].projectInfoEntryParam', projectInfoEntryParam)
         if(loading) return
         setLoading(true)
-        const projectData = await getProject(projectId)
-        if(projectData === undefined)
-        console.log('projectDatita', projectData)
-        var projectInfoResp = {
-            userId: projectData.userId,
-            projectName: projectData.projectName,
-            createdDate: projectData.createdDate,
-            savedDate: projectData.savedDate,
-            totalDuration: projectData.totalDuration
-        
+        if(projectInfoEntryParam.projectId === null){
+            console.log('[ProjectContextProvider].[setInitValues].project en blanco')
+            var projectInfoResp = {
+                userId: projectInfoEntryParam.userId,
+                projectName: projectInfoEntryParam.projectName,
+                createdDate: new Date(),
+                totalDuration: 0            
+            }
+            setProjectInfo(projectInfoResp)
+            setSoundList([])
+            console.log('[ProjectContextProvider].[setInitValues].end')
+        }else{
+            const projectData = await getProject(projectInfoEntryParam.projectId)
+            if(projectData === undefined)
+            console.log('projectDatita', projectData)
+            var projectInfoResp = {
+                userId: projectData.userId,
+                projectName: projectData.projectName,
+                createdDate: projectData.createdDate,
+                savedDate: projectData.savedDate,
+                totalDuration: projectData.totalDuration
+            
+            }
+            setProjectInfo(projectInfoResp)
+            setSoundList(projectData.channelList)
+            console.log('[ProjectContext.js].setInitValues.#####MEDIO#######.loading=', loading)
         }
-        setProjectInfo(projectInfoResp)
-        setSoundList(projectData.channelList)
-        console.log('[ProjectContext.js].setInitValues.#####MEDIO#######.loading=', loading)
         setLoading(false)
       }
       console.log('[ProjectContext.js].loading=', loading)

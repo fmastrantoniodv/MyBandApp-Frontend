@@ -5,15 +5,16 @@ import { MasterAudioContextProvider } from "../contexts/MasterAudioContext";
 import { ProjectContextProvider } from "../contexts/ProjectContext";
 import ListOfChannels from "../components/Studio/ListOfChannels"
 
-const Studio = () => {
-      const projectId = '6670f16ce0514db5f7b74e1e';
+const Studio = ({projectInfo}) => {
+
+      if(projectInfo === undefined) return
 
       useEffect(()=>{
       }, [])
 
       return( 
           <>
-            <ProjectContextProvider value={{projectId}}>
+            <ProjectContextProvider projectInfoEntry={projectInfo}>
               <div className='studio-container'>
                   <MasterAudioContextProvider value={{}}>    
                     <ProjectEditor />
