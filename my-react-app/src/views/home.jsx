@@ -3,7 +3,9 @@ import unFavButtonIcon from '../img/unFavButtonIcon.svg'
 import favButtonIcon from '../img/favButtonIcon.svg'
 import seeMoreIcon from '../img/seeMoreIcon.svg'
 import playIcon from '../img/playIcon.svg'
+import deleteIcon from '../img/deleteIcon.svg'
 import projectImg from '../img/projectImg.svg'
+import openIcon from '../img/openIcon.svg'
 import { Header, FormButton, FormInput, InputDropdown } from '../components/Register/Form'
 import { routes, inputsNewProject } from '../const/constants'
 import { UserContext } from '../contexts/UserContext';
@@ -37,24 +39,32 @@ export const CollectionCard = ({ id, name, img, onFavCollection }) => {
     )
 }
 
-export const ProjectCard = ({ id, name, savedDate }) => {
+export const ProjectCard = ({ id, name, savedDate, onDelete, onOpen }) => {
 
     const fecha = new Date(savedDate);
-
-    // Obtener partes de la fecha   
+ 
     const dia = fecha.getDate().toString().padStart(2, '0');
-    const mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Los meses en JavaScript van de 0 a 11
+    const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
     const anio = fecha.getFullYear().toString().padStart(4, '0');
     const hora = fecha.getHours().toString().padStart(2, '0');
     const minutos = fecha.getMinutes().toString().padStart(2, '0');
     const segundos = fecha.getSeconds().toString().padStart(2, '0');
 
-    // Formatear la fecha según el requerimiento
     const fechaFormateada = `${dia}-${mes}-${anio} ${hora}:${minutos}:${segundos}`;
 
     return (
         <div key={id} className='project-card'>
-            <img style={{width: '81px', height: '85px'}} src={projectImg}/>
+            <div style={{display:'flex', justifyContent: 'space-between'}}>
+                <img style={{width: '81px', height: '85px'}} src={projectImg}/>
+                <div style={{display:'flex', flexDirection:'column', gap: '8px'}}>
+                    <button style={{border: '0px', backgroundColor: '#EF3C3C'}} onClick={onDelete}>
+                        <img src={deleteIcon} alt="icono de borrar"/>
+                    </button>
+                    <button style={{border: '0px', backgroundColor: '#FCFCFC'}} onClick={onOpen}>
+                        <img src={openIcon} alt="icono de abrir"/>
+                    </button>
+                </div>
+            </div>
             <span className='project-name'>{name}</span>
             <span className='project-last-change'>Último cambio: {fechaFormateada}</span>
         </div>
@@ -78,7 +88,7 @@ export const getFavList = async (userId) => {
     try {
         const url = `http://localhost:3001/api/users/getUserFavsList/${userId}`
         const response = await axios.get(url)
-        console.log("favlist:" + JSON.stringify(response.data))
+        console.log("getFavList: ", response.data)
         return response.data
     } catch (error) {
         console.log(error)
@@ -94,9 +104,7 @@ export const updateFav = async (userId, sampleId, action, callback) => {
             "sampleId": sampleId,
             "actionCode": action
         }
-        console.log("updateFav:" + body)
         const response = await axios.post(url, body)
-        console.log(response)
         callback()
         return response
     } catch (error) {
@@ -109,7 +117,7 @@ export const getCollections = async (plan) => {
     try {
         const url = `http://localhost:3001/api/collections/plan/${plan}`
         const response = await axios.get(url)
-        console.log("getCollections:" + JSON.stringify(response))
+        console.log("getCollections: ", response.data)
         return response.data
     } catch (error) {
         console.log(error)
@@ -121,7 +129,7 @@ export const getProjects = async (userId) => {
     try {
         const url = `http://localhost:3001/api/project/getUserProjects/${userId}`
         const response = await axios.get(url)
-        console.log("getProjects:" + JSON.stringify(response))
+        console.log("getProjects: ", response.data)
         return response.data
     } catch (error) {
         console.log(error)
@@ -137,8 +145,34 @@ export const createNewProject = async (userId, projectName) => {
             "projectName": projectName
         };
         const response = await axios.post(url, body)
-        console.log(response)
         return response
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+}
+
+export const deleteProject = async (userId, projectId) => {
+    try {
+        const url = 'http://localhost:3001/api/project/delete'
+        const body = {
+            "userId": userId,
+            "projectId": projectId
+        }
+        const response = await axios.post(url, body)
+        return response
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+}
+
+export const getProject = async (projectId) => {
+    try {
+        const url = `http://localhost:3001/api/project/${projectId}`
+        const response = await axios.get(url)
+        console.log("getProject: ", response.data)
+        return response.data
     } catch (error) {
         console.log(error)
         throw error
@@ -215,17 +249,17 @@ export const Home = () => {
         setFavList(updatedFavs)
         setLoadingFavs(false)
     }
-
+    
     const handleOpenModalNewProject = () => {
         openModalNewProject()
     }
-
+    
     const handleNewProjectSubmit = async (data) => {
         
         try {
             const resp = await createNewProject(user.id, data.projectName);
             if (resp.status === 200) {
-                console.log('Proyecto creado con exito, resp: ' + JSON.stringify(resp.data))
+                console.log('Proyecto creado con exito: ', resp.data)
                 closeModalNewProject()
                 reset()
                 navigate(routes.studio)
@@ -235,6 +269,30 @@ export const Home = () => {
         } catch (error) {
             console.error('Error: ', error)
         }
+        
+    }
+    const handleDeleteProject = async (projectId) => {
+        setLoadingProjects(true)
+
+        try {
+            await deleteProject(user.id, projectId)
+        } catch (error) {
+            console.error('Error handleDeleteProject: ', error)
+        }
+
+        const updatedProjects = await getProjects(user.id)
+        setProjects(updatedProjects)
+        setLoadingProjects(false)
+    }
+
+    const handleOpenProject = async (projectId) => {
+        try {
+            await getProject(projectId)
+        } catch (error) {
+            console.error('Error handleDeleteProject: ', error)
+        }
+
+        navigate(routes.studio)
     }
 
     return (
@@ -253,9 +311,9 @@ export const Home = () => {
             <div className={'home-container'}>
                 <div style={{
                     display: 'flex',
-                    'gap': '50px',
-                    'width': '60%',
-                    'flex-direction': 'column'
+                    gap: '50px',
+                    width: '60%',
+                    flexDirection: 'column'
                 }}>
                     <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                         <h3 className='collections-title'>Últimas librerias</h3>
@@ -325,6 +383,8 @@ export const Home = () => {
                                                 id={id}
                                                 name={projectName}
                                                 savedDate={savedDate}
+                                                onDelete={() => handleDeleteProject(id)}
+                                                onOpen={() => handleOpenProject(id)}
                                             />
                                         ))}
                                     </>
@@ -348,9 +408,7 @@ export const Home = () => {
                             <div style={{
                                 gap: '54px', display: 'flex',
                                 flexDirection: 'column',
-                                margin: '0px 101px',
-                                maxWidth: '664px',
-                                minWidth: '354px'
+                                margin: '30px 28px 30px'
                             }}>
                                 <div style={{ gap: '18px', display: 'flex', flexDirection: 'column' }}>
                                     {
