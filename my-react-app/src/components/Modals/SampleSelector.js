@@ -1,31 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import useFavouritesSamples from "../../hooks/useFavouritesSamples";
+import ProjectContext from "../../contexts/ProjectContext"
+import MasterAudioContext from '../../contexts/MasterAudioContext'
 
-export default function SampleSelector({channelList, handleCloseSamplesSelector, handleOnClickSelection}) {
+export default function SampleSelector({handleCloseSamplesSelector, openModalSampleSelector}) {
   const [itemSelected, setItemSelected] = useState(null)
   const [titleMsg, setTitleMsg] = useState(null)
-  const [loading, setLoading] = useState(null)
-  const favsSamples = useFavouritesSamples({channelList})
   const [avaibleFavs, setAvaibleFavs] = useState(null)
-  const [favouritesSamples, setFavouritesSamples] = useState(null)
+  const {addChannelToList, getSoundList} = useContext(ProjectContext)
+  const {playBackTracks} = useContext(MasterAudioContext)
+  const favouritesSamples = useFavouritesSamples({})
 
   useEffect(()=>{
     console.log('[SampleSelector.js].[useEffect]')
-    console.log('[SampleSelector.js].[useEffect].favsSamples',favsSamples)
-    console.log('[SampleSelector.js].[useEffect].avaibleFavs',avaibleFavs)
-    console.log('[SampleSelector.js].[useEffect].favouritesSamples',favouritesSamples)
-    setLoading(true)
-    if(favsSamples === undefined) return
-    setAvaibleFavs(favsSamples.avaibleFavs)
-    if(favsSamples.avaibleFavs && favsSamples.avaibleFavs.length === 0){
-      setTitleMsg("No hay muestras disponibles")
-    }else{
-      setTitleMsg("Selecciona una muestra para crear el canal")
+    console.log('[SampleSelector.js].[availableFavs]', avaibleFavs)
+    if(favouritesSamples !== undefined){
+      setAvaibleFavs(getFavsAvailable(favouritesSamples))
+      if(avaibleFavs === null || avaibleFavs.length === 0){
+        setTitleMsg("No hay muestras disponibles")
+      }else{
+        setTitleMsg("Selecciona una muestra para crear el canal")
+      }
     }
-    setLoading(false)
-    console.log('[SampleSelector].favouritesSamples',favsSamples.favouritesSamples)
-    console.log('[SampleSelector].avaibleFavs',favsSamples.avaibleFavs)
-  },[channelList, favsSamples])
+  },[favouritesSamples,openModalSampleSelector])
 
   const handleCloseAction = () => {
     handleCloseSamplesSelector()
@@ -41,15 +38,26 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
   }
 
   const handleApplySelection = () => {
-    handleOnClickSelection(itemSelected)
+    playBackTracks('stop')
+    addChannelToList(itemSelected)
     setItemSelected(null)
-    /**
-    setAvaibleFavs(getFavsAvailable(favouritesSamples))
-     */
+    handleCloseAction()
   }
 
-    console.log('[SampleSelector.js].[linea46].avaibleFavs=', avaibleFavs)  
-    if(channelList === undefined || avaibleFavs === null) return
+  const getFavsAvailable = (favouritesSamples) => {
+    var listFilteredFavs = new Array;
+    console.log('getFavsAvailable.favouritesSamples',favouritesSamples)
+    var channelList = getSoundList()
+    console.log('getFavsAvailable.channelList',channelList)
+    if(!favouritesSamples || channelList === null || channelList === undefined ) return
+    favouritesSamples.map(fav => {
+      if(channelList.find(value => value.id === fav.id) === undefined) listFilteredFavs.push(fav)
+      })
+    return listFilteredFavs
+  }
+
+  if(favouritesSamples === undefined || avaibleFavs === null) return
+  console.log('[SampleSelector.js].[linea46].avaibleFavs=', avaibleFavs)  
 
     return (
       <>
@@ -57,7 +65,7 @@ export default function SampleSelector({channelList, handleCloseSamplesSelector,
           <h3 className='subtitle-text'>{titleMsg}</h3>
           <ul>
             {
-            avaibleFavs === undefined || avaibleFavs === null || avaibleFavs.length === 0 ?
+            avaibleFavs === undefined || avaibleFavs === null ?
             'cargando' : 
             avaibleFavs.map(item => {
               return  <li key={item.id} 

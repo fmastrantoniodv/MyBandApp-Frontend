@@ -5,19 +5,18 @@ import playIcon from '../../img/playIcon.svg'
 import stopIcon from '../../img/stopIcon.svg'
 import pauseIcon from '../../img/pauseIcon.svg'
 import exportIcon from '../../img/exportIcon.svg'
+import saveIcon from '../../img/saveIcon.svg'
 import MasterAudioContext from '../../contexts/MasterAudioContext'
+import ProjectContext from '../../contexts/ProjectContext'
 
-export default function ProjectEditor ({ projectDataContext }) {
-    const sounds = projectDataContext.channelList;
-    const sampleList = [];
+export default function ProjectEditor ({}) {
     const [playing, setPlaying] = useState('false')
-    const [soundsList, setSoundsList] = useState(null)
     const { exportWavFile, playBackTracks } = useContext(MasterAudioContext)
+    const { loading, getProjectInfo } = useContext(ProjectContext)
     
     useEffect(() => {
-      console.log('[ProjectEditor].[useEffect].projectDataContext', projectDataContext)
-      setSoundsList(sounds)
-    }, [sounds]);
+      console.log('[ProjectEditor].[useEffect].loading', loading)
+    }, [loading]);
       
     const playProject = () => {
       console.log('Play')
@@ -33,17 +32,10 @@ export default function ProjectEditor ({ projectDataContext }) {
     }
 
     const pauseProject = () => {
-        console.log('Pause')
         playBackTracks('pause')
         setPlaying('pause') 
     }
   
-    const changeZoom = ( number ) => {
-      sampleList.map(sample => {
-        sample.waveform.zoom(number[1])
-      })
-    }
-
     const PlayButton = () => {
       return(
         <button className="btn-project-controls" 
@@ -100,11 +92,30 @@ export default function ProjectEditor ({ projectDataContext }) {
       )
     }
 
+    const SaveProject = () =>{
+      return(
+      <button className="btn-save-project"
+      onClick={() => exportWavFile()}
+      >
+      <img 
+        src={saveIcon} 
+        alt="icono de guardar proyecto"
+        width="100%"
+      ></img>  
+    </button>
+      )
+    }
+
     return (
         <>
             <div className='project-controls' >
-              <h1>{projectDataContext.projectName}</h1>
-              <ExportProject />
+              <div className='project-info'>
+                <span>{getProjectInfo().projectName}</span>
+                <div className='project-info-btns'>
+                  <ExportProject />
+                  <SaveProject />
+                </div>
+              </div>
               <div className="project-controls-btn-container">
                 <PlayButton />
                 <PauseButton />

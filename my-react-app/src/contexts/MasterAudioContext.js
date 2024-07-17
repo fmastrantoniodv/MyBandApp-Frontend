@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import exportToWavFile from '../functions/exportToWavFile'
+import { useSampleList } from '../hooks/useSampleList';
 
 const Context = React.createContext({})
 
@@ -16,6 +17,7 @@ export function MasterAudioContextProvider({children, value}){
     },[trackList])
 
     const addTrackToList = ( newTrack ) => {
+        console.log('[MasterAudioContextProvider].[addTrackToList].newTrack', newTrack)
         setTrackList(prevState => [...prevState, newTrack])
     }
 
