@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import '../../../App.css';
-import '../../../views/studio';
+import '../../App.css';
 
 function VolumeController({waveformObj}) {
     const [volumeValue, setVolumeValue] = useState(waveformObj.savedVolume);

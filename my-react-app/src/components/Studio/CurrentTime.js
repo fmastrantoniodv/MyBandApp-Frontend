@@ -1,29 +1,21 @@
-import React, { useState, useEffect, useContext } from 'react';
-import MasterAudioContext from "../../contexts/MasterAudioContext";
+import React, { useState, useEffect, useRef } from 'react';
 
 const CurrentTime = ({ playing }) => {
-    const [tiempo, setTiempo] = useState();
-    const [prevTiempo, setPrevTiempo] = useState(0);
-    const {masterAudioCtx} = useContext(MasterAudioContext)
+    const [currentTime, setCurrentTime] = useState(0);
+    const intervalRef = useRef(null);
 
     useEffect(() => {
-
       if(playing === 'true'){
-      const interval = setInterval(() => {
-        setTiempo(prevTiempo + masterAudioCtx.currentTime * 1000);
-      }, 100);
-      return () => clearInterval(interval);
-
+        intervalRef.current = setInterval(() => {
+          setCurrentTime((prevTime) => prevTime + 97);
+        }, 97);
       }else if(playing === 'pause'){
-        setPrevTiempo(tiempo)
+        clearInterval(intervalRef.current);
       }
       else{
-        const interval = setInterval(() => {
-          setTiempo(0);
-          setPrevTiempo(0)
-        }, 1);
-    
-        return () => clearInterval(interval);
+        clearInterval(intervalRef.current);
+        setCurrentTime(0)
+        return () => clearInterval(intervalRef.current);
       }
     }, [playing]);
 
@@ -37,10 +29,10 @@ const CurrentTime = ({ playing }) => {
         .toString()
         .padStart(2, '0')}.${miliseg.toString().padStart(3, '0')}`;
     };
-  
+
   return(
     <div className='current-time'>
-      <span>{formatTiempo(tiempo)}</span>
+      <span>{formatTiempo(currentTime)}</span>
       </div>
   ) ;
 };

@@ -4,7 +4,7 @@ import MasterAudioContext from '../contexts/MasterAudioContext'
 
 const useWaveform = (src, sampleProps, containerRef) => {
     const [waveformComponent, setWaveformComponent] = useState(null)
-    const {masterAudioCtx, mainGainNode, addArrayBuffers, addTrackToList} = useContext(MasterAudioContext)
+    const {masterAudioCtx, mainGainNode, addArrayBuffers, addTrackToList, playBackTracks} = useContext(MasterAudioContext)
 
     const soundID = sampleProps.id
 
@@ -71,7 +71,6 @@ const useWaveform = (src, sampleProps, containerRef) => {
         wavesurfer.backend.gainNode.gain.value = sampleProps.channelConfig.volume
         wavesurfer.savedVolume = sampleProps.channelConfig.volume
         //wavesurfer.backend.ac.sampleRate = '44100'
-        console.log('wavesurfer ready',wavesurfer)
         addTrackToList(wavesurfer)
         setWaveformComponent(wavesurfer)
         addArrayBuffers(wavesurfer.backend.buffer, soundID)

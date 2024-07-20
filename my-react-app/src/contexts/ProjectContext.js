@@ -20,7 +20,6 @@ export function ProjectContextProvider({children, projectInfoEntry}){
     }, [])
 
     const getSoundList = () => {
-        console.log('[ProjectContextProvider].[getSoundList].soundList', soundList)
         return soundList
     }
 

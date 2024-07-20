@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import '../css/studio.css';
 import ProjectEditor from '../components/Studio/ProjectEditor';
 import { MasterAudioContextProvider } from "../contexts/MasterAudioContext";
