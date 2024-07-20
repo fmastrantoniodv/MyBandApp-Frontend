@@ -10,12 +10,14 @@ import { Home } from './views/home';
 import { UserProvider } from './contexts/UserContext';
 
 function App() {
-      const projectIdExample = '6670f16ce0514db5f7b74e1e';
       const newProjectExample = {
-            projectId: null,
-            userId: '665b28e287fa373281f47938',
-            projectName: 'Proyecto en blanco',
-            template: 'blank'
+            userId: "665b28e287fa373281f47938",
+            createdDate: "Sat Jul 20 2024 15:15:07 GMT-0300 (hora estándar de Argentina)",
+            id: "669bfeab1dee1734c00a9a2d",
+            projectName: "aaaaaaaaaaaaa",
+            savedDate: "Sat Jul 20 2024 15:15:07 GMT-0300 (hora estándar de Argentina)",
+            totalDuration: 0,
+            channelList: []
       }
           
       return (

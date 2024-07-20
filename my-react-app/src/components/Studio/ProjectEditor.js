@@ -12,7 +12,7 @@ import ProjectContext from '../../contexts/ProjectContext'
 export default function ProjectEditor ({}) {
     const [playing, setPlaying] = useState('false')
     const { exportWavFile, playBackTracks } = useContext(MasterAudioContext)
-    const { loading, getProjectInfo, getSoundList } = useContext(ProjectContext)
+    const { loading, getProjectInfo, getSoundList, saveProject } = useContext(ProjectContext)
     
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect].loading', loading)
@@ -73,7 +73,7 @@ export default function ProjectEditor ({}) {
 
     const SaveProject = () =>{
       return(
-        <button className="btn-save-project" onClick={() => exportWavFile()}>
+        <button className="btn-save-project" onClick={() => saveProject()}>
           <img src={saveIcon} alt="icono de guardar proyecto" width="100%"/>
         </button>
       )

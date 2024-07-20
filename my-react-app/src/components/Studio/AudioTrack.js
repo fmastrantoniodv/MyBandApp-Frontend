@@ -16,10 +16,8 @@ export default function AudioTrack ({
   const {getTrack, deleteTrack, onSoloChannel} = useContext(MasterAudioContext)
   const { deleteChannel } = useContext(ProjectContext)
   const [loading, setLoading] = useState(true)
-  console.log(sample)
-  const url = `http://localhost:3001/api/samples/${sample.collectionCode}/${sample.sampleName}`
-
-  const waveformPlayer = useWaveform(url, sample, containerRef)
+  
+  const waveformPlayer = useWaveform(sample, containerRef)
   
   useEffect(() => {
     console.log('[AudioTrack.js].useEffect.waveformPlayer', waveformPlayer)
@@ -87,7 +85,6 @@ export default function AudioTrack ({
             </div>
             )
     }
-    console.log('[AudioTrack.js].pre-render.sample=', sample)
     if(sample === undefined) return
     return (
     <div className='channel-container'>

@@ -1,6 +1,5 @@
-import { useEffect, useState, useContext } from 'react';
-import { getUserFavs } from '../services/users/getUserFavs';
-import ProjectContext from "../contexts/ProjectContext"
+import { useEffect, useState } from 'react';
+import { getUserFavsServ } from '../services/users/getUserFavsServ';
 
 const useFavouritesSamples = () => {
     const [favouritesSamples, setFavouritesSamples] = useState(null)
@@ -9,7 +8,7 @@ const useFavouritesSamples = () => {
     
     useEffect(() => {
       if(favouritesSamples !== null) return
-      getUserFavs(userId).then(res =>{
+      getUserFavsServ(userId).then(res =>{
         console.log('[useFavouritesSamples.js].[useEffect].res=', res)
         if(res.status != 200) return
         console.log('[useFavouritesSamples.js].[useEffect].res.data=', res.data)

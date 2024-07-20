@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getProject = (projectId) => {
+export const getProjectServ = async (projectId) => {
     return axios.
     get(`http://localhost:3001/api/project/${projectId}`)
     .then((response) => {
