@@ -67,8 +67,8 @@ const Register = () => {
             <Header
                 textPrimaryButton={'Iniciar sesión'}
                 textSecondaryButton={'Volver a la página principal'}
-                route1={routes.login}
-                route2={routes.home}
+                action1={() => navigate(routes.login)}
+                action2={() => navigate(routes.home)}
             />
             <div class={'container'}>
                 <LoadingScreen loading={loading} />

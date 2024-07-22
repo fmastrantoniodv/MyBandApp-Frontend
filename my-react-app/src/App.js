@@ -1,12 +1,14 @@
 import './App.css';
 import './components/Register/Register.css';
-import './components/Home/Home.css';
+import './css/home.css';
+import './css/collections.css';
 import React from 'react';
 import Studio from './views/studio.jsx'
 import Login from './views/login.jsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Register from './views/register.jsx';
-import { Home } from './views/home';
+import { Home } from './views/home.jsx';
+import Collections from './views/collections.jsx';
 import { UserProvider } from './contexts/UserContext';
 
 function App() {
@@ -25,7 +27,8 @@ function App() {
                               <Route path='/' element={<Login />}></Route>
                               <Route path='/register' element={<Register />}></Route>
                               <Route path='/studio' element={<Studio projectInfo={newProjectExample} />}></Route>
-                              <Route path='/home' element={<Home></Home>}></Route>
+                              <Route path='/home' element={<Home />}></Route>
+                              <Route path='/collections' element={<Collections />}></Route>
                         </Routes>
                   </BrowserRouter>
             </UserProvider>

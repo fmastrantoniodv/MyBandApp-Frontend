@@ -6,7 +6,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import LottieAnimation from '../components/Register/LoadingAnimation';
-import { UserContext } from '../contexts/UserContext';
+import { useUser } from '../contexts/UserContext';
 
 export const LoadingScreen = ({ loading }) => {
     return (
@@ -44,7 +44,7 @@ const Login = () => {
 
     const [loading, setLoading] = useState(false);
 
-    const { setUser } = useContext(UserContext);
+    const { setUser } = useUser()
 
     const navigate = useNavigate()
 
@@ -72,8 +72,8 @@ const Login = () => {
             <Header
                 textPrimaryButton={'Registrarse'}
                 textSecondaryButton={'Volver a la página principal'}
-                route1={routes.register}
-                route2={routes.home}
+                action1={() => navigate(routes.register)}
+                action2={() => navigate(routes.home)}
             />
             <div class={'container'}>
                 <LoadingScreen loading={loading} />

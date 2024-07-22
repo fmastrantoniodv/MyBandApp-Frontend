@@ -3,7 +3,7 @@ import logo from '../../img/logo.svg'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
-export const Header = ({ textPrimaryButton, textSecondaryButton, route1, route2 }) => {
+export const Header = ({ textPrimaryButton, textSecondaryButton, action1, action2, children }) => {
     return (
         <header class={'main-header'}>
             <img src={logo} alt='my band app logo' class={'logo'}></img>
@@ -13,26 +13,22 @@ export const Header = ({ textPrimaryButton, textSecondaryButton, route1, route2 
                     gap: '16px',
                     position: 'relative',
                     left: '80%',
-                    transform: 'translateX(-80%)'
+                    transform: 'translateX(-80%)',
+                    alignItems: 'center'
                 }}
             >
-                <ButtonText type={'secondary'} text={textSecondaryButton} route={route2} />
-                <ButtonText type={'primary'} text={textPrimaryButton} route={route1} />
+                <ButtonText type={'secondary'} text={textSecondaryButton} action={action2} />
+                <ButtonText type={'primary'} text={textPrimaryButton} action={action1} />
+                {children}
             </div>
         </header>
     )
 }
 
-export const ButtonText = ({ text, type, route }) => {
-
-    const navigate = useNavigate()
-
-    const handleClick = () => {
-        navigate(route);
-    }
+export const ButtonText = ({ text, type, action }) => {
 
     return (
-        <button class={`text-btn ${type}`} onClick={handleClick}>{text}</button>
+        <button class={`text-btn ${type}`} onClick={action}>{text}</button>
     )
 }
 

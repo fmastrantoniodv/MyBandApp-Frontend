@@ -4,7 +4,8 @@ export const routes = {
     login: '/',
     register: '/register',
     home: '/home',
-    studio: '/studio'
+    studio: '/studio',
+    collections: '/collections'
 }
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
