@@ -11,14 +11,16 @@ import arrow from '../img/arrow.svg'
 import settingsIcon from '../img/settingsIcon.svg'
 import { updateFav, getCollections, getFavList } from './home'
 
-export const Collection = ({ user, id, img, name, tags, samples, favList, setUser }) => {
+export const Collection = ({ user, collectionItem, setUser }) => {
+
+    const { collectionCode, collectionName, tags, id, sampleList } = collectionItem
 
     const [isOpen, setOpen] = useState(false)
 
     const sampleListClass = isOpen ? 'abierto' : 'cerrado'
 
     const handleFavCollection = async () => {
-        for (const sample of samples) {
+        for (const sample of sampleList) {
             await updateFav(user.id, sample.id, 'FAV', () => {
                 return
             })
@@ -30,8 +32,8 @@ export const Collection = ({ user, id, img, name, tags, samples, favList, setUse
     return (
         <div id={id} className='collection-container'>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                <div style={{ width: '41px', height: '41px', backgroundColor: '#00FF00', borderRadius: '5px' }} />
-                <span className='collection-name'>{name}</span>
+                <img style={{ width: '41px', height: '41px', backgroundColor: '#00FF00', borderRadius: '5px' }} src={`http://localhost:3001/api/collections/src/${collectionCode}`} alt={`imagen de libreria ${collectionName}`}/>
+                <span className='collection-name'>{collectionName}</span>
                 <div className='tags-container'>
                     {
                         tags.map((tag, index) => (
@@ -50,12 +52,11 @@ export const Collection = ({ user, id, img, name, tags, samples, favList, setUse
                     <span className='sample-name' style={{ marginLeft: '21px' }}>Samples</span>
                 </div>
                 {
-                    samples.map((sample, index) => (
+                    sampleList.map((sample) => (
                         <Sample
                             user={user}
                             id={sample.id}
                             name={sample.sampleName}
-                            favList={favList}
                             setUser={setUser}
                         />
                     ))
@@ -65,8 +66,8 @@ export const Collection = ({ user, id, img, name, tags, samples, favList, setUse
     )
 }
 
-export const Sample = ({ user, id, name, favList, setUser }) => {
-    const isFav = favList.some(fav => fav.id === id)
+export const Sample = ({ user, id, name, setUser }) => {
+    const isFav = user.favList.some(fav => fav.id === id)
 
     const action = isFav ? 'UNFAV' : 'FAV'
 
@@ -97,9 +98,6 @@ const Collections = () => {
     const { user, setUser, clearUser } = useUser()
 
     useEffect(() => {
-        console.log('user: ', user)
-
-        console.log('favList: ', user.favList)
 
         const fetchData = async () => {
             try {
@@ -120,12 +118,7 @@ const Collections = () => {
     }
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            backgroundColor: '#262529',
-            minHeight: '100vh'
-        }}>
+        <div className='collections-container'>
             <Header
                 textPrimaryButton={`Hola ${user.usrName}`}
                 textSecondaryButton={'Cerrar sesión'}
@@ -141,14 +134,10 @@ const Collections = () => {
                         <ButtonText type={'secondary'} text='Volver a la home' action={() => navigate(routes.home)} />
                     </div>
                     {
-                        collections.map(({ id, collectionName, tags, sampleList }) =>
+                        collections.map((collection) =>
                             <Collection
                                 user={user}
-                                id={id}
-                                name={collectionName}
-                                tags={tags}
-                                samples={sampleList}
-                                favList={user.favList}
+                                collectionItem={collection}
                                 setUser={setUser}
                             />
                         )

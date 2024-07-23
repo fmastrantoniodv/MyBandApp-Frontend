@@ -17,15 +17,14 @@ import Modal from "../components/Modals/Modal"
 import LottieAnimation from '../components/Register/LoadingAnimation'
 import axios from 'axios'
 
-export const CollectionCard = ({ id, name, img, onFavCollection }) => {
+export const CollectionCard = ({ collectionItem, onFavCollection }) => {
+
+    const { collectionName, collectionCode } = collectionItem
+
     return (
-        <div id={id} className='collection-card'>
-            <div style={{
-                height: '180px',
-                width: '180px',
-                backgroundColor: '#00FF00'
-            }} />
-            <span className='collection-name'>{name}</span>
+        <div className='collection-card'>
+            <img style={{ height: '180px', width: '180px', backgroundColor: '#00FF00' }} src={`http://localhost:3001/api/collections/src/${collectionCode}`} alt={`imagen de libreria ${collectionName}`} />
+            <span className='collection-name'>{collectionName}</span>
             <div className='collection-btn-container'>
                 <div className='collection-button'>
                     <img className='fav-play-icon' src={playIcon} />
@@ -40,7 +39,7 @@ export const CollectionCard = ({ id, name, img, onFavCollection }) => {
     )
 }
 
-export const ProjectCard = ({ id, name, savedDate, onDelete, onOpen }) => {
+export const ProjectCard = ({ name, savedDate, onDelete, onOpen }) => {
 
     const fecha = new Date(savedDate);
 
@@ -54,16 +53,12 @@ export const ProjectCard = ({ id, name, savedDate, onDelete, onOpen }) => {
     const fechaFormateada = `${dia}-${mes}-${anio} ${hora}:${minutos}:${segundos}`;
 
     return (
-        <div key={id} className='project-card'>
+        <div className='project-card'>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <img style={{ width: '81px', height: '85px' }} src={projectImg} />
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <button style={{ border: '0px', backgroundColor: '#EF3C3C', boxShadow: '-1px 4px 8px rgba(0, 0, 0, 0.3)' }} onClick={onDelete}>
-                        <img src={deleteIcon} alt="icono de borrar" />
-                    </button>
-                    <button style={{ border: '0px', backgroundColor: '#FCFCFC', boxShadow: '-1px 4px 8px rgba(0, 0, 0, 0.3)' }} onClick={onOpen}>
-                        <img src={openIcon} alt="icono de abrir" />
-                    </button>
+                    <button className='project-btn delete' style={{ backgroundImage: `url(${deleteIcon})` }} onClick={onDelete} />
+                    <button className='project-btn open' style={{ backgroundImage: `url(${openIcon})` }} onClick={onOpen} />
                 </div>
             </div>
             <span className='project-name'>{name}</span>
@@ -72,9 +67,9 @@ export const ProjectCard = ({ id, name, savedDate, onDelete, onOpen }) => {
     )
 }
 
-export const FavItem = ({ id, name, pack, onUnfav }) => {
+export const FavItem = ({ name, pack, onUnfav }) => {
     return (
-        <div id={id} className='fav-item-container'>
+        <div className='fav-item-container'>
             <span className='fav-item'>{name}</span>
             <span className='fav-item'>{pack}</span>
             <div style={{ display: 'flex', gap: '5px' }}>
@@ -204,20 +199,20 @@ export const Home = () => {
             try {
                 const colls = await getCollections(user.plan)
                 setCollections(colls)
-                setLoadingCollections(false)
             }
             catch (error) {
                 console.log("Error al obtener collections")
             }
+            setLoadingCollections(false)
 
             try {
                 const userProjects = await getProjects(user.id)
                 setProjects(userProjects)
-                setLoadingProjects(false)
             }
             catch (error) {
                 console.log("Error al obtener projects, error: " + error)
             }
+            setLoadingProjects(false)
         }
 
         fetchData()
@@ -232,12 +227,12 @@ export const Home = () => {
         })
     }
 
-    const handleFavCollection = async (collectionId) => {
+    const handleFavCollection = async (collectionItem) => {
         setLoadingFavs(true)
 
-        const collection = collections.find(collection => collection.id === collectionId)
+        const { sampleList } = collectionItem
 
-        for (const sample of collection.sampleList) {
+        for (const sample of sampleList) {
             await updateFav(user.id, sample.id, 'FAV', () => {
                 return
             })
@@ -253,19 +248,14 @@ export const Home = () => {
     }
 
     const handleNewProjectSubmit = async (data) => {
-
         try {
-            const resp = await createNewProject(user.id, data.projectName);
-            if (resp.status === 200) {
-                console.log('Proyecto creado con exito: ', resp.data)
-                closeModalNewProject()
-                reset()
-                navigate(routes.studio)
-            } else {
-                console.log('http status not ok')
-            }
+            const resp = await createNewProject(user.id, data.projectName)
+            console.log('Proyecto creado con exito: ', resp.data)
+            closeModalNewProject()
+            reset()
+            navigate(routes.studio)
         } catch (error) {
-            console.error('Error: ', error)
+            console.error('Error handleNewProjectSubmit: ', error)
         }
 
     }
@@ -329,12 +319,11 @@ export const Home = () => {
                         }
                         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
                             {
-                                collections.map(({ id, collectionName }) => (
+                                collections.map((collection) => (
                                     <CollectionCard
-                                        key={id}
-                                        id={id}
-                                        name={collectionName}
-                                        onFavCollection={() => handleFavCollection(id)}
+                                        key={collection.id}
+                                        collectionItem={collection}
+                                        onFavCollection={() => handleFavCollection(collection)}
                                     />
                                 ))
                             }
@@ -370,7 +359,6 @@ export const Home = () => {
                                         {projects.map(({ id, projectName, savedDate }) => (
                                             <ProjectCard
                                                 key={id}
-                                                id={id}
                                                 name={projectName}
                                                 savedDate={savedDate}
                                                 onDelete={() => handleDeleteProject(id)}
@@ -387,14 +375,8 @@ export const Home = () => {
 
                 {
                     <Modal isOpen={isOpenModalNewProject} closeModal={closeModalNewProject}>
-                        <form style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center'
-                        }} onSubmit={handleSubmit(handleNewProjectSubmit)}>
-                            <div style={{ marginTop: '14px' }}>
-                                <h3 className='favs-title'>Crear proyecto</h3>
-                            </div>
+                        <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} onSubmit={handleSubmit(handleNewProjectSubmit)}>
+                            <h3 className='favs-title' style={{ marginTop: '14px' }}>Crear proyecto</h3>
                             <div style={{
                                 gap: '54px', display: 'flex',
                                 flexDirection: 'column',
@@ -424,8 +406,8 @@ export const Home = () => {
                                     }
                                 </div>
                                 <div style={{ gap: '18px', display: 'flex' }}>
-                                    <FormButton style={{ maxWidth: '222px', minWidth: '150px' }} text='Cancelar' type='secondary' action={() => closeModalNewProject()} />
-                                    <FormButton style={{ maxWidth: '222px', minWidth: '150px' }} text='Crear proyecto' type='primary' />
+                                    <FormButton text='Cancelar' type='secondary' action={() => closeModalNewProject()} />
+                                    <FormButton text='Crear proyecto' type='primary' />
                                 </div>
                             </div>
                         </form>
@@ -439,7 +421,7 @@ export const Home = () => {
                     }
                     <div style={{ padding: "6px 20px 6px 20px" }}>
                         <h3 className='favs-title'>Mis favoritos</h3>
-                        <div style={{display: 'flex', margin: '7px 0px 9px 0px'}}>
+                        <div style={{ display: 'flex', margin: '7px 0px 9px 0px' }}>
                             <span className='fav-item'>Nombre de muestra</span>
                             <span className='fav-item'>Pack origen</span>
                         </div>
@@ -447,7 +429,6 @@ export const Home = () => {
                             user.favList.map(({ id, sampleName, collectionCode }) => (
                                 <FavItem
                                     key={id}
-                                    id={id}
                                     name={sampleName}
                                     pack={collectionCode}
                                     onUnfav={() => handleUnfav(id)}
