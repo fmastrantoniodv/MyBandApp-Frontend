@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import unFavButtonIcon from '../img/unFavButtonIcon.svg'
-import favButtonIcon from '../img/favButtonIcon.svg'
+import { CollectionCard } from '../components/Home/CollectionCard'
+import { ProjectCard } from '../components/Home/ProjectCard'
+import { FavItem } from '../components/Home/FavItem'
 import seeMoreIcon from '../img/seeMoreIcon.svg'
-import playIcon from '../img/playIcon.svg'
-import deleteIcon from '../img/deleteIcon.svg'
-import projectImg from '../img/projectImg.svg'
-import openIcon from '../img/openIcon.svg'
 import settingsIcon from '../img/settingsIcon.svg'
 import { routes, inputsNewProject } from '../const/constants'
 import { Header, FormButton, FormInput, InputDropdown } from '../components/Register/Form'
@@ -13,161 +10,21 @@ import { useUser } from '../contexts/UserContext';
 import { useModal } from "../hooks/useModal";
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import { deleteProject } from '../services/projects/deleteProject'
+import { getProjects } from '../services/projects/getProjects'
+import { createNewProject } from '../services/projects/createNewProject'
+import { getCollections } from '../services/collections/getCollections'
+import { updateFav } from '../services/users/updateFav'
+import { getProject } from '../services/projects/getProject'
 import Modal from "../components/Modals/Modal"
 import LottieAnimation from '../components/Register/LoadingAnimation'
 import axios from 'axios'
-
-export const CollectionCard = ({ collectionItem, onFavCollection }) => {
-
-    const { collectionName, collectionCode } = collectionItem
-
-    return (
-        <div className='collection-card'>
-            <img style={{ height: '180px', width: '180px', backgroundColor: '#00FF00' }} src={`http://localhost:3001/api/collections/src/${collectionCode}`} alt={`imagen de libreria ${collectionName}`} />
-            <span className='collection-name'>{collectionName}</span>
-            <div className='collection-btn-container'>
-                <div className='collection-button'>
-                    <img className='fav-play-icon' src={playIcon} />
-                    Escuchar muestra
-                </div>
-                <div className='collection-button' onClick={onFavCollection}>
-                    <img className='fav-play-icon' src={favButtonIcon} />
-                    Marcar Favorito
-                </div>
-            </div>
-        </div>
-    )
-}
-
-export const ProjectCard = ({ name, savedDate, onDelete, onOpen }) => {
-
-    const fecha = new Date(savedDate);
-
-    const dia = fecha.getDate().toString().padStart(2, '0');
-    const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
-    const anio = fecha.getFullYear().toString().padStart(4, '0');
-    const hora = fecha.getHours().toString().padStart(2, '0');
-    const minutos = fecha.getMinutes().toString().padStart(2, '0');
-    const segundos = fecha.getSeconds().toString().padStart(2, '0');
-
-    const fechaFormateada = `${dia}-${mes}-${anio} ${hora}:${minutos}:${segundos}`;
-
-    return (
-        <div className='project-card'>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <img style={{ width: '81px', height: '85px' }} src={projectImg} />
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <button className='project-btn delete' style={{ backgroundImage: `url(${deleteIcon})` }} onClick={onDelete} />
-                    <button className='project-btn open' style={{ backgroundImage: `url(${openIcon})` }} onClick={onOpen} />
-                </div>
-            </div>
-            <span className='project-name'>{name}</span>
-            <span className='project-last-change'>Último cambio: {fechaFormateada}</span>
-        </div>
-    )
-}
-
-export const FavItem = ({ name, pack, onUnfav }) => {
-    return (
-        <div className='fav-item-container'>
-            <span className='fav-item'>{name}</span>
-            <span className='fav-item'>{pack}</span>
-            <div style={{ display: 'flex', gap: '5px' }}>
-                <img className='fav-play-icon' src={playIcon} />
-                <img className='fav-play-icon' src={unFavButtonIcon} onClick={onUnfav} />
-            </div>
-        </div>
-    )
-}
 
 export const getFavList = async (userId) => {
     try {
         const url = `http://localhost:3001/api/users/getUserFavsList/${userId}`
         const response = await axios.get(url)
         console.log("getFavList: ", response.data)
-        return response.data
-    } catch (error) {
-        console.log(error)
-        throw error
-    }
-}
-
-export const updateFav = async (userId, sampleId, action, callback) => {
-    try {
-        const url = 'http://localhost:3001/api/users/updateFav'
-        const body = {
-            "userId": userId,
-            "sampleId": sampleId,
-            "actionCode": action
-        }
-        const response = await axios.post(url, body)
-        callback()
-        return response
-    } catch (error) {
-        console.log(error)
-        throw error
-    }
-}
-
-export const getCollections = async (plan) => {
-    try {
-        const url = `http://localhost:3001/api/collections/plan/${plan}`
-        const response = await axios.get(url)
-        console.log("getCollections: ", response.data)
-        return response.data
-    } catch (error) {
-        console.log(error)
-        throw error
-    }
-}
-
-export const getProjects = async (userId) => {
-    try {
-        const url = `http://localhost:3001/api/project/getUserProjects/${userId}`
-        const response = await axios.get(url)
-        console.log("getProjects: ", response.data)
-        return response.data
-    } catch (error) {
-        console.log(error)
-        throw error
-    }
-}
-
-export const createNewProject = async (userId, projectName) => {
-    try {
-        const url = 'http://localhost:3001/api/project/create'
-        const body = {
-            "userId": userId,
-            "projectName": projectName
-        };
-        const response = await axios.post(url, body)
-        return response
-    } catch (error) {
-        console.log(error)
-        throw error
-    }
-}
-
-export const deleteProject = async (userId, projectId) => {
-    try {
-        const url = 'http://localhost:3001/api/project/delete'
-        const body = {
-            "userId": userId,
-            "projectId": projectId
-        }
-        const response = await axios.post(url, body)
-        return response
-    } catch (error) {
-        console.log(error)
-        throw error
-    }
-}
-
-export const getProject = async (projectId) => {
-    try {
-        const url = `http://localhost:3001/api/project/${projectId}`
-        const response = await axios.get(url)
-        console.log("getProject: ", response.data)
         return response.data
     } catch (error) {
         console.log(error)
@@ -185,7 +42,7 @@ export const Home = () => {
 
     const navigate = useNavigate()
 
-    const { user, setUser, clearUser } = useUser()
+    const { user, setUser, clearUser, setProjectInfo } = useUser()
 
     const [isOpenModalNewProject, openModalNewProject, closeModalNewProject] = useModal(false)
 
@@ -250,7 +107,14 @@ export const Home = () => {
     const handleNewProjectSubmit = async (data) => {
         try {
             const resp = await createNewProject(user.id, data.projectName)
-            console.log('Proyecto creado con exito: ', resp.data)
+            console.log('Proyecto creado con exito: ', resp)
+            console.log('DATA: ' , data)
+            setProjectInfo({
+                projectId: null,
+                userId: user.id,
+                projectName: resp.projectName,
+                template: data.template
+            })
             closeModalNewProject()
             reset()
             navigate(routes.studio)
@@ -387,12 +251,14 @@ export const Home = () => {
                                         inputsNewProject.map(({ title, options, name, type, required, validate }) => (
                                             type === 'dropdown' ? (
                                                 <InputDropdown
+                                                    key={name}
                                                     title={title}
                                                     name={name}
                                                     options={options}
                                                     register={register}
                                                 />
                                             ) : <FormInput
+                                                key={name}
                                                 title={title}
                                                 name={name}
                                                 type={type}

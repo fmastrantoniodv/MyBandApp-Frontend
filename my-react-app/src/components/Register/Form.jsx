@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom'
 
 export const Header = ({ textPrimaryButton, textSecondaryButton, action1, action2, children }) => {
     return (
-        <header class={'main-header'}>
-            <img src={logo} alt='my band app logo' class={'logo'}></img>
+        <header className={'main-header'}>
+            <img src={logo} alt='my band app logo' className={'logo'}></img>
             <div
                 style={{
                     display: 'flex',
@@ -28,7 +28,7 @@ export const Header = ({ textPrimaryButton, textSecondaryButton, action1, action
 export const ButtonText = ({ text, type, action }) => {
 
     return (
-        <button class={`text-btn ${type}`} onClick={action}>{text}</button>
+        <button className={`text-btn ${type}`} onClick={action}>{text}</button>
     )
 }
 
@@ -37,8 +37,8 @@ export const FormCard = ({ title, children, inputs, onSubmit }) => {
     const { register, handleSubmit, formState: { errors }, watch } = useForm()
 
     return (
-        <form class={'card scale-up-center'} onSubmit={handleSubmit(onSubmit)}>
-            <h1 class={'title'}>{title}</h1>
+        <form className={'card scale-up-center'} onSubmit={handleSubmit(onSubmit)}>
+            <h1 className={'title'}>{title}</h1>
             <div style={{
                 width: '100%',
                 gap: '12px',
@@ -49,12 +49,14 @@ export const FormCard = ({ title, children, inputs, onSubmit }) => {
                     inputs.map(({ title, options, name, type, required, validate }) => (
                         type === 'dropdown' ? (
                             <InputDropdown
+                                key={name}
                                 title={title}
                                 name={name}
                                 options={options}
                                 register={register}
                             />
                         ) : <FormInput
+                            key={name}
                             title={title}
                             name={name}
                             type={type}
@@ -115,7 +117,7 @@ export const FormInput = ({ title, type, name, register, required, validate, err
             }}>{title}
             </h3>
 
-            <input class={'form-input'} type={inputType} {...register(name,
+            <input className={'form-input'} type={inputType} {...register(name,
                 {
                     required: required ? {
                         value: required.value,
@@ -144,7 +146,7 @@ export const InputDropdown = ({ title, name, options, register }) => {
             }}>
                 {title}
             </h3>
-            <select class={'form-input dropdown'}  {...register(name)}>
+            <select className={'form-input dropdown'}  {...register(name)}>
                 {options.map(option => (
                     <option key={option.key} value={option.key}>{option.value}</option>
                 ))}

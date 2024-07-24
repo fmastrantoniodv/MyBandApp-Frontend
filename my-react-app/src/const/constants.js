@@ -1,4 +1,3 @@
-import Studio from "../views/studio"
 
 export const routes = {
     login: '/',
@@ -16,8 +15,7 @@ const suscriptions = [
     { "key": "pro", "value": "Pro" }
 ]
 const templates = [
-    { "key": "default", "value": "En blanco" },
-    { "key": "asd", "value": "Proyecto 123" }
+    { "key": "blank", "value": "En blanco" }
 ]
 
 export const inputsLogin = [

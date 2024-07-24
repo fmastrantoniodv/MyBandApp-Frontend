@@ -29,8 +29,15 @@ export const UserProvider = ({ children }) => {
         window.localStorage.removeItem('user')
     }
 
+    const [projectInfo, setProjectInfo] = useLocalStorage('project', {
+        projectId: '',
+        userId: '',
+        projectName: '',
+        template: ''
+    })
+
     return (
-        <UserContext.Provider value={{ user, setUser, clearUser }}>
+        <UserContext.Provider value={{ user, setUser, clearUser, projectInfo, setProjectInfo }}>
             {children}
         </UserContext.Provider>
     );
