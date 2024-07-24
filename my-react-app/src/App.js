@@ -1,5 +1,5 @@
 import './App.css';
-import './components/Register/Register.css';
+import './css/register.css';
 import './css/home.css';
 import './css/collections.css';
 import React from 'react';

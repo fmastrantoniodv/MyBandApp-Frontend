@@ -1,14 +1,13 @@
-import React, { useContext } from 'react'
+import React, { useState } from 'react'
 import googleIcon from '../img/googleIcon.svg'
 import { FormButton, FormCard, Header } from '../components/Register/Form'
 import { routes, inputsLogin } from '../const/constants'
-import { useState } from 'react'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import LottieAnimation from '../components/Register/LoadingAnimation';
 import { useUser } from '../contexts/UserContext';
+import { login } from '../services/users/login'
 
-export const LoadingScreen = ({ loading }) => {
+export const LoadingScreen = ({ loading }) => { //TODO
     return (
         <div className="loading-screen" style={{ display: loading ? 'flex' : 'none' }}>
             <div className="loading-overlay">
@@ -17,27 +16,6 @@ export const LoadingScreen = ({ loading }) => {
             </div>
         </div>
     )
-}
-
-export const loginPOST = async (data, setLoading, setUser) => {
-    setLoading(true);
-    try {
-        const url = 'http://localhost:3001/api/users/login';
-        const body = {
-            "email": data.email,
-            "password": data.password
-        };
-        console.log("loginPOST:" + body)
-        const response = await axios.post(url, body);
-        console.log(response);
-        setUser(response.data);
-        return response;
-    } catch (error) {
-        console.log(error);
-        throw error;
-    } finally {
-        setLoading(false);
-    }
 }
 
 const Login = () => {
@@ -49,16 +27,15 @@ const Login = () => {
     const navigate = useNavigate()
 
     const handleLoginSubmit = async (data) => {
+        setLoading(true)
         try {
-            const resp = await loginPOST(data, setLoading, setUser);
-            if (resp.status === 200) {
-                console.log('http status ok, resp: ' + JSON.stringify(resp.data));
-                navigate(routes.home);
-            } else {
-                console.log('http status not ok');
-            }
+            const resp = await login(data)
+            setUser(resp)
+            setLoading(false)
+            navigate(routes.home)
         } catch (error) {
-            console.error('Error: ', error);
+            console.error('Error handleLoginSubmit: ', error);
+            setLoading(false)
         }
     }
 
@@ -75,7 +52,7 @@ const Login = () => {
                 action1={() => navigate(routes.register)}
                 action2={() => navigate(routes.home)}
             />
-            <div class={'container'}>
+            <div className={'container'}>
                 <LoadingScreen loading={loading} />
                 <FormCard title={'Iniciar sesión'} inputs={inputsLogin} onSubmit={handleLoginSubmit}>
                     <button style={{
@@ -97,7 +74,7 @@ const Login = () => {
                         <FormButton text={'Ingresar'} type={'primary'} />
                         <FormButton text={'Registrarse'} type={'secondary'} action={() => navigate(routes.register)} />
                     </div>
-                    <button class='form-btn secondary icon' type='button'>
+                    <button className='form-btn secondary icon' type='button'>
                         Iniciar con google
                         <img alt='google icon' src={googleIcon} />
                     </button>
