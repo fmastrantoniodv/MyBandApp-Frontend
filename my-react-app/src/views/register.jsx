@@ -1,36 +1,27 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { FormButton, FormCard, Header } from '../components/Register/Form'
 import { routes, inputsRegister } from '../const/constants'
 import { useNavigate } from 'react-router-dom'
+import { useModal } from "../hooks/useModal"
+import Modal from "../components/Modals/Modal"
 import LottieAnimation from '../components/Register/LoadingAnimation';
 import { createNewUser } from '../services/users/createNewUser'
 
-export const LoadingScreen = ({ loading }) => { //TODO
-    return (
-        <div className="loading-screen" style={{ display: loading ? 'flex' : 'none' }}>
-            <div className="loading-overlay">
-                <LottieAnimation width={200} height={200} />
-                Cargando...
-            </div>
-        </div>
-    );
-};
-
 const Register = () => {
 
-    const [loading, setLoading] = useState(false);
+    const [isOpenModal, openModal, closeModal] = useModal(false)
 
     const navigate = useNavigate()
 
     const handleRegisterSubmit = async (data) => {
-        setLoading(true)
+        openModal()
         try {
             await createNewUser(data)
-            setLoading(false)
+            closeModal()
             navigate(routes.login)
         } catch (error) {
             console.error('Error handleRegisterSubmit: ', error)
-            setLoading(false)
+            closeModal()
         }
     }
 
@@ -47,7 +38,6 @@ const Register = () => {
                 action2={() => navigate(routes.home)}
             />
             <div className={'container'}>
-                <LoadingScreen loading={loading} />
                 <FormCard title={'Registrarse'} inputs={inputsRegister} onSubmit={handleRegisterSubmit}>
                     <div style={{
                         width: '100%',
@@ -61,6 +51,12 @@ const Register = () => {
                         <FormButton text={'Volver'} type={'secondary'} action={() => navigate(routes.login)} />
                     </div>
                 </FormCard>
+                <Modal isOpen={isOpenModal} closeModal={closeModal}>
+                    <div className='loading'>
+                        <LottieAnimation width={200} height={200} />
+                        Cargando...
+                    </div>
+                </Modal>
             </div>
         </div>
     )

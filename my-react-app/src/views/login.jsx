@@ -1,41 +1,32 @@
-import React, { useState } from 'react'
+import React from 'react'
 import googleIcon from '../img/googleIcon.svg'
 import { FormButton, FormCard, Header } from '../components/Register/Form'
 import { routes, inputsLogin } from '../const/constants'
 import { useNavigate } from 'react-router-dom'
-import LottieAnimation from '../components/Register/LoadingAnimation';
-import { useUser } from '../contexts/UserContext';
+import LottieAnimation from '../components/Register/LoadingAnimation'
+import Modal from "../components/Modals/Modal"
+import { useUser } from '../contexts/UserContext'
+import { useModal } from "../hooks/useModal"
 import { login } from '../services/users/login'
-
-export const LoadingScreen = ({ loading }) => { //TODO
-    return (
-        <div className="loading-screen" style={{ display: loading ? 'flex' : 'none' }}>
-            <div className="loading-overlay">
-                <LottieAnimation width={200} height={200} />
-                Cargando...
-            </div>
-        </div>
-    )
-}
 
 const Login = () => {
 
-    const [loading, setLoading] = useState(false);
+    const [isOpenModal, openModal, closeModal] = useModal(false)
 
     const { setUser } = useUser()
 
     const navigate = useNavigate()
 
     const handleLoginSubmit = async (data) => {
-        setLoading(true)
+        openModal()
         try {
             const resp = await login(data)
             setUser(resp)
-            setLoading(false)
+            closeModal()
             navigate(routes.home)
         } catch (error) {
-            console.error('Error handleLoginSubmit: ', error);
-            setLoading(false)
+            console.error('Error handleLoginSubmit: ', error)
+            closeModal()
         }
     }
 
@@ -53,7 +44,6 @@ const Login = () => {
                 action2={() => navigate(routes.home)}
             />
             <div className={'container'}>
-                <LoadingScreen loading={loading} />
                 <FormCard title={'Iniciar sesión'} inputs={inputsLogin} onSubmit={handleLoginSubmit}>
                     <button style={{
                         backgroundColor: 'rgba(0, 0, 0, 0)',
@@ -79,6 +69,12 @@ const Login = () => {
                         <img alt='google icon' src={googleIcon} />
                     </button>
                 </FormCard>
+                <Modal isOpen={isOpenModal} closeModal={closeModal}>
+                    <div className='loading'>
+                        <LottieAnimation width={200} height={200} />
+                        Cargando...
+                    </div>
+                </Modal>
             </div>
         </div>
     )
