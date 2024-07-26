@@ -95,7 +95,7 @@ export function ProjectContextProvider({children, projectInfoEntry}){
             setSoundList([])
             console.log('[ProjectContextProvider].[setInitValues].end')
         }else{
-            const projectData = await getProjectServ(projectInfoEntryParam.id)
+            const projectData = await getProjectServ(projectInfoEntryParam.projectId)
             if(projectData === undefined) return
             console.log('projectDatita', projectData)
             var projectInfoResp = {

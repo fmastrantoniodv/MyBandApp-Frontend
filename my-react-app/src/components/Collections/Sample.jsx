@@ -1,5 +1,5 @@
 import React from 'react'
-import { getUserFavs } from '../../services/users/getUserFavs'
+import { getUserFavsServ } from '../../services/users/getUserFavsServ'
 import { updateFav } from '../../services/users/updateFav'
 import playIcon from '../../img/playIcon.svg'
 import unFavButtonIcon from '../../img/unFavButtonIcon.svg'
@@ -16,7 +16,7 @@ export const Sample = ({ user, id, name, setUser }) => {
 
     const handleUpdateFav = async (sampleId, action) => {
         await updateFav(user.id, sampleId, action, async () => {
-            const updatedFavs = await getUserFavs(user.id)
+            const updatedFavs = await getUserFavsServ(user.id)
             setUser({ ...user, favList: updatedFavs })
         })
     }

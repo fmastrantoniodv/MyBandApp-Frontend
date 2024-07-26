@@ -3,7 +3,7 @@ import { Sample } from './Sample'
 import arrow from '../../img/arrow.svg'
 import playIcon from '../../img/playIcon.svg'
 import unFavButtonIcon from '../../img/unFavButtonIcon.svg'
-import { getUserFavs } from '../../services/users/getUserFavs'
+import { getUserFavsServ } from '../../services/users/getUserFavsServ'
 import { updateFav } from '../../services/users/updateFav'
 
 export const Collection = ({ user, collectionItem, setUser }) => {
@@ -20,7 +20,7 @@ export const Collection = ({ user, collectionItem, setUser }) => {
                 return
             })
         }
-        const updatedFavs = await getUserFavs(user.id)
+        const updatedFavs = await getUserFavsServ(user.id)
         console.log('updated favs: ', updatedFavs)
         console.log('updated favs.data: ', updatedFavs.data)
 

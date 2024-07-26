@@ -125,18 +125,18 @@ export const Home = () => {
 
     const handleOpenProject = async (projectId) => {
         try {
-            const resp = await getProject(projectId)
+            //const resp = await getProject(projectId)
             setProjectInfo({
-                projectId: resp.id,
-                userId: resp.userId,
-                projectName: resp.projectName,
+                projectId: projectId,
+                userId: user.id,
+                projectName: 'elproject',
                 template: 'blank'
             })
+            navigate(routes.studio)
         } catch (error) {
             console.error('Error handleDeleteProject: ', error)
         }
 
-        navigate(routes.studio)
     }
 
     const handleLogout = () => {
