@@ -16,21 +16,9 @@ import { createNewProject } from '../services/projects/createNewProject'
 import { getCollections } from '../services/collections/getCollections'
 import { updateFav } from '../services/users/updateFav'
 import { getProject } from '../services/projects/getProject'
+import { getUserFavs } from '../services/users/getUserFavs'
 import Modal from "../components/Modals/Modal"
 import LottieAnimation from '../components/Register/LoadingAnimation'
-import axios from 'axios'
-
-export const getFavList = async (userId) => {
-    try {
-        const url = `http://localhost:3001/api/users/getUserFavsList/${userId}`
-        const response = await axios.get(url)
-        console.log("getFavList: ", response.data)
-        return response.data
-    } catch (error) {
-        console.log(error)
-        throw error
-    }
-}
 
 export const Home = () => {
 
@@ -78,8 +66,8 @@ export const Home = () => {
     const handleUnfav = async (sampleId) => {
         setLoadingFavs(true)
         await updateFav(user.id, sampleId, 'UNFAV', async () => {
-            const updatedFavs = await getFavList(user.id)
-            setUser({ ...user, favList: updatedFavs })
+            const updatedFavs = await getUserFavs(user.id)
+            setUser({ ...user, favList: updatedFavs.data })
             setLoadingFavs(false)
         })
     }
@@ -95,8 +83,8 @@ export const Home = () => {
             })
         }
 
-        const updatedFavs = await getFavList(user.id)
-        setUser({ ...user, favList: updatedFavs })
+        const updatedFavs = await getUserFavs(user.id)
+        setUser({ ...user, favList: updatedFavs.data })
         setLoadingFavs(false)
     }
 
@@ -139,7 +127,13 @@ export const Home = () => {
 
     const handleOpenProject = async (projectId) => {
         try {
-            await getProject(projectId)
+            const resp = await getProject(projectId)
+            setProjectInfo({
+                projectId: resp.id,
+                userId: resp.userId,
+                projectName: resp.projectName,
+                template: 'blank'
+            })
         } catch (error) {
             console.error('Error handleDeleteProject: ', error)
         }

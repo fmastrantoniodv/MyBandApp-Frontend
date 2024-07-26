@@ -1,18 +1,20 @@
 import React from 'react'
-import { getFavList } from '../../views/home' //TODO .data
+import { getUserFavs } from '../../services/users/getUserFavs'
 import { updateFav } from '../../services/users/updateFav'
 import playIcon from '../../img/playIcon.svg'
 import unFavButtonIcon from '../../img/unFavButtonIcon.svg'
 import favButtonIcon from '../../img/favButtonIcon.svg'
 
 export const Sample = ({ user, id, name, setUser }) => {
-    const isFav = user.favList.some(fav => fav.id === id)
+    const { favList } = user
+
+    const isFav = favList.some(fav => fav.id === id)
 
     const action = isFav ? 'UNFAV' : 'FAV'
 
     const handleUpdateFav = async (sampleId, action) => {
         await updateFav(user.id, sampleId, action, async () => {
-            const updatedFavs = await getFavList(user.id)
+            const updatedFavs = await getUserFavs(user.id)
             setUser({ ...user, favList: updatedFavs })
         })
     }
