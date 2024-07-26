@@ -15,7 +15,6 @@ import { getProjects } from '../services/projects/getProjects'
 import { createNewProject } from '../services/projects/createNewProject'
 import { getCollections } from '../services/collections/getCollections'
 import { updateFav } from '../services/users/updateFav'
-import { getProject } from '../services/projects/getProject'
 import Modal from "../components/Modals/Modal"
 import LottieAnimation from '../components/Register/LoadingAnimation'
 import axios from 'axios'

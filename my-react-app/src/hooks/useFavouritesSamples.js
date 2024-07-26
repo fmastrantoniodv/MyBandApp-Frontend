@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import { getUserFavsServ } from '../services/users/getUserFavsServ';
+import { useUser } from '../contexts/UserContext';
 
 const useFavouritesSamples = () => {
     const [favouritesSamples, setFavouritesSamples] = useState(null)
     const [loading, setLoading] = useState(true)
-    const userId = '665b28e287fa373281f47938'
+    const { user } = useUser()
     
     useEffect(() => {
       if(favouritesSamples !== null) return
-      getUserFavsServ(userId).then(res =>{
+      getUserFavsServ(user.id).then(res =>{
         console.log('[useFavouritesSamples.js].[useEffect].res=', res)
         if(res.status != 200) return
         console.log('[useFavouritesSamples.js].[useEffect].res.data=', res.data)
@@ -16,8 +17,6 @@ const useFavouritesSamples = () => {
         setLoading(false)
       })
     }, []);
-
-
 
     if(!loading) return favouritesSamples
   

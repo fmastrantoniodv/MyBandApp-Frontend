@@ -4,9 +4,11 @@ import { MasterAudioContextProvider } from "../contexts/MasterAudioContext";
 import { ProjectContextProvider } from "../contexts/ProjectContext";
 import ProjectEditor from '../components/Studio/ProjectEditor';
 import ListOfChannels from "../components/Studio/ListOfChannels"
+import { useUser } from '../contexts/UserContext';
 
-const Studio = ({projectInfo}) => {
-
+const Studio = () => {
+  
+      const { projectInfo } = useUser()
       if(projectInfo === undefined) return
 
       useEffect(()=>{

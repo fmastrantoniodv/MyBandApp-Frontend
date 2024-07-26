@@ -83,7 +83,7 @@ export function ProjectContextProvider({children, projectInfoEntry}){
         console.log('[ProjectContextProvider].[setInitValues].projectInfoEntryParam', projectInfoEntryParam)
         if(loading) return
         setLoading(true)
-        if(projectInfoEntryParam.id === null){
+        if(projectInfoEntryParam.projectId === null){
             console.log('[ProjectContextProvider].[setInitValues].project en blanco')
             var projectInfoResp = {
                 userId: projectInfoEntryParam.userId,
