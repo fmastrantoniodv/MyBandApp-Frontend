@@ -6,6 +6,8 @@ import unFavButtonIcon from '../../img/unFavButtonIcon.svg'
 import favButtonIcon from '../../img/favButtonIcon.svg'
 
 export const Sample = ({ user, id, name, setUser }) => {
+
+    console.log(user)
     const { favList } = user
 
     const isFav = favList.some(fav => fav.id === id)
