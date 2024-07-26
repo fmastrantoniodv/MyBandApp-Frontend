@@ -1,4 +1,3 @@
-
 export const routes = {
     login: '/',
     register: '/register',
@@ -13,9 +12,6 @@ const suscriptions = [
     { "key": "free", "value": "Free" },
     { "key": "trial", "value": "Trial" },
     { "key": "pro", "value": "Pro" }
-]
-const templates = [
-    { "key": "blank", "value": "En blanco" }
 ]
 
 export const inputsLogin = [
@@ -95,23 +91,5 @@ export const inputsRegister = [
         name: 'suscription',
         type: 'dropdown',
         options: suscriptions
-    }
-]
-
-export const inputsNewProject = [
-    {
-        title: 'Nombre del proyecto',
-        name: 'projectName',
-        type: 'text',
-        required: {
-            value: true,
-            message: 'Por favor ingrese un nombre para el proyecto'
-        }
-    },
-    {
-        title: 'Template',
-        name: 'template',
-        type: 'dropdown',
-        options: templates
     }
 ]

@@ -7,7 +7,6 @@ import { useUser } from '../contexts/UserContext'
 import settingsIcon from '../img/settingsIcon.svg'
 import { getCollections } from '../services/collections/getCollections'
 
-
 const Collections = () => {
     
     const [collections, setCollections] = useState([])

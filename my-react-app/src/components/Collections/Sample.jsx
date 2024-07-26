@@ -6,8 +6,7 @@ import unFavButtonIcon from '../../img/unFavButtonIcon.svg'
 import favButtonIcon from '../../img/favButtonIcon.svg'
 
 export const Sample = ({ user, id, name, setUser }) => {
-
-    console.log(user)
+    
     const { favList } = user
 
     const isFav = favList.some(fav => fav.id === id)
@@ -17,7 +16,7 @@ export const Sample = ({ user, id, name, setUser }) => {
     const handleUpdateFav = async (sampleId, action) => {
         await updateFav(user.id, sampleId, action, async () => {
             const updatedFavs = await getUserFavs(user.id)
-            setUser({ ...user, favList: updatedFavs })
+            setUser({ ...user, favList: updatedFavs.data })
         })
     }
 

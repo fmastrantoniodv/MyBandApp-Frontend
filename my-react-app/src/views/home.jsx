@@ -15,6 +15,7 @@ import { getProjects } from '../services/projects/getProjects'
 import { createNewProject } from '../services/projects/createNewProject'
 import { getCollections } from '../services/collections/getCollections'
 import { updateFav } from '../services/users/updateFav'
+import { setTemplates } from '../functions/functions'
 import { getProject } from '../services/projects/getProject'
 import { getUserFavs } from '../services/users/getUserFavs'
 import Modal from "../components/Modals/Modal"
@@ -96,7 +97,7 @@ export const Home = () => {
         try {
             const resp = await createNewProject(user.id, data.projectName)
             console.log('Proyecto creado con exito: ', resp)
-            console.log('DATA: ' , data)
+            console.log('DATA: ', data)
             setProjectInfo({
                 projectId: null,
                 userId: user.id,
@@ -230,49 +231,43 @@ export const Home = () => {
                         </div>
                     </div>
                 </div>
-
-                {
-                    <Modal isOpen={isOpenModalNewProject} closeModal={closeModalNewProject}>
-                        <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} onSubmit={handleSubmit(handleNewProjectSubmit)}>
-                            <h3 className='favs-title' style={{ marginTop: '14px' }}>Crear proyecto</h3>
-                            <div style={{
-                                gap: '54px', display: 'flex',
-                                flexDirection: 'column',
-                                margin: '30px 28px 30px'
-                            }}>
-                                <div style={{ gap: '18px', display: 'flex', flexDirection: 'column' }}>
-                                    {
-                                        inputsNewProject.map(({ title, options, name, type, required, validate }) => (
-                                            type === 'dropdown' ? (
-                                                <InputDropdown
-                                                    key={name}
-                                                    title={title}
-                                                    name={name}
-                                                    options={options}
-                                                    register={register}
-                                                />
-                                            ) : <FormInput
-                                                key={name}
-                                                title={title}
-                                                name={name}
-                                                type={type}
-                                                register={register}
-                                                errors={errors}
-                                                required={required}
-                                                validate={validate}
-                                                watch={watch}
-                                            />
-                                        ))
-                                    }
-                                </div>
-                                <div style={{ gap: '18px', display: 'flex' }}>
-                                    <FormButton text='Cancelar' type='secondary' action={() => closeModalNewProject()} />
-                                    <FormButton text='Crear proyecto' type='primary' />
-                                </div>
+                <Modal isOpen={isOpenModalNewProject} closeModal={closeModalNewProject}>
+                    <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} onSubmit={handleSubmit(handleNewProjectSubmit)}>
+                        <h3 className='favs-title' style={{ marginTop: '14px' }}>Crear proyecto</h3>
+                        <div style={{
+                            gap: '54px', display: 'flex',
+                            flexDirection: 'column',
+                            margin: '30px 28px 30px'
+                        }}>
+                            <div style={{ gap: '18px', display: 'flex', flexDirection: 'column' }}>
+                                <FormInput
+                                    key='projectName'
+                                    title='Nombre del proyecto'
+                                    name='projectName'
+                                    type='text'
+                                    register={register}
+                                    errors={errors}
+                                    required={{
+                                        value: true,
+                                        message: 'Por favor ingrese un nombre para el proyecto'
+                                    }}
+                                    watch={watch}
+                                />
+                                <InputDropdown
+                                    key='template'
+                                    title='Template'
+                                    name='template'
+                                    options={setTemplates(collections)}
+                                    register={register}
+                                />
                             </div>
-                        </form>
-                    </Modal>
-                }
+                            <div style={{ gap: '18px', display: 'flex' }}>
+                                <FormButton text='Cancelar' type='secondary' action={() => closeModalNewProject()} />
+                                <FormButton text='Crear proyecto' type='primary' />
+                            </div>
+                        </div>
+                    </form>
+                </Modal>
                 <div className='favs-card'>
                     {loadingFavs &&
                         (<div className='loading-favs'>
