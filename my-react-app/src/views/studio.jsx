@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
 import '../css/studio.css';
-import ProjectEditor from '../components/Studio/ProjectEditor';
+import React, { useEffect } from 'react';
 import { MasterAudioContextProvider } from "../contexts/MasterAudioContext";
 import { ProjectContextProvider } from "../contexts/ProjectContext";
+import ProjectEditor from '../components/Studio/ProjectEditor';
 import ListOfChannels from "../components/Studio/ListOfChannels"
+import { useUser } from '../contexts/UserContext';
 
-const Studio = ({projectInfo}) => {
-
+const Studio = () => {
+  
+      const { projectInfo } = useUser()
       if(projectInfo === undefined) return
 
       useEffect(()=>{

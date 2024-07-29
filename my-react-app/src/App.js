@@ -11,22 +11,14 @@ import { Home } from './views/home.jsx';
 import Collections from './views/collections.jsx';
 import { UserProvider } from './contexts/UserContext';
 
-function App() {
-      const projectIdExample = '6670f16ce0514db5f7b74e1e';
-      const newProjectExample = {
-            projectId: null,
-            userId: '665b28e287fa373281f47938',
-            projectName: 'Proyecto en blanco',
-            template: 'blank'
-      }
-          
+function App() {   
       return (
             <UserProvider>
                   <BrowserRouter>
                         <Routes>
                               <Route path='/' element={<Login />}></Route>
                               <Route path='/register' element={<Register />}></Route>
-                              <Route path='/studio' element={<Studio projectInfo={newProjectExample} />}></Route>
+                              <Route path='/studio' element={<Studio />}></Route>
                               <Route path='/home' element={<Home />}></Route>
                               <Route path='/collections' element={<Collections />}></Route>
                         </Routes>

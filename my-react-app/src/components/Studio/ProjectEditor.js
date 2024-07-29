@@ -12,14 +12,17 @@ import ProjectContext from '../../contexts/ProjectContext'
 export default function ProjectEditor ({}) {
     const [playing, setPlaying] = useState('false')
     const { exportWavFile, playBackTracks } = useContext(MasterAudioContext)
-    const { loading, getProjectInfo } = useContext(ProjectContext)
+    const { loading, getProjectInfo, getSoundList, saveProject } = useContext(ProjectContext)
     
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect].loading', loading)
     }, [loading]);
       
     const playProject = () => {
-      console.log('Play')
+      var soundList = getSoundList()
+      if(soundList === undefined || soundList < 1) return
+      console.log('Play',getSoundList().lenght)
+
       setPlaying('true')
       if(playing !== 'true'){
         playBackTracks('play')
@@ -38,71 +41,41 @@ export default function ProjectEditor ({}) {
   
     const PlayButton = () => {
       return(
-        <button className="btn-project-controls" 
-          onClick={() => playProject()}
-          >
-          <img 
-            src={playIcon} 
-            alt="icono de reproducir"
-            width="100%"
-          ></img>  
-        </button>        
+        <button className="btn-project-controls" onClick={() => playProject()}>
+          <img src={playIcon} alt="icono de reproducir" width="100%" />  
+        </button>
       )
     }
 
     const StopButton = () => {
       return(
-        <button className="btn-project-controls" 
-          onClick={() => stopProject()}
-          >
-          <img 
-            src={stopIcon} 
-            alt="icono de detener reproduccion"
-            width="100%"
-          ></img>  
-        </button>        
+        <button className="btn-project-controls" onClick={() => stopProject()}>
+          <img src={stopIcon} alt="icono de detener reproduccion" width="100%" />  
+        </button>
       )
     }
 
     const PauseButton = () => {
       return(
-        <button className="btn-project-controls" 
-          onClick={() => pauseProject()}
-          >
-          <img 
-            src={pauseIcon} 
-            alt="icono de pausar reproduccion"
-            width="100%"
-          ></img>  
-        </button>        
+        <button className="btn-project-controls" onClick={() => pauseProject()}>
+          <img src={pauseIcon} alt="icono de pausar reproduccion" width="100%" />  
+        </button>
       )
     }
 
     const ExportProject = () =>{
       return(
-      <button className="btn-export"
-      onClick={() => exportWavFile()}
-      >
-      <img 
-        src={exportIcon} 
-        alt="icono de exportar archivo"
-        width="100%"
-      ></img>  
-    </button>
+        <button className="btn-export" onClick={() => exportWavFile()}>
+          <img src={exportIcon} alt="icono de exportar archivo" width="100%" />
+        </button>
       )
     }
 
     const SaveProject = () =>{
       return(
-      <button className="btn-save-project"
-      onClick={() => exportWavFile()}
-      >
-      <img 
-        src={saveIcon} 
-        alt="icono de guardar proyecto"
-        width="100%"
-      ></img>  
-    </button>
+        <button className="btn-save-project" onClick={() => saveProject()}>
+          <img src={saveIcon} alt="icono de guardar proyecto" width="100%"/>
+        </button>
       )
     }
 

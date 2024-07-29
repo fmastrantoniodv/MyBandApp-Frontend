@@ -5,16 +5,17 @@ import { useSampleList } from '../hooks/useSampleList';
 const Context = React.createContext({})
 
 const AudioContext = window.AudioContext || window.webkitAudioContext;
+var audioCtx = new AudioContext
 
 export function MasterAudioContextProvider({children, value}){
-    const [masterAudioCtx, setMasterAudioCtx] = useState(new AudioContext())
+    const [masterAudioCtx, setMasterAudioCtx] = useState(audioCtx)
     const [mainGainNode, setMainGainNode] = useState(masterAudioCtx.createGain())
     const [trackList, setTrackList] = useState([])
     const [playBackCurrentTime, setPlayBackCurrentTime] = useState(0)
 
     useEffect(()=>{
         console.log('[MasterAudioContextProvider].[useEffect].trackList', trackList)
-    },[trackList])
+    },[])
 
     const addTrackToList = ( newTrack ) => {
         console.log('[MasterAudioContextProvider].[addTrackToList].newTrack', newTrack)
@@ -28,13 +29,15 @@ export function MasterAudioContextProvider({children, value}){
     const deleteTrack = ( trackId ) => {
         setTrackList(trackList.filter(value => value.mediaContainer.id !== trackId))
     }
-    /*
+    
     const getPlayBackCurrentTime = () => {
         setPlayBackCurrentTime(trackList[0].backend.ac.currentTime)
         return playBackCurrentTime
     }
-*/
+
     const playBackTracks = ( playBackAction ) => {
+        if(trackList.length < 1) return
+
         if(playBackAction === 'play'){
             trackList.map(track => track.play())
         }else if(playBackAction === 'stop'){
@@ -141,8 +144,8 @@ export function MasterAudioContextProvider({children, value}){
                 addTrackToList,
                 deleteTrack,
                 playBackTracks,
-                onSoloChannel
-                //getPlayBackCurrentTime
+                onSoloChannel,
+                getPlayBackCurrentTime
             }}>{children}
             </Context.Provider>
 }

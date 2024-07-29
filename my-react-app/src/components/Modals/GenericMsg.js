@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import useFavouritesSamples from "../../hooks/useFavouritesSamples";
-import { getUserFavs } from '../../services/users/getUserFavs';
+import { getUserFavs } from '../../services/users/getUserFavsServ';
 
 export default function GenericMsg({type, msg, handleCloseModal, buttonsConfig}) {
   const [titleMsg, setTitleMsg] = useState(null)

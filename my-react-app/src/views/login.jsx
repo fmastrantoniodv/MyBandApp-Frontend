@@ -1,10 +1,10 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import googleIcon from '../img/googleIcon.svg'
 import { FormButton, FormCard, Header } from '../components/Register/Form'
-import { routes, inputsLogin } from '../const/constants'
-import { useNavigate } from 'react-router-dom'
 import LottieAnimation from '../components/Register/LoadingAnimation'
 import Modal from "../components/Modals/Modal"
+import { routes, inputsLogin } from '../const/constants'
 import { useUser } from '../contexts/UserContext'
 import { useModal } from "../hooks/useModal"
 import { login } from '../services/users/login'
@@ -31,36 +31,14 @@ const Login = () => {
     }
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            backgroundColor: '#262529',
-            minHeight: '100vh'
-        }}>
-            <Header
-                textPrimaryButton={'Registrarse'}
-                textSecondaryButton={'Volver a la página principal'}
-                action1={() => navigate(routes.register)}
-                action2={() => navigate(routes.home)}
-            />
+        <div className='register-container'>
+            <Header textPrimaryButton={'Registrarse'} textSecondaryButton={'Volver a la página principal'} action1={() => navigate(routes.register)} action2={() => navigate(routes.home)}/>
             <div className={'container'}>
                 <FormCard title={'Iniciar sesión'} inputs={inputsLogin} onSubmit={handleLoginSubmit}>
-                    <button style={{
-                        backgroundColor: 'rgba(0, 0, 0, 0)',
-                        fontSize: '14px',
-                        border: '0px',
-                        marginTop: '9px'
-                    }} onClick={() => navigate(routes.register)}>
+                    <button className='forgot-pass-btn' onClick={() => navigate(routes.register)}>
                         Olvidé mi contraseña
                     </button>
-                    <div style={{
-                        width: '100%',
-                        gap: '13px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        marginTop: '38px',
-                        alignItems: 'center'
-                    }}>
+                    <div className='btns-container login'>
                         <FormButton text={'Ingresar'} type={'primary'} />
                         <FormButton text={'Registrarse'} type={'secondary'} action={() => navigate(routes.register)} />
                     </div>

@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
-import { getProject } from '../services/projects/getProject';
+import { getProjectServ } from '../services/projects/getProjectServ';
+import { saveProjectServ } from '../services/projects/saveProjectServ';
 import Modal from "../components/Modals/Modal"
 import { useModal } from "../hooks/useModal"
 import GenericMsg from "../components/Modals/GenericMsg"
@@ -8,7 +9,7 @@ const ProjectContext = React.createContext()
 
 export function ProjectContextProvider({children, projectInfoEntry}){
     const [soundList, setSoundList] = useState(null)
-    const [projectInfo, setProjectInfo] = useState(null); // El estado del contexto
+    const [projectInfo, setProjectInfo] = useState(null) 
     const [loading, setLoading] = useState(null)
     const [isOpenGenericModal, openGenericModal, closeGenericModal] = useModal(false)
     const [modalMsg, setModalMsg] = useState(null)
@@ -20,12 +21,32 @@ export function ProjectContextProvider({children, projectInfoEntry}){
     }, [])
 
     const getSoundList = () => {
-        console.log('[ProjectContextProvider].[getSoundList].soundList', soundList)
         return soundList
     }
 
     const getProjectInfo = () => {
         return projectInfo
+    }
+
+    const saveProject = () => {
+        var channelListReq = new Array;
+        soundList.map(sound => {
+            var channelItem = {
+                sampleId: sound.id,
+                channelConfig: sound.channelConfig
+            }
+            channelListReq.push(channelItem)
+        })
+        const req = {
+            "projectId": projectInfo.id,
+            "userId": projectInfo.userId,
+            "projectName": projectInfo.projectName,
+            "totalDuration": 0,
+            "channelList": channelListReq
+        }
+        console.log('[ProjectContext.js].req=', req)
+        const saveProjectResult = saveProjectServ(req)
+        console.log('[ProjectContext.js].saveProjectResult=', saveProjectResult)
     }
 
     const addChannelToList = (sampleInfo) => {
@@ -68,22 +89,22 @@ export function ProjectContextProvider({children, projectInfoEntry}){
                 userId: projectInfoEntryParam.userId,
                 projectName: projectInfoEntryParam.projectName,
                 createdDate: new Date(),
-                totalDuration: 0            
+                totalDuration: 1            
             }
             setProjectInfo(projectInfoResp)
             setSoundList([])
             console.log('[ProjectContextProvider].[setInitValues].end')
         }else{
-            const projectData = await getProject(projectInfoEntryParam.projectId)
-            if(projectData === undefined)
+            const projectData = await getProjectServ(projectInfoEntryParam.projectId)
+            if(projectData === undefined) return
             console.log('projectDatita', projectData)
             var projectInfoResp = {
+                id: projectData.id,
                 userId: projectData.userId,
                 projectName: projectData.projectName,
                 createdDate: projectData.createdDate,
                 savedDate: projectData.savedDate,
                 totalDuration: projectData.totalDuration
-            
             }
             setProjectInfo(projectInfoResp)
             setSoundList(projectData.channelList)
@@ -115,7 +136,8 @@ export function ProjectContextProvider({children, projectInfoEntry}){
                     loading,
                     getProjectInfo,
                     addChannelToList,
-                    deleteChannel
+                    deleteChannel,
+                    saveProject
                     }}>
                         {children}
                 </ProjectContext.Provider>

@@ -2,24 +2,24 @@ import React, { useEffect, useState } from 'react'
 import { CollectionCard } from '../components/Home/CollectionCard'
 import { ProjectCard } from '../components/Home/ProjectCard'
 import { FavItem } from '../components/Home/FavItem'
+import { Header, FormButton, FormInput, InputDropdown } from '../components/Register/Form'
+import LottieAnimation from '../components/Register/LoadingAnimation'
+import Modal from "../components/Modals/Modal"
 import seeMoreIcon from '../img/seeMoreIcon.svg'
 import settingsIcon from '../img/settingsIcon.svg'
-import { routes, inputsNewProject } from '../const/constants'
-import { Header, FormButton, FormInput, InputDropdown } from '../components/Register/Form'
+import { routes } from '../const/constants'
+import { setTemplates } from '../functions/functions'
 import { useUser } from '../contexts/UserContext';
 import { useModal } from "../hooks/useModal";
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { deleteProject } from '../services/projects/deleteProject'
 import { getProjects } from '../services/projects/getProjects'
+import { getProjectServ } from '../services/projects/getProjectServ'
 import { createNewProject } from '../services/projects/createNewProject'
 import { getCollections } from '../services/collections/getCollections'
 import { updateFav } from '../services/users/updateFav'
-import { setTemplates } from '../functions/functions'
-import { getProject } from '../services/projects/getProject'
-import { getUserFavs } from '../services/users/getUserFavs'
-import Modal from "../components/Modals/Modal"
-import LottieAnimation from '../components/Register/LoadingAnimation'
+import { getUserFavsServ } from '../services/users/getUserFavsServ'
 
 export const Home = () => {
 
@@ -38,8 +38,9 @@ export const Home = () => {
     const { register, handleSubmit, formState: { errors }, watch, reset } = useForm()
 
     useEffect(() => {
+        setProjects(user.projectList)
+
         setLoadingCollections(true)
-        setLoadingProjects(true)
 
         const fetchData = async () => {
             try {
@@ -50,15 +51,6 @@ export const Home = () => {
                 console.log("Error al obtener collections")
             }
             setLoadingCollections(false)
-
-            try {
-                const userProjects = await getProjects(user.id)
-                setProjects(userProjects)
-            }
-            catch (error) {
-                console.log("Error al obtener projects, error: " + error)
-            }
-            setLoadingProjects(false)
         }
 
         fetchData()
@@ -67,7 +59,7 @@ export const Home = () => {
     const handleUnfav = async (sampleId) => {
         setLoadingFavs(true)
         await updateFav(user.id, sampleId, 'UNFAV', async () => {
-            const updatedFavs = await getUserFavs(user.id)
+            const updatedFavs = await getUserFavsServ(user.id)
             setUser({ ...user, favList: updatedFavs.data })
             setLoadingFavs(false)
         })
@@ -84,7 +76,7 @@ export const Home = () => {
             })
         }
 
-        const updatedFavs = await getUserFavs(user.id)
+        const updatedFavs = await getUserFavsServ(user.id)
         setUser({ ...user, favList: updatedFavs.data })
         setLoadingFavs(false)
     }
@@ -96,8 +88,6 @@ export const Home = () => {
     const handleNewProjectSubmit = async (data) => {
         try {
             const resp = await createNewProject(user.id, data.projectName)
-            console.log('Proyecto creado con exito: ', resp)
-            console.log('DATA: ', data)
             setProjectInfo({
                 projectId: null,
                 userId: user.id,
@@ -121,25 +111,25 @@ export const Home = () => {
             console.error('Error handleDeleteProject: ', error)
         }
 
-        const updatedProjects = await getProjects(user.id)
-        setProjects(updatedProjects)
+        const updatedProjects = await getProjects(user.id)  //TODO
+        setProjects(updatedProjects) //TODO
         setLoadingProjects(false)
     }
 
     const handleOpenProject = async (projectId) => {
         try {
-            const resp = await getProject(projectId)
+            //const resp = await getProject(projectId)
             setProjectInfo({
-                projectId: resp.id,
-                userId: resp.userId,
-                projectName: resp.projectName,
+                projectId: projectId,
+                userId: user.id,
+                projectName: 'elproject',
                 template: 'blank'
             })
+            navigate(routes.studio)
         } catch (error) {
             console.error('Error handleDeleteProject: ', error)
         }
 
-        navigate(routes.studio)
     }
 
     const handleLogout = () => {
@@ -154,21 +144,11 @@ export const Home = () => {
             flexDirection: 'column',
             backgroundColor: '#262529'
         }}>
-            <Header
-                textPrimaryButton={`Hola ${user.usrName}`}
-                textSecondaryButton={'Cerrar sesión'}
-                action1={() => navigate(routes.home)}
-                action2={handleLogout}
-            >
+            <Header textPrimaryButton={`Hola ${user.usrName}`} textSecondaryButton={'Cerrar sesión'} action1={() => navigate(routes.home)} action2={handleLogout}>
                 <button style={{ background: `url(${settingsIcon})` }} className='settings-btn' />
             </Header>
             <div className={'home-container'}>
-                <div style={{
-                    display: 'flex',
-                    gap: '50px',
-                    width: '60%',
-                    flexDirection: 'column'
-                }}>
+                <div className='home-left-section-container'>
                     <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                         <h3 className='collections-title'>Últimas librerias</h3>
                         {loadingCollections &&
@@ -179,11 +159,7 @@ export const Home = () => {
                         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
                             {
                                 collections.map((collection) => (
-                                    <CollectionCard
-                                        key={collection.id}
-                                        collectionItem={collection}
-                                        onFavCollection={() => handleFavCollection(collection)}
-                                    />
+                                    <CollectionCard key={collection.id} collectionItem={collection} onFavCollection={() => handleFavCollection(collection)}/>
                                 ))
                             }
                             <div className='seemore-btn' onClick={() => navigate(routes.collections)}>
@@ -201,28 +177,16 @@ export const Home = () => {
                             }
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '296px' }}>
-                            <h3 style={{ marginTop: '15px', zIndex: '10' }} className='favs-title'>Mis proyectos</h3>
+                            <h3 className='projects-title'>Mis proyectos</h3>
                             <div className='projects-container'>
                                 {!loadingProjects &&
                                     (<>
                                         <div className='new-project-btn' onClick={() => handleOpenModalNewProject()}>
                                             <img src={seeMoreIcon} />
-                                            <span style={{
-                                                fontFamily: 'Inter-Regular',
-                                                fontSize: '16px'
-                                            }}>
-                                                Nuevo
-                                            </span>
+                                            <span>Nuevo</span>
                                         </div>
-
                                         {projects.map(({ id, projectName, savedDate }) => (
-                                            <ProjectCard
-                                                key={id}
-                                                name={projectName}
-                                                savedDate={savedDate}
-                                                onDelete={() => handleDeleteProject(id)}
-                                                onOpen={() => handleOpenProject(id)}
-                                            />
+                                            <ProjectCard key={id} name={projectName} savedDate={savedDate} onDelete={() => handleDeleteProject(id)} onOpen={() => handleOpenProject(id)}/>
                                         ))}
                                     </>
                                     )
@@ -232,39 +196,15 @@ export const Home = () => {
                     </div>
                 </div>
                 <Modal isOpen={isOpenModalNewProject} closeModal={closeModalNewProject}>
-                    <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} onSubmit={handleSubmit(handleNewProjectSubmit)}>
-                        <h3 className='favs-title' style={{ marginTop: '14px' }}>Crear proyecto</h3>
-                        <div style={{
-                            gap: '54px', display: 'flex',
-                            flexDirection: 'column',
-                            margin: '30px 28px 30px'
-                        }}>
-                            <div style={{ gap: '18px', display: 'flex', flexDirection: 'column' }}>
-                                <FormInput
-                                    key='projectName'
-                                    title='Nombre del proyecto'
-                                    name='projectName'
-                                    type='text'
-                                    register={register}
-                                    errors={errors}
-                                    required={{
-                                        value: true,
-                                        message: 'Por favor ingrese un nombre para el proyecto'
-                                    }}
-                                    watch={watch}
-                                />
-                                <InputDropdown
-                                    key='template'
-                                    title='Template'
-                                    name='template'
-                                    options={setTemplates(collections)}
-                                    register={register}
-                                />
-                            </div>
-                            <div style={{ gap: '18px', display: 'flex' }}>
-                                <FormButton text='Cancelar' type='secondary' action={() => closeModalNewProject()} />
-                                <FormButton text='Crear proyecto' type='primary' />
-                            </div>
+                    <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '30px 50px', gap: '25px'}} onSubmit={handleSubmit(handleNewProjectSubmit)}>
+                        <h3 className='favs-title'>Crear proyecto</h3>
+                        <div style={{ gap: '18px', display: 'flex', flexDirection: 'column', width: '100%'}}>
+                            <FormInput key='projectName' title='Nombre del proyecto' name='projectName' type='text' register={register}  errors={errors} required={{value: true, message: 'Por favor ingrese un nombre para el proyecto'}} watch={watch}/>
+                            <InputDropdown key='template' title='Template' name='template' options={setTemplates(collections)} register={register}/>
+                        </div>
+                        <div style={{ gap: '18px', display: 'flex'}}>
+                            <FormButton text='Cancelar' type='secondary' action={() => closeModalNewProject()} />
+                            <FormButton text='Crear proyecto' type='primary' />
                         </div>
                     </form>
                 </Modal>
@@ -274,7 +214,7 @@ export const Home = () => {
                             <LottieAnimation width={200} height={200} />
                         </div>)
                     }
-                    <div style={{ padding: "6px 20px 6px 20px" }}>
+                    <div style={{ padding: '6px 20px' }}>
                         <h3 className='favs-title'>Mis favoritos</h3>
                         <div style={{ display: 'flex', margin: '7px 0px 9px 0px' }}>
                             <span className='fav-item'>Nombre de muestra</span>
@@ -282,12 +222,7 @@ export const Home = () => {
                         </div>
                         {
                             user.favList.map(({ id, sampleName, collectionCode }) => (
-                                <FavItem
-                                    key={id}
-                                    name={sampleName}
-                                    pack={collectionCode}
-                                    onUnfav={() => handleUnfav(id)}
-                                />
+                                <FavItem key={id} name={sampleName} pack={collectionCode} onUnfav={() => handleUnfav(id)}/>
                             ))
                         }
                     </div>
