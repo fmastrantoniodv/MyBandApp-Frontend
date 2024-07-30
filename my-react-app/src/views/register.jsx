@@ -1,10 +1,10 @@
 import React from 'react'
-import { FormButton, FormCard, Header } from '../components/Register/Form'
-import { routes, inputsRegister } from '../const/constants'
 import { useNavigate } from 'react-router-dom'
-import { useModal } from "../hooks/useModal"
-import Modal from "../components/Modals/Modal"
+import { FormButton, FormCard, Header } from '../components/Register/Form'
+import Modal from '../components/Modals/Modal'
 import LottieAnimation from '../components/Register/LoadingAnimation';
+import { routes, inputsRegister } from '../const/constants'
+import { useModal } from '../hooks/useModal'
 import { createNewUser } from '../services/users/createNewUser'
 
 const Register = () => {
@@ -26,27 +26,11 @@ const Register = () => {
     }
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            backgroundColor: '#262529'
-        }}>
-            <Header
-                textPrimaryButton={'Iniciar sesión'}
-                textSecondaryButton={'Volver a la página principal'}
-                action1={() => navigate(routes.login)}
-                action2={() => navigate(routes.home)}
-            />
+        <div className='register-container'>
+            <Header textPrimaryButton={'Iniciar sesión'} textSecondaryButton={'Volver a la página principal'} action1={() => navigate(routes.login)} action2={() => navigate(routes.home)}/>
             <div className={'container'}>
                 <FormCard title={'Registrarse'} inputs={inputsRegister} onSubmit={handleRegisterSubmit}>
-                    <div style={{
-                        width: '100%',
-                        gap: '13px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        marginTop: '30px',
-                        alignItems: 'center'
-                    }}>
+                    <div className='btns-container register'>
                         <FormButton text={'Crear usuario'} type={'primary'} />
                         <FormButton text={'Volver'} type={'secondary'} action={() => navigate(routes.login)} />
                     </div>

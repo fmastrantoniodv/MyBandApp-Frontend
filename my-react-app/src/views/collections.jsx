@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import settingsIcon from '../img/settingsIcon.svg'
 import { Header, ButtonText } from '../components/Register/Form'
 import { Collection } from '../components/Collections/Collection'
 import { routes } from '../const/constants'
-import { useNavigate } from 'react-router-dom'
 import { useUser } from '../contexts/UserContext'
-import settingsIcon from '../img/settingsIcon.svg'
 import { getCollections } from '../services/collections/getCollections'
-
 
 const Collections = () => {
     
@@ -38,28 +37,22 @@ const Collections = () => {
 
     return (
         <div className='collections-container'>
-            <Header
-                textPrimaryButton={`Hola ${user.usrName}`}
-                textSecondaryButton={'Cerrar sesión'}
-                action1={() => navigate(routes.home)}
-                action2={handleLogout}
-            >
+            <Header textPrimaryButton={`Hola ${user.usrName}`} textSecondaryButton={'Cerrar sesión'} action1={() => navigate(routes.home)} action2={handleLogout}>
                 <button style={{ background: `url(${settingsIcon})` }} className='settings-btn' />
             </Header>
-            <div class={'container'}>
+            <div className={'container'}>
                 <div className='collections-card'>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div className='collections-card-header'>
                         <h3 className='favs-title'>Librerías</h3>
                         <ButtonText type={'secondary'} text='Volver a la home' action={() => navigate(routes.home)} />
                     </div>
+                    <div className='collections-header'>
+                        <span style={{width: '170px'}}>Nombre de pack</span>
+                        <span>Tags</span>
+                    </div>
                     {
                         collections.map((collection) =>
-                            <Collection
-                                key={collection.id}
-                                user={user}
-                                collectionItem={collection}
-                                setUser={setUser}
-                            />
+                            <Collection key={collection.id} user={user} collectionItem={collection} setUser={setUser}/>
                         )
                     }
                 </div>

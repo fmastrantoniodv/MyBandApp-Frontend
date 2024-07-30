@@ -13,6 +13,7 @@
     src: url('../fonts/Inter-Regular.ttf') format('truetype');
 }
 
+
 .settings-btn {
     border: 0px;
     padding: 0px;
@@ -28,6 +29,13 @@
     margin-top: 68px;
     min-height: calc(100vh - 68px);
     padding: 23px 20px 23px 20px;
+}
+
+.home-left-section-container {
+    display: flex;
+    gap: 50px;
+    width: 60%;
+    flex-direction: column;
 }
 
 .collections-title {
@@ -105,6 +113,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.projects-title {
+    color: #000000;
+    font-size: 32px;
+    font-family: 'Inter-SemiBold', sans-serif;
+    margin: 15px 0px 0px 0px;
+    z-index: 10;
 }
 
 .project-btn {
@@ -230,6 +246,8 @@
     gap: 5px;
     height: min-content;
     width: min-content;
+    font-family: 'Inter-Regular', sans-serif;
+    font-size: 16px;
     box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 6px;
 }
 

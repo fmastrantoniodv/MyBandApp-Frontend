@@ -29,6 +29,22 @@ function formatUpperFirstCase( param ){
   return param.charAt(0).toUpperCase()+param.substring(1);
 }
 
+//Si las collections que tengo disponibles tienen el campo "templateId" las muestro en la lista
+export const setTemplates = ( collections ) => {
+  const templates = [
+    { key: "blank", value: "En blanco" }
+  ]
+
+  for (const collection of collections) {
+    if ('templateId' in collection) {
+      templates.push({ key: collection.templateId, value: `${collection.collectionName} template` })
+    }
+  }
+
+  return templates
+}
+
+
 export default {
     HolaMundo,
     GuardarUser,

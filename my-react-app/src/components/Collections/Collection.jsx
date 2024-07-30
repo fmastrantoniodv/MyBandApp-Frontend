@@ -21,16 +21,13 @@ export const Collection = ({ user, collectionItem, setUser }) => {
             })
         }
         const updatedFavs = await getUserFavsServ(user.id)
-        console.log('updated favs: ', updatedFavs)
-        console.log('updated favs.data: ', updatedFavs.data)
-
         setUser({ ...user, favList: updatedFavs.data })
     }
 
     return (
         <div className='collection-container'>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                <img style={{ width: '41px', height: '41px', backgroundColor: '#00FF00', borderRadius: '5px' }} src={`http://localhost:3001/api/collections/src/${collectionCode}`} alt={`imagen de libreria ${collectionName}`}/>
+                <img className='collection-img' src={`http://localhost:3001/api/collections/src/${collectionCode}`} alt={`imagen de libreria ${collectionName}`}/>
                 <span className='collection-name'>{collectionName}</span>
                 <div className='tags-container'>
                     {
@@ -40,23 +37,16 @@ export const Collection = ({ user, collectionItem, setUser }) => {
                     }
                 </div>
                 <div style={{ display: 'flex', gap: '5px' }}>
-                    <img className='fav-play-icon' src={playIcon} />
-                    <img className='fav-play-icon' src={unFavButtonIcon} onClick={() => handleFavCollection()}/>
+                    <img className='fav-play-icon' src={playIcon} alt='boton de reproducir muestra'/>
+                    <img className='fav-play-icon' src={unFavButtonIcon} onClick={() => handleFavCollection()} alt='boton de agregar collection a favoritos'/>
                 </div>
                 <button style={{ background: `url(${arrow})` }} className={`arrow-btn ${sampleListClass}`} onClick={() => setOpen(!isOpen)} />
             </div>
             <div className={`collection-samples-${sampleListClass}`}>
-                <div style={{ borderBottom: '1px solid #262529', width: '570px' }}>
-                    <span className='sample-name' style={{ marginLeft: '21px' }}>Samples</span>
-                </div>
+                <span className='samples-title'>Samples</span>
                 {
                     sampleList.map((sample) => (
-                        <Sample
-                            user={user}
-                            id={sample.id}
-                            name={sample.sampleName}
-                            setUser={setUser}
-                        />
+                        <Sample key={sample.id} user={user} id={sample.id} name={sample.sampleName} setUser={setUser}/>
                     ))
                 }
             </div>
