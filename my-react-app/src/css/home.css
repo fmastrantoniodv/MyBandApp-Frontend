@@ -80,7 +80,7 @@
     align-items: center;
     padding: 11px 16px 11px 16px;
     gap: 5px;
-    height: fit-content;
+    min-width: 70px;
 }
 
 .seemore-btn:hover {
@@ -151,6 +151,7 @@
     position: relative;
     background-color: #FFFFFF;
     min-height: calc(100vh - 68px);
+    min-width: 380px;
     height: 890px;
     width: 40%;
     border-radius: 10px;
@@ -216,7 +217,7 @@
 }
 
 .project-card {
-    width: 229px;
+    min-width: 229px;
     display: flex;
     flex-direction: column;
     justify-content: center;

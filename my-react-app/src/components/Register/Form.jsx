@@ -28,7 +28,7 @@ export const Header = ({ textPrimaryButton, textSecondaryButton, action1, action
 export const ButtonText = ({ text, type, action }) => {
 
     return (
-        <button className={`text-btn ${type}`} onClick={action}>{text}</button>
+        <button className={`text-btn ${type}`} onClick={action} type='button'>{text}</button>
     )
 }
 

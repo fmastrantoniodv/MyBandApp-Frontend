@@ -16,7 +16,6 @@ import { useNavigate } from 'react-router-dom'
 import { deleteProject } from '../services/projects/deleteProject'
 import { getProjects } from '../services/projects/getProjects'
 import { getProjectServ } from '../services/projects/getProjectServ'
-import { createNewProject } from '../services/projects/createNewProject'
 import { getCollections } from '../services/collections/getCollections'
 import { updateFav } from '../services/users/updateFav'
 import { getUserFavsServ } from '../services/users/getUserFavsServ'
@@ -27,18 +26,16 @@ export const Home = () => {
     const [loadingCollections, setLoadingCollections] = useState(false)
     const [loadingProjects, setLoadingProjects] = useState(false)
     const [collections, setCollections] = useState([])
-    const [projects, setProjects] = useState([])
 
     const navigate = useNavigate()
 
-    const { user, setUser, clearUser, setProjectInfo } = useUser()
+    const { user, setUser, clearUser, setProjectInfo, clearProject } = useUser()
 
     const [isOpenModalNewProject, openModalNewProject, closeModalNewProject] = useModal(false)
 
     const { register, handleSubmit, formState: { errors }, watch, reset } = useForm()
 
     useEffect(() => {
-        setProjects(user.projectList)
 
         setLoadingCollections(true)
 
@@ -87,12 +84,14 @@ export const Home = () => {
 
     const handleNewProjectSubmit = async (data) => {
         try {
-            const resp = await createNewProject(user.id, data.projectName)
+            const resp = await getProjectServ(data.template)
+            console.log('getProject: ', resp)
             setProjectInfo({
                 projectId: null,
                 userId: user.id,
-                projectName: resp.projectName,
-                template: data.template
+                projectName: data.projectName,
+                template: data.template,
+                channelList: resp.channelList
             })
             closeModalNewProject()
             reset()
@@ -100,8 +99,8 @@ export const Home = () => {
         } catch (error) {
             console.error('Error handleNewProjectSubmit: ', error)
         }
-
     }
+
     const handleDeleteProject = async (projectId) => {
         setLoadingProjects(true)
 
@@ -111,8 +110,8 @@ export const Home = () => {
             console.error('Error handleDeleteProject: ', error)
         }
 
-        const updatedProjects = await getProjects(user.id)  //TODO
-        setProjects(updatedProjects) //TODO
+        const updatedProjects = await getProjects(user.id)
+        setUser({ ...user, projectList: updatedProjects })
         setLoadingProjects(false)
     }
 
@@ -134,6 +133,7 @@ export const Home = () => {
 
     const handleLogout = () => {
         clearUser()
+        clearProject()
         navigate(routes.login)
     }
 
@@ -185,7 +185,7 @@ export const Home = () => {
                                             <img src={seeMoreIcon} />
                                             <span>Nuevo</span>
                                         </div>
-                                        {projects.map(({ id, projectName, savedDate }) => (
+                                        {user.projectList.map(({ id, projectName, savedDate }) => (
                                             <ProjectCard key={id} name={projectName} savedDate={savedDate} onDelete={() => handleDeleteProject(id)} onOpen={() => handleOpenProject(id)}/>
                                         ))}
                                     </>

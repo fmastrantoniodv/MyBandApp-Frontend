@@ -35,7 +35,7 @@ const Login = () => {
             <Header textPrimaryButton={'Registrarse'} textSecondaryButton={'Volver a la página principal'} action1={() => navigate(routes.register)} action2={() => navigate(routes.home)}/>
             <div className={'container'}>
                 <FormCard title={'Iniciar sesión'} inputs={inputsLogin} onSubmit={handleLoginSubmit}>
-                    <button className='forgot-pass-btn' onClick={() => navigate(routes.register)}>
+                    <button className='forgot-pass-btn' onClick={() => navigate(routes.register)} type='button'>
                         Olvidé mi contraseña
                     </button>
                     <div className='btns-container login'>
