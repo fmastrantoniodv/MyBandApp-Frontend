@@ -13,6 +13,19 @@
     src: url('../fonts/Inter-Regular.ttf') format('truetype');
 }
 
+.collections-view-container {
+    display: flex;
+    flex-direction: column;
+    background-color: #262529;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+@media (max-width: 1000px) {
+    .collections-view-container {
+      overflow-x: auto;
+    }
+}
 
 .settings-btn {
     border: 0px;
@@ -28,7 +41,8 @@
     justify-content: space-between;
     margin-top: 68px;
     min-height: calc(100vh - 68px);
-    padding: 23px 20px 23px 20px;
+    min-width: 1000px;
+    padding: 23px 20px 23px 0px;
 }
 
 .home-left-section-container {
@@ -107,12 +121,10 @@
 .projects-background {
     background-color: #FFFFFF;
     height: 296px;
-    width: 57%;
-    position: absolute;
-    left: 0;
+    width: 96%;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    padding-left: 20px;
 }
 
 .projects-title {

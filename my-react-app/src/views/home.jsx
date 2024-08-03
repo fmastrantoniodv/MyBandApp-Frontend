@@ -13,12 +13,9 @@ import { useUser } from '../contexts/UserContext';
 import { useModal } from "../hooks/useModal";
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { deleteProject } from '../services/projects/deleteProject'
-import { getProjects } from '../services/projects/getProjects'
-import { getProjectServ } from '../services/projects/getProjectServ'
-import { getCollections } from '../services/collections/getCollections'
-import { updateFav } from '../services/users/updateFav'
-import { getUserFavsServ } from '../services/users/getUserFavsServ'
+import { deleteProject, getProjects, getProjectServ } from '../services/projectsServ'
+import { getCollections } from '../services/collectionsServ'
+import { updateFav, getUserFavsServ } from '../services/usersServ'
 
 export const Home = () => {
 
@@ -139,17 +136,13 @@ export const Home = () => {
 
     return (
 
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            backgroundColor: '#262529'
-        }}>
+        <div className='collections-view-container'>
             <Header textPrimaryButton={`Hola ${user.usrName}`} textSecondaryButton={'Cerrar sesión'} action1={() => navigate(routes.home)} action2={handleLogout}>
                 <button style={{ background: `url(${settingsIcon})` }} className='settings-btn' />
             </Header>
             <div className={'home-container'}>
                 <div className='home-left-section-container'>
-                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', paddingLeft: '20px' }}>
                         <h3 className='collections-title'>Últimas librerias</h3>
                         {loadingCollections &&
                             (<div className='loading-collections'>
@@ -168,31 +161,22 @@ export const Home = () => {
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <div className='projects-background'>
-                            {loadingProjects &&
-                                (<div className='loading-collections'>
-                                    <LottieAnimation width={200} height={200} />
-                                </div>)
-                            }
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '296px' }}>
-                            <h3 className='projects-title'>Mis proyectos</h3>
-                            <div className='projects-container'>
-                                {!loadingProjects &&
-                                    (<>
-                                        <div className='new-project-btn' onClick={() => handleOpenModalNewProject()}>
-                                            <img src={seeMoreIcon} />
-                                            <span>Nuevo</span>
-                                        </div>
-                                        {user.projectList.map(({ id, projectName, savedDate }) => (
-                                            <ProjectCard key={id} name={projectName} savedDate={savedDate} onDelete={() => handleDeleteProject(id)} onOpen={() => handleOpenProject(id)}/>
-                                        ))}
-                                    </>
-                                    )
-                                }
-                            </div>
-                        </div>
+                    <div className='projects-background'>
+                        <h3 className='projects-title'>Mis proyectos</h3>
+                        {loadingProjects ? 
+                            (<div className='loading-collections'>
+                                <LottieAnimation width={200} height={200} />
+                            </div>) :
+                            (<div className='projects-container'>
+                                <div className='new-project-btn' onClick={() => handleOpenModalNewProject()}>
+                                    <img src={seeMoreIcon} />
+                                    <span>Nuevo</span>
+                                </div>
+                                {user.projectList.map(({ id, projectName, savedDate }) => (
+                                    <ProjectCard key={id} name={projectName} savedDate={savedDate} onDelete={() => handleDeleteProject(id)} onOpen={() => handleOpenProject(id)}/>
+                                ))}
+                            </div>)
+                        }
                     </div>
                 </div>
                 <Modal isOpen={isOpenModalNewProject} closeModal={closeModalNewProject}>

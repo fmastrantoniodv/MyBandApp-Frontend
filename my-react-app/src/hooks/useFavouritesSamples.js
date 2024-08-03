@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getUserFavsServ } from '../services/users/getUserFavsServ';
+import { getUserFavsServ } from '../services/usersServ';
 import { useUser } from '../contexts/UserContext';
 
 const useFavouritesSamples = () => {

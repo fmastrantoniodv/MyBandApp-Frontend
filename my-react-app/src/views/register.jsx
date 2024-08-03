@@ -1,19 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FormButton, FormCard, Header } from '../components/Register/Form'
 import Modal from '../components/Modals/Modal'
 import LottieAnimation from '../components/Register/LoadingAnimation';
 import { routes, inputsRegister } from '../const/constants'
 import { useModal } from '../hooks/useModal'
-import { createNewUser } from '../services/users/createNewUser'
+import { createNewUser } from '../services/usersServ';
 
 const Register = () => {
 
     const [isOpenModal, openModal, closeModal] = useModal(false)
+    const [error, setError] = useState(false)
 
     const navigate = useNavigate()
 
     const handleRegisterSubmit = async (data) => {
+        setError(false)
         openModal()
         try {
             await createNewUser(data)
@@ -21,7 +23,7 @@ const Register = () => {
             navigate(routes.login)
         } catch (error) {
             console.error('Error handleRegisterSubmit: ', error)
-            closeModal()
+            setError(true)
         }
     }
 
@@ -36,10 +38,17 @@ const Register = () => {
                     </div>
                 </FormCard>
                 <Modal isOpen={isOpenModal} closeModal={closeModal}>
-                    <div className='loading'>
-                        <LottieAnimation width={200} height={200} />
-                        Cargando...
-                    </div>
+                    {error ? 
+                        (<div className='modal-error'>
+                            <b>No se pudo completar el registro</b>
+                            El nombre de usuario ya está en uso.
+                            <FormButton text={'Volver'} type={'secondary'} action={() => closeModal()}/>
+                        </div>) : 
+                        (<div className='loading'>
+                            <LottieAnimation width={200} height={200} />
+                            Cargando...
+                        </div>)
+                    }
                 </Modal>
             </div>
         </div>

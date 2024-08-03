@@ -6,17 +6,8 @@ import { useNavigate } from 'react-router-dom'
 export const Header = ({ textPrimaryButton, textSecondaryButton, action1, action2, children }) => {
     return (
         <header className={'main-header'}>
-            <img src={logo} alt='my band app logo' className={'logo'}></img>
-            <div
-                style={{
-                    display: 'flex',
-                    gap: '16px',
-                    position: 'relative',
-                    left: '80%',
-                    transform: 'translateX(-80%)',
-                    alignItems: 'center'
-                }}
-            >
+            <img src={logo} alt='my band app logo' className='logo'></img>
+            <div style={{display: 'flex', gap: '16px', alignItems: 'center', marginRight: '20px'}}>
                 <ButtonText type={'secondary'} text={textSecondaryButton} action={action2} />
                 <ButtonText type={'primary'} text={textPrimaryButton} action={action1} />
                 {children}

@@ -5,7 +5,7 @@ import { Header, ButtonText } from '../components/Register/Form'
 import { Collection } from '../components/Collections/Collection'
 import { routes } from '../const/constants'
 import { useUser } from '../contexts/UserContext'
-import { getCollections } from '../services/collections/getCollections'
+import { getCollections } from '../services/collectionsServ'
 
 const Collections = () => {
     
