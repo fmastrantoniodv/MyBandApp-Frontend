@@ -6,7 +6,6 @@ import { Header, FormButton, FormInput, InputDropdown } from '../components/Regi
 import LottieAnimation from '../components/Register/LoadingAnimation'
 import Modal from "../components/Modals/Modal"
 import seeMoreIcon from '../img/seeMoreIcon.svg'
-import settingsIcon from '../img/settingsIcon.svg'
 import { routes } from '../const/constants'
 import { setTemplates } from '../functions/functions'
 import { useUser } from '../contexts/UserContext';
@@ -137,9 +136,7 @@ export const Home = () => {
     return (
 
         <div className='collections-view-container'>
-            <Header textPrimaryButton={`Hola ${user.usrName}`} textSecondaryButton={'Cerrar sesión'} action1={() => navigate(routes.home)} action2={handleLogout}>
-                <button style={{ background: `url(${settingsIcon})` }} className='settings-btn' />
-            </Header>
+            <Header type='home' textPrimaryButton={`Hola ${user.usrName}`} textSecondaryButton={'Cerrar sesión'} action1={() => navigate(routes.home)} action2={handleLogout}/>
             <div className={'home-container'}>
                 <div className='home-left-section-container'>
                     <div style={{ display: 'flex', flexDirection: 'column', paddingLeft: '20px' }}>
@@ -149,10 +146,10 @@ export const Home = () => {
                                 <LottieAnimation width={200} height={200} />
                             </div>)
                         }
-                        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+                        <div className='collection-cards-container'>
                             {
                                 collections.map((collection) => (
-                                    <CollectionCard key={collection.id} collectionItem={collection} onFavCollection={() => handleFavCollection(collection)}/>
+                                    <CollectionCard key={collection.id} collectionItem={collection} onFavCollection={() => handleFavCollection(collection)} />
                                 ))
                             }
                             <div className='seemore-btn' onClick={() => navigate(routes.collections)}>
@@ -163,7 +160,7 @@ export const Home = () => {
                     </div>
                     <div className='projects-background'>
                         <h3 className='projects-title'>Mis proyectos</h3>
-                        {loadingProjects ? 
+                        {loadingProjects ?
                             (<div className='loading-collections'>
                                 <LottieAnimation width={200} height={200} />
                             </div>) :
@@ -173,20 +170,20 @@ export const Home = () => {
                                     <span>Nuevo</span>
                                 </div>
                                 {user.projectList.map(({ id, projectName, savedDate }) => (
-                                    <ProjectCard key={id} name={projectName} savedDate={savedDate} onDelete={() => handleDeleteProject(id)} onOpen={() => handleOpenProject(id)}/>
+                                    <ProjectCard key={id} name={projectName} savedDate={savedDate} onDelete={() => handleDeleteProject(id)} onOpen={() => handleOpenProject(id)} />
                                 ))}
                             </div>)
                         }
                     </div>
                 </div>
                 <Modal isOpen={isOpenModalNewProject} closeModal={closeModalNewProject}>
-                    <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '30px 50px', gap: '25px'}} onSubmit={handleSubmit(handleNewProjectSubmit)}>
+                    <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '30px 50px', gap: '25px' }} onSubmit={handleSubmit(handleNewProjectSubmit)}>
                         <h3 className='favs-title'>Crear proyecto</h3>
-                        <div style={{ gap: '18px', display: 'flex', flexDirection: 'column', width: '100%'}}>
-                            <FormInput key='projectName' title='Nombre del proyecto' name='projectName' type='text' register={register}  errors={errors} required={{value: true, message: 'Por favor ingrese un nombre para el proyecto'}} watch={watch}/>
-                            <InputDropdown key='template' title='Template' name='template' options={setTemplates(collections)} register={register}/>
+                        <div style={{ gap: '18px', display: 'flex', flexDirection: 'column', width: '100%' }}>
+                            <FormInput key='projectName' title='Nombre del proyecto' name='projectName' type='text' register={register} errors={errors} required={{ value: true, message: 'Por favor ingrese un nombre para el proyecto' }} watch={watch} />
+                            <InputDropdown key='template' title='Template' name='template' options={setTemplates(collections)} register={register} />
                         </div>
-                        <div style={{ gap: '18px', display: 'flex'}}>
+                        <div style={{ gap: '18px', display: 'flex' }}>
                             <FormButton text='Cancelar' type='secondary' action={() => closeModalNewProject()} />
                             <FormButton text='Crear proyecto' type='primary' />
                         </div>
@@ -198,18 +195,16 @@ export const Home = () => {
                             <LottieAnimation width={200} height={200} />
                         </div>)
                     }
-                    <div style={{ padding: '6px 20px' }}>
-                        <h3 className='favs-title'>Mis favoritos</h3>
-                        <div style={{ display: 'flex', margin: '7px 0px 9px 0px' }}>
-                            <span className='fav-item'>Nombre de muestra</span>
-                            <span className='fav-item'>Pack origen</span>
-                        </div>
-                        {
-                            user.favList.map(({ id, sampleName, collectionCode }) => (
-                                <FavItem key={id} name={sampleName} pack={collectionCode} onUnfav={() => handleUnfav(id)}/>
-                            ))
-                        }
+                    <h3 className='favs-title'>Mis favoritos</h3>
+                    <div style={{ display: 'flex', margin: '7px 0px 9px 0px' }}>
+                        <span className='fav-item'>Nombre de muestra</span>
+                        <span className='fav-item'>Pack origen</span>
                     </div>
+                    {
+                        user.favList.map(({ id, sampleName, collectionCode }) => (
+                            <FavItem key={id} name={sampleName} pack={collectionCode} onUnfav={() => handleUnfav(id)} />
+                        ))
+                    }
                 </div>
             </div>
         </div>

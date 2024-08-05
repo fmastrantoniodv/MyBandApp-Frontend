@@ -29,6 +29,78 @@ button:hover {
     width: 100%;
 }
 
+.header-content {
+    display: flex;
+    gap: 16px; 
+    align-items: center; 
+    margin-right: 20px;
+}
+
+.menu-icon {
+    display: none;
+}
+
+.menu-wrapper {
+    display: none;
+    position: relative;
+}
+
+.menu-container {
+    display: none;
+    flex-direction: column;
+    width: 250px;
+    gap: 5px;
+    padding: 10px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    position: absolute; 
+    top: 100%; 
+    right: 0; 
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 6px;
+}
+
+.menu-title {
+    font-family: 'Inter-Medium', sans-serif;
+    font-size: 16px;
+}
+
+.logout-menu-btn {
+    margin-top: 10px;
+    border-radius: 5px;
+    padding: 10px;
+    border: none;
+    font-family: 'Inter-Medium', sans-serif;
+    font-size: 12px;
+    color: #FFFFFF;
+    background-color: #000000;
+}
+
+@media (max-width: 700px) {
+    .menu-wrapper {
+        display: flex;
+        position: relative;
+        padding-bottom: 5px;
+    }
+
+    .header-content {
+        display: none;
+    }
+
+    .menu-icon {
+        display: flex;
+        border: none;
+        cursor: pointer;
+        height: 25px;
+        width: 25px;
+        margin-right: 20px;
+    }
+}
+
+.menu-wrapper:hover .menu-container,
+.menu-container:hover {
+    display: flex;
+}
+
 .logo {
     position: relative;
     left: 50%;

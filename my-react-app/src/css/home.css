@@ -21,12 +21,6 @@
     overflow-x: hidden;
 }
 
-@media (max-width: 1000px) {
-    .collections-view-container {
-      overflow-x: auto;
-    }
-}
-
 .settings-btn {
     border: 0px;
     padding: 0px;
@@ -41,7 +35,6 @@
     justify-content: space-between;
     margin-top: 68px;
     min-height: calc(100vh - 68px);
-    min-width: 1000px;
     padding: 23px 20px 23px 0px;
 }
 
@@ -166,6 +159,7 @@
     min-width: 380px;
     height: 890px;
     width: 40%;
+    padding: 6px 20px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -198,7 +192,8 @@
 
 .loading-favs {
     position: absolute;
-    min-height: calc(100vh - 68px);
+    top: 0;
+    left: 0;
     height: 100%;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.5);
@@ -239,6 +234,16 @@
     background: linear-gradient(to bottom, #DE9494, transparent);
 }
 
+.project-img {
+    width: 81px; 
+    height: 85px;
+}
+
+.project-description {
+    display: flex;
+    flex-direction: column;
+}
+
 .project-name {
     font-family: 'Inter-SemiBold', sans-serif;
     font-size: 16px;
@@ -267,4 +272,136 @@
 .new-project-btn:hover {
     background-color: rgba(0, 0, 0, 0.05);
     cursor: pointer;
+}
+
+.settings-wrapper {
+    display: flex;
+    position: relative;
+    padding-bottom: 5px;
+}
+
+.settings-container {
+    display: none;
+    flex-direction: column;
+    width: 250px;
+    gap: 5px;
+    padding: 10px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    position: absolute; 
+    top: 100%; 
+    right: 0; 
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 6px;
+}
+
+.collection-cards-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.settings-btns {
+    border-radius: 5px;
+    padding: 10px;
+    border: none;
+    font-family: 'Inter-Medium', sans-serif;
+    font-size: 12px;
+    background-color: #FFFFFF;
+}
+
+.settings-btns:hover {
+    background-color: #f2f2f2;
+}
+
+.settings-wrapper:hover .settings-container,
+.settings-container:hover {
+    display: flex;
+}
+
+@media (width <= 1000px) {
+    .collections-view-container {
+      overflow-x: auto;
+    }
+
+    .home-container {
+        flex-direction: column;
+        padding: 23px 20px 23px 20px;
+    }
+
+    .collection-card {
+        width: auto;
+        max-height: fit-content;
+    }
+
+    .home-left-section-container {
+        width: 100%;
+    }
+
+    .seemore-btn, .new-project-btn{
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        transform: scale(0.9);
+    }
+
+    .collection-cards-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 16px;
+        padding: 0px;
+        box-sizing: border-box;
+    }
+
+    .favs-card {
+        margin-top: 50px;
+        width: 100%;
+        height: auto;
+        min-height: auto;
+        padding: 15px;
+        border-radius: 20px;
+        box-sizing: border-box;
+    }
+
+    .favs-title, .collections-title, .projects-title {
+        font-size: 20px;
+    }
+
+    .favs-title {
+        padding-bottom: 7px;
+    }
+
+    .projects-title {
+        margin: 0px 0px 15px;
+    }
+
+    .projects-background {
+        box-sizing: border-box;
+        width: 100%;
+        height: auto;
+        padding: 15px;
+    }
+
+    .projects-container {
+        flex-direction: column-reverse;
+        margin: 0;
+        gap: 0px;
+    }
+
+    .project-card {
+        flex-direction: row-reverse;
+        width: 100%;
+        box-sizing: border-box;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px;
+    }
+
+    .project-img {
+        display: none;
+    }
+
+    .loading-favs {
+        border-radius: 20px;
+    }
 }
