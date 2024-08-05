@@ -37,7 +37,7 @@ export const setTemplates = ( collections ) => {
 
   for (const collection of collections) {
     if ('templateId' in collection) {
-      templates.push({ key: collection.templateId, value: `${collection.collectionName} template` })
+      templates.push({ key: collection.templateId, value: collection.templateName })
     }
   }
 

@@ -1,25 +1,41 @@
 import React from 'react'
 import logo from '../../img/logo.svg'
+import menuIcon from '../../img/menuIcon.svg'
+import settingsIcon from '../../img/settingsIcon.svg'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
-export const Header = ({ textPrimaryButton, textSecondaryButton, action1, action2, children }) => {
+export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, action2 }) => {
     return (
         <header className={'main-header'}>
-            <img src={logo} alt='my band app logo' className={'logo'}></img>
-            <div
-                style={{
-                    display: 'flex',
-                    gap: '16px',
-                    position: 'relative',
-                    left: '80%',
-                    transform: 'translateX(-80%)',
-                    alignItems: 'center'
-                }}
-            >
+            <img src={logo} alt='my band app logo' className='logo'></img>
+            <div className='header-content'>
                 <ButtonText type={'secondary'} text={textSecondaryButton} action={action2} />
                 <ButtonText type={'primary'} text={textPrimaryButton} action={action1} />
-                {children}
+                {type == 'home' && (
+                <div className='settings-wrapper'>
+                    <button style={{ background: `url(${settingsIcon})` }} className='settings-btn' />
+                    <div className='settings-container'>
+                        <button className='settings-btns'>Cambiar contraseña</button>
+                        <button className='settings-btns'>Cambiar plan</button>
+                    </div>
+                </div>
+                )}
+            </div>
+            <div className='menu-wrapper'>
+                <button style={{ background: `url(${menuIcon})` }} className='menu-icon' />
+                {type == 'home' ? 
+                (<div className='menu-container'>
+                    <span className='menu-title'>{textPrimaryButton}</span>
+                    <button className='settings-btns'>Cambiar contraseña</button>
+                    <button className='settings-btns'>Cambiar plan</button>
+                    <button className='logout-menu-btn' onClick={action2}>{textSecondaryButton}</button>
+                </div>) : 
+                (<div className='menu-container'>
+                    <button className='settings-btns' onClick={action1}>{textPrimaryButton}</button>
+                    <button className='logout-menu-btn' onClick={action2}>{textSecondaryButton}</button>
+                </div>)
+                }
             </div>
         </header>
     )
@@ -28,7 +44,7 @@ export const Header = ({ textPrimaryButton, textSecondaryButton, action1, action
 export const ButtonText = ({ text, type, action }) => {
 
     return (
-        <button className={`text-btn ${type}`} onClick={action}>{text}</button>
+        <button className={`text-btn ${type}`} onClick={action} type='button'>{text}</button>
     )
 }
 

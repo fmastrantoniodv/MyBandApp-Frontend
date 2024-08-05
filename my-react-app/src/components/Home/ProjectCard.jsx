@@ -19,14 +19,16 @@ export const ProjectCard = ({ name, savedDate, onDelete, onOpen }) => {
     return (
         <div className='project-card'>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <img style={{ width: '81px', height: '85px' }} src={projectImg} />
+                <img src={projectImg} className='project-img'/>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <button className='project-btn delete' style={{ backgroundImage: `url(${deleteIcon})` }} onClick={onDelete} />
                     <button className='project-btn open' style={{ backgroundImage: `url(${openIcon})` }} onClick={onOpen} />
                 </div>
             </div>
-            <span className='project-name'>{name}</span>
-            <span className='project-last-change'>Último cambio: {fechaFormateada}</span>
+            <div className='project-description'>
+                <span className='project-name'>{name}</span>
+                <span className='project-last-change'>Último cambio: {fechaFormateada}</span>
+            </div>
         </div>
     )
 }

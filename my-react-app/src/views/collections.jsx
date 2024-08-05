@@ -5,7 +5,7 @@ import { Header, ButtonText } from '../components/Register/Form'
 import { Collection } from '../components/Collections/Collection'
 import { routes } from '../const/constants'
 import { useUser } from '../contexts/UserContext'
-import { getCollections } from '../services/collections/getCollections'
+import { getCollections } from '../services/collectionsServ'
 
 const Collections = () => {
     
@@ -37,7 +37,7 @@ const Collections = () => {
 
     return (
         <div className='collections-container'>
-            <Header textPrimaryButton={`Hola ${user.usrName}`} textSecondaryButton={'Cerrar sesión'} action1={() => navigate(routes.home)} action2={handleLogout}>
+            <Header type='home' textPrimaryButton={`Hola ${user.usrName}`} textSecondaryButton={'Cerrar sesión'} action1={() => navigate(routes.home)} action2={handleLogout}>
                 <button style={{ background: `url(${settingsIcon})` }} className='settings-btn' />
             </Header>
             <div className={'container'}>

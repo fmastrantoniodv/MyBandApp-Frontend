@@ -24,6 +24,7 @@
     background-color: #FFFFFF;
     min-height: 890px;
     width: 782px;
+    min-width: 600px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;

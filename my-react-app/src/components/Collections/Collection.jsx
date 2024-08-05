@@ -3,8 +3,7 @@ import { Sample } from './Sample'
 import arrow from '../../img/arrow.svg'
 import playIcon from '../../img/playIcon.svg'
 import unFavButtonIcon from '../../img/unFavButtonIcon.svg'
-import { getUserFavsServ } from '../../services/users/getUserFavsServ'
-import { updateFav } from '../../services/users/updateFav'
+import { getUserFavsServ, updateFav } from '../../services/usersServ'
 
 export const Collection = ({ user, collectionItem, setUser }) => {
 

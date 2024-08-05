@@ -10,6 +10,7 @@ export const UserProvider = ({ children }) => {
         id: '',
         email: '',
         password: '',
+        projectList: [],
         registerDate: '',
         expirationPlanDate: '',
         favList: []
@@ -22,6 +23,7 @@ export const UserProvider = ({ children }) => {
             id: '',
             email: '',
             password: '',
+            projectList: [],
             registerDate: '',
             expirationPlanDate: '',
             favList: []
@@ -33,11 +35,23 @@ export const UserProvider = ({ children }) => {
         projectId: '',
         userId: '',
         projectName: '',
-        template: ''
+        template: '',
+        channelList: []
     })
 
+    const clearProject = () => {
+        setProjectInfo({
+            projectId: '',
+            userId: '',
+            projectName: '',
+            template: '',
+            channelList: []
+        })
+        window.localStorage.removeItem('project')
+    }
+
     return (
-        <UserContext.Provider value={{ user, setUser, clearUser, projectInfo, setProjectInfo }}>
+        <UserContext.Provider value={{ user, setUser, clearUser, projectInfo, setProjectInfo, clearProject }}>
             {children}
         </UserContext.Provider>
     );

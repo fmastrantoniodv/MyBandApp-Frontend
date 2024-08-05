@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { getProjectServ } from '../services/projects/getProjectServ';
-import { saveProjectServ } from '../services/projects/saveProjectServ';
+import { getProjectServ, saveProjectServ } from "../services/projectsServ";
 import Modal from "../components/Modals/Modal"
 import { useModal } from "../hooks/useModal"
 import GenericMsg from "../components/Modals/GenericMsg"

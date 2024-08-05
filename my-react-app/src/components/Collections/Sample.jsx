@@ -1,6 +1,5 @@
 import React from 'react'
-import { getUserFavsServ } from '../../services/users/getUserFavsServ'
-import { updateFav } from '../../services/users/updateFav'
+import { getUserFavsServ, updateFav } from '../../services/usersServ'
 import playIcon from '../../img/playIcon.svg'
 import unFavButtonIcon from '../../img/unFavButtonIcon.svg'
 import favButtonIcon from '../../img/favButtonIcon.svg'
