@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Sample } from './Sample'
 import arrow from '../../img/arrow.svg'
-import PlaySample from '../Home/PlaySample'
 import unFavButtonIcon from '../../img/unFavButtonIcon.svg'
 import { getUserFavsServ, updateFav } from '../../services/usersServ'
 
@@ -36,7 +35,6 @@ export const Collection = ({ user, collectionItem, setUser }) => {
                     }
                 </div>
                 <div style={{ display: 'flex', gap: '5px' }}>
-                    <PlaySample sampleInfo={sampleList[0]}/>
                     <img className='fav-play-icon' src={unFavButtonIcon} onClick={() => handleFavCollection()} alt='boton de agregar collection a favoritos'/>
                 </div>
                 <button style={{ background: `url(${arrow})` }} className={`arrow-btn ${sampleListClass}`} onClick={() => setOpen(!isOpen)} />
