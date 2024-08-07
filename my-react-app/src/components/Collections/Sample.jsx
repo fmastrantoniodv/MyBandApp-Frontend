@@ -1,14 +1,14 @@
 import React from 'react'
 import { getUserFavsServ, updateFav } from '../../services/usersServ'
-import playIcon from '../../img/playIcon.svg'
+import PlaySample from '../Home/PlaySample'
 import unFavButtonIcon from '../../img/unFavButtonIcon.svg'
 import favButtonIcon from '../../img/favButtonIcon.svg'
 
-export const Sample = ({ user, id, name, setUser }) => {
+export const Sample = ({ user, sampleInfo, setUser }) => {
     
     const { favList } = user
 
-    const isFav = favList.some(fav => fav.id === id)
+    const isFav = favList.some(fav => fav.id === sampleInfo.id)
 
     const action = isFav ? 'UNFAV' : 'FAV'
 
@@ -21,10 +21,10 @@ export const Sample = ({ user, id, name, setUser }) => {
 
     return (
         <div className='sample-container'>
-            <span className='sample-name'>{name}</span>
+            <span className='sample-name'>{sampleInfo.sampleName}</span>
             <div style={{ display: 'flex', gap: '5px' }}>
-                <img className='fav-play-icon' src={playIcon} alt='boton de reproducir sample'/>
-                <img className='fav-play-icon' src={isFav ? favButtonIcon : unFavButtonIcon} onClick={() => handleUpdateFav(id, action)} alt='boton de agregar sample a favoritos'/>
+                <PlaySample sampleInfo={sampleInfo}/>
+                <img className='fav-play-icon' src={isFav ? favButtonIcon : unFavButtonIcon} onClick={() => handleUpdateFav(sampleInfo.id, action)} alt='boton de agregar sample a favoritos'/>
             </div>
         </div>
     )

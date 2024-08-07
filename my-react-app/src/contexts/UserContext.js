@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export const UserContext = createContext();
@@ -50,8 +50,10 @@ export const UserProvider = ({ children }) => {
         window.localStorage.removeItem('project')
     }
 
+    const [playingSample, setPlayingSample] = useState(null)
+
     return (
-        <UserContext.Provider value={{ user, setUser, clearUser, projectInfo, setProjectInfo, clearProject }}>
+        <UserContext.Provider value={{ user, setUser, clearUser, projectInfo, setProjectInfo, clearProject, setPlayingSample, playingSample }}>
             {children}
         </UserContext.Provider>
     );

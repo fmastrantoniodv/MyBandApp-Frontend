@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Sample } from './Sample'
 import arrow from '../../img/arrow.svg'
-import playIcon from '../../img/playIcon.svg'
+import PlaySample from '../Home/PlaySample'
 import unFavButtonIcon from '../../img/unFavButtonIcon.svg'
 import { getUserFavsServ, updateFav } from '../../services/usersServ'
 
@@ -36,7 +36,7 @@ export const Collection = ({ user, collectionItem, setUser }) => {
                     }
                 </div>
                 <div style={{ display: 'flex', gap: '5px' }}>
-                    <img className='fav-play-icon' src={playIcon} alt='boton de reproducir muestra'/>
+                    <PlaySample sampleInfo={sampleList[0]}/>
                     <img className='fav-play-icon' src={unFavButtonIcon} onClick={() => handleFavCollection()} alt='boton de agregar collection a favoritos'/>
                 </div>
                 <button style={{ background: `url(${arrow})` }} className={`arrow-btn ${sampleListClass}`} onClick={() => setOpen(!isOpen)} />
@@ -45,7 +45,7 @@ export const Collection = ({ user, collectionItem, setUser }) => {
                 <span className='samples-title'>Samples</span>
                 {
                     sampleList.map((sample) => (
-                        <Sample key={sample.id} user={user} id={sample.id} name={sample.sampleName} setUser={setUser}/>
+                        <Sample key={sample.id} user={user} sampleInfo={sample} setUser={setUser}/>
                     ))
                 }
             </div>

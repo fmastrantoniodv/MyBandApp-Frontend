@@ -17,7 +17,6 @@ import { getCollections } from '../services/collectionsServ'
 import { updateFav, getUserFavsServ } from '../services/usersServ'
 
 export const Home = () => {
-
     const [loadingFavs, setLoadingFavs] = useState(false)
     const [loadingCollections, setLoadingCollections] = useState(false)
     const [loadingProjects, setLoadingProjects] = useState(false)
@@ -201,8 +200,8 @@ export const Home = () => {
                         <span className='fav-item'>Pack origen</span>
                     </div>
                     {
-                        user.favList.map(({ id, sampleName, collectionCode }) => (
-                            <FavItem key={id} name={sampleName} pack={collectionCode} onUnfav={() => handleUnfav(id)} />
+                        user.favList.map((fav) => (
+                            <FavItem key={fav.id} favInfo={fav} onUnfav={() => handleUnfav(fav.id)} />
                         ))
                     }
                 </div>

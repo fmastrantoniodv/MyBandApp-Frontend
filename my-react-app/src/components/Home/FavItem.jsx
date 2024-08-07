@@ -1,14 +1,14 @@
 import React from 'react'
-import playIcon from '../../img/playIcon.svg'
 import unFavButtonIcon from '../../img/unFavButtonIcon.svg'
+import PlaySample from './PlaySample'
 
-export const FavItem = ({ name, pack, onUnfav }) => {
+export const FavItem = ({ favInfo, onUnfav }) => {
     return (
         <div className='fav-item-container'>
-            <span className='fav-item'>{name}</span>
-            <span className='fav-item'>{pack}</span>
+            <span className='fav-item'>{favInfo.sampleName}</span>
+            <span className='fav-item'>{favInfo.collectionCode}</span>
             <div style={{ display: 'flex', gap: '5px' }}>
-                <img className='fav-play-icon' src={playIcon} />
+                <PlaySample sampleInfo={favInfo}/>
                 <img className='fav-play-icon' src={unFavButtonIcon} onClick={onUnfav} />
             </div>
         </div>
