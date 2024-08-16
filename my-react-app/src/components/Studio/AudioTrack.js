@@ -29,7 +29,7 @@ export default function AudioTrack ({
   }, [waveformPlayer, containerRef]);
 
   const onClickMute = () => {
-    getTrack(sample.id).setMute(!getTrack(sample.id).isMuted)
+    getTrack(sample.id).waveformComponent.setMute(!getTrack(sample.id).isMuted)
   }
 
   const onClickSolo = () => {
@@ -74,9 +74,9 @@ export default function AudioTrack ({
                     <DeleteButton />
                     <span className='display-name'>{sample.sampleName}</span>
                   </div>
-                  <EQControls waveformObj={getTrack(sample.id)}/>
+                  <EQControls sample={getTrack(sample.id)}/>
                 </div>
-                <VolumeController waveformObj={getTrack(sample.id)} />
+                <VolumeController sample={getTrack(sample.id)} />
                 <div className='audio-controls-output-router-buttons'>
                   <Button faderID={sample.id} textButton='M' state={getTrack(sample.id).isMuted} onClickButton={() => onClickMute()}/>
                   <Button faderID={sample.id} textButton='S' state={sample.id === soloChannelSelected} onClickButton={() => onClickSolo(getTrack(sample.id))}/>

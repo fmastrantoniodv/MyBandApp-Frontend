@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import '../../App.css';
 
-function VolumeController({waveformObj}) {
-    const [volumeValue, setVolumeValue] = useState(waveformObj.savedVolume);
+function VolumeController({sample}) {
+    const [volumeValue, setVolumeValue] = useState(sample.channelConfig.volume);
 
     const handleOnChangeVolume = (e) => {
-        if(!waveformObj.isMuted){
-            waveformObj.backend.gainNode.gain.value = volumeValue
+        if(!sample.waveformComponent.isMuted){
+            sample.waveformComponent.backend.gainNode.gain.value = volumeValue
         }
 
         setVolumeValue(parseFloat(e.target.value));
-        waveformObj.savedVolume = volumeValue
+        sample.waveformComponent.savedVolume = volumeValue
+        sample.channelConfig.volume = volumeValue
     };
 
     return(

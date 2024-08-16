@@ -8,11 +8,12 @@ import exportIcon from '../../img/exportIcon.svg'
 import saveIcon from '../../img/saveIcon.svg'
 import MasterAudioContext from '../../contexts/MasterAudioContext'
 import ProjectContext from '../../contexts/ProjectContext'
+import { saveProjectServ } from '../../services/projectsServ'
 
 export default function ProjectEditor ({}) {
     const [playing, setPlaying] = useState('false')
-    const { exportWavFile, playBackTracks } = useContext(MasterAudioContext)
-    const { loading, getProjectInfo, getSoundList, saveProject } = useContext(ProjectContext)
+    const { exportWavFile, playBackTracks, getTracklist } = useContext(MasterAudioContext)
+    const { loading, getProjectInfo, getSoundList } = useContext(ProjectContext)
     
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect].loading', loading)
@@ -71,9 +72,32 @@ export default function ProjectEditor ({}) {
       )
     }
 
+    const saveProjectFunc = () => {
+      let trackList = getTracklist()
+      let projectInfo = getProjectInfo()
+      console.log('[ProjectEditor.js].saveProjectFunc.trackList', trackList)
+      var channelListReq = new Array;
+      trackList.map(track => {
+          var channelItem = {
+              sampleId: track.id,
+              channelConfig: track.channelConfig
+          }
+          channelListReq.push(channelItem)
+      })
+      const req = {
+          "projectId": projectInfo.id,
+          "userId": projectInfo.userId,
+          "projectName": projectInfo.projectName,
+          "totalDuration": 0,
+          "channelList": channelListReq
+      }
+      console.log('[ProjectContext.js].req=', req)
+      const saveProjectResult = saveProjectServ(req)
+      console.log('[ProjectContext.js].saveProjectResult=', saveProjectResult)
+  }
     const SaveProject = () =>{
       return(
-        <button className="btn-save-project" onClick={() => saveProject()}>
+        <button className="btn-save-project" onClick={() => saveProjectFunc()}>
           <img src={saveIcon} alt="icono de guardar proyecto" width="100%"/>
         </button>
       )

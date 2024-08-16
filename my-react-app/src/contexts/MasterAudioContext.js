@@ -23,15 +23,17 @@ export function MasterAudioContextProvider({children, value}){
     }
 
     const getTrack = ( trackId ) => {
-        return trackList.find(value => value.mediaContainer.id === trackId)
+        console.log('[MasterAudioContext.js].getTrack.trackid=', trackId)
+        console.log('[MasterAudioContext.js].getTrack.trackList=', trackList)
+        return trackList.find(value => value.id === trackId)
     }
 
     const deleteTrack = ( trackId ) => {
-        setTrackList(trackList.filter(value => value.mediaContainer.id !== trackId))
+        setTrackList(trackList.filter(value => value.id !== trackId))
     }
     
     const getPlayBackCurrentTime = () => {
-        setPlayBackCurrentTime(trackList[0].backend.ac.currentTime)
+        setPlayBackCurrentTime(trackList[0].waveformComponent.backend.ac.currentTime)
         return playBackCurrentTime
     }
 
@@ -39,12 +41,16 @@ export function MasterAudioContextProvider({children, value}){
         if(trackList.length < 1) return
 
         if(playBackAction === 'play'){
-            trackList.map(track => track.play())
+            trackList.map(track => track.waveformComponent.play())
         }else if(playBackAction === 'stop'){
-            trackList.map(track => track.stop())
+            trackList.map(track => track.waveformComponent.stop())
         }else if(playBackAction === 'pause'){
-            trackList.map(track => track.pause())
+            trackList.map(track => track.waveformComponent.pause())
         }
+    }
+
+    const getTracklist = () =>{
+        return trackList
     }
   
     function getAudioOfflineBuffer(waveSurfer) {
@@ -96,7 +102,7 @@ export function MasterAudioContextProvider({children, value}){
     async function processWaveSurfers(waveSurfers) {
         var results = [];
         var promises = waveSurfers.map(function(waveSurfer) {
-            return getAudioOfflineBuffer(waveSurfer).then(function(renderedBuffer) {
+            return getAudioOfflineBuffer(waveSurfer.waveformComponent).then(function(renderedBuffer) {
                 results.push(renderedBuffer);
             }).catch(function(error) {
                 console.error('Failed to get audio offline buffer:', error);
@@ -117,19 +123,19 @@ export function MasterAudioContextProvider({children, value}){
     }
 
     const onSoloChannel = (trackId) => {
-        if(getTrack(trackId).onSolo){
+        if(getTrack(trackId).waveformComponent.onSolo){
             trackList.map(value => {
-                    value.setMute(false)
-                    value.onSolo = false
+                    value.waveformComponent.setMute(false)
+                    value.waveformComponent.onSolo = false
             })
         }else{
             trackList.map(value => {
                 if(value.mediaContainer.id === trackId){
-                    value.setMute(false)
-                    value.onSolo = true
+                    value.waveformComponent.setMute(false)
+                    value.waveformComponent.onSolo = true
                 }else{
-                    value.setMute(true)
-                    value.onSolo = false
+                    value.waveformComponent.setMute(true)
+                    value.waveformComponent.onSolo = false
                 }
             })
         }
@@ -145,7 +151,8 @@ export function MasterAudioContextProvider({children, value}){
                 deleteTrack,
                 playBackTracks,
                 onSoloChannel,
-                getPlayBackCurrentTime
+                getPlayBackCurrentTime,
+                getTracklist
             }}>{children}
             </Context.Provider>
 }

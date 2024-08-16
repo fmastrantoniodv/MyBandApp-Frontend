@@ -72,7 +72,16 @@ const useWaveform = (sampleProps, containerRef) => {
         wavesurfer.backend.gainNode.gain.value = sampleProps.channelConfig.volume
         wavesurfer.savedVolume = sampleProps.channelConfig.volume
         //wavesurfer.backend.ac.sampleRate = '44100'
-        addTrackToList(wavesurfer)
+        const tracklistObj = {
+          waveformComponent: wavesurfer,
+          channelConfig: sampleProps.channelConfig,
+          collectionCode: sampleProps.collectionCode, 
+          duration: sampleProps.duration, 
+          id: sampleProps.id,
+          sampleName: sampleProps.sampleName,
+          tempo: sampleProps.tempo
+        }
+        addTrackToList(tracklistObj)
         setWaveformComponent(wavesurfer)
         addArrayBuffers(wavesurfer.backend.buffer, soundID)
       });

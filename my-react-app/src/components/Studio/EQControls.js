@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import knobSvg from '../../img/knob.svg'
 
-export default function EQControls({ waveformObj }) {
-  const [lowFrequency, setLowFrequency] = useState(waveformObj.backend.filters[0].gain.value);
-  const [midFrequency, setMidFrequency] = useState(waveformObj.backend.filters[1].gain.value);
-  const [highFrequency, setHighFrequency] = useState(waveformObj.backend.filters[2].gain.value);
+export default function EQControls({ sample }) {
+  const [lowFrequency, setLowFrequency] = useState(sample.channelConfig.EQ.low);
+  const [midFrequency, setMidFrequency] = useState(sample.channelConfig.EQ.mid);
+  const [highFrequency, setHighFrequency] = useState(sample.channelConfig.EQ.high);
 
   const handleLowFrequencyChange = (e) => {
-    waveformObj.backend.filters[0].gain.value = e.target.value
+    sample.waveformComponent.backend.filters[0].gain.value = e.target.value
+    sample.channelConfig.EQ.low = parseFloat(e.target.value)
     setLowFrequency(parseFloat(e.target.value));
   };
 
   const handleMidFrequencyChange = (e) => {
-    waveformObj.backend.filters[1].gain.value = e.target.value
+    sample.waveformComponent.backend.filters[1].gain.value = e.target.value
+    sample.channelConfig.EQ.mid = parseFloat(e.target.value)
     setMidFrequency(parseFloat(e.target.value));
   };
 
   const handleHighFrequencyChange = (e) => {
-    waveformObj.backend.filters[2].gain.value = e.target.value
+    sample.waveformComponent.backend.filters[2].gain.value = e.target.value
+    sample.channelConfig.EQ.high = parseFloat(e.target.value)
     setHighFrequency(parseFloat(e.target.value));
   };
 

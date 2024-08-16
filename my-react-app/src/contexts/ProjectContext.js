@@ -27,27 +27,6 @@ export function ProjectContextProvider({children, projectInfoEntry}){
         return projectInfo
     }
 
-    const saveProject = () => {
-        var channelListReq = new Array;
-        soundList.map(sound => {
-            var channelItem = {
-                sampleId: sound.id,
-                channelConfig: sound.channelConfig
-            }
-            channelListReq.push(channelItem)
-        })
-        const req = {
-            "projectId": projectInfo.id,
-            "userId": projectInfo.userId,
-            "projectName": projectInfo.projectName,
-            "totalDuration": 0,
-            "channelList": channelListReq
-        }
-        console.log('[ProjectContext.js].req=', req)
-        const saveProjectResult = saveProjectServ(req)
-        console.log('[ProjectContext.js].saveProjectResult=', saveProjectResult)
-    }
-
     const addChannelToList = (sampleInfo) => {
         console.log('Nueva pista', sampleInfo)
         var updatedChannelList = soundList
@@ -135,8 +114,7 @@ export function ProjectContextProvider({children, projectInfoEntry}){
                     loading,
                     getProjectInfo,
                     addChannelToList,
-                    deleteChannel,
-                    saveProject
+                    deleteChannel
                     }}>
                         {children}
                 </ProjectContext.Provider>
