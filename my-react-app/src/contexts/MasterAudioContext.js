@@ -12,10 +12,21 @@ export function MasterAudioContextProvider({children, value}){
     const [mainGainNode, setMainGainNode] = useState(masterAudioCtx.createGain())
     const [trackList, setTrackList] = useState([])
     const [playBackCurrentTime, setPlayBackCurrentTime] = useState(0)
+    const [projectBPM, setProjectBPM] = useState(110)
 
     useEffect(()=>{
         console.log('[MasterAudioContextProvider].[useEffect].trackList', trackList)
-    },[])
+        syncTempoTracks()
+    },[projectBPM])
+
+    const syncTempoTracks = () => {
+        trackList.map(track => {
+            if(track.waveformComponent.backend.source.playbackRate !== undefined){
+                const playbackRate = projectBPM / track.tempo;
+                track.waveformComponent.setPlaybackRate(playbackRate)
+            }
+        })
+    }
 
     const addTrackToList = ( newTrack ) => {
         console.log('[MasterAudioContextProvider].[addTrackToList].newTrack', newTrack)
@@ -42,6 +53,7 @@ export function MasterAudioContextProvider({children, value}){
 
         if(playBackAction === 'play'){
             trackList.map(track => track.waveformComponent.play())
+            syncTempoTracks()
         }else if(playBackAction === 'stop'){
             trackList.map(track => track.waveformComponent.stop())
         }else if(playBackAction === 'pause'){
@@ -53,14 +65,14 @@ export function MasterAudioContextProvider({children, value}){
         return trackList
     }
   
-    function getAudioOfflineBuffer(waveSurfer) {
-        console.log('getAudioOfflineBuffer.wavesurfer',waveSurfer)
-        var offlineContext = new OfflineAudioContext(waveSurfer.backend.source.channelCount, waveSurfer.backend.buffer.duration * waveSurfer.backend.ac.sampleRate, waveSurfer.backend.ac.sampleRate);        
+    function getAudioOfflineBuffer(sample) {
+        const waveSurfer = sample.waveformComponent
+        var offlineContext = new OfflineAudioContext(waveSurfer.backend.source.channelCount, waveSurfer.backend.buffer.duration * waveSurfer.backend.ac.sampleRate, waveSurfer.backend.ac.sampleRate);
         var buffer = waveSurfer.backend.buffer;
         var source = offlineContext.createBufferSource();
         source.buffer = buffer;
-        console.log('getAudioOfflineBuffer.source',source)
-
+        const playbackRate = projectBPM / sample.tempo
+        source.playbackRate.value = playbackRate
         const gainNode = offlineContext.createGain();
         if(waveSurfer.isMuted){
             gainNode.gain.value = 0;
@@ -68,7 +80,6 @@ export function MasterAudioContextProvider({children, value}){
             gainNode.gain.value = waveSurfer.backend.gainNode.gain.value;
         }
         source.connect(gainNode);
-        console.log('getAudioOfflineBuffer.gainNode', gainNode)
 
         const lowFilter = offlineContext.createBiquadFilter();
         lowFilter.type = 'lowshelf';
@@ -102,7 +113,7 @@ export function MasterAudioContextProvider({children, value}){
     async function processWaveSurfers(waveSurfers) {
         var results = [];
         var promises = waveSurfers.map(function(waveSurfer) {
-            return getAudioOfflineBuffer(waveSurfer.waveformComponent).then(function(renderedBuffer) {
+            return getAudioOfflineBuffer(waveSurfer).then(function(renderedBuffer) {
                 results.push(renderedBuffer);
             }).catch(function(error) {
                 console.error('Failed to get audio offline buffer:', error);
@@ -152,7 +163,9 @@ export function MasterAudioContextProvider({children, value}){
                 playBackTracks,
                 onSoloChannel,
                 getPlayBackCurrentTime,
-                getTracklist
+                getTracklist,
+                setProjectBPM,
+                projectBPM
             }}>{children}
             </Context.Provider>
 }

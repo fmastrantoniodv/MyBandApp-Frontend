@@ -12,8 +12,10 @@ import { saveProjectServ } from '../../services/projectsServ'
 
 export default function ProjectEditor ({}) {
     const [playing, setPlaying] = useState('false')
-    const { exportWavFile, playBackTracks, getTracklist } = useContext(MasterAudioContext)
+    const { exportWavFile, playBackTracks, getTracklist, setProjectBPM, projectBPM } = useContext(MasterAudioContext)
     const { loading, getProjectInfo, getSoundList } = useContext(ProjectContext)
+    const [inputBPMSavedValue, setInputBPMSavedValue] = useState()
+    const [inputBPMValue, setInputBPMValue] = useState(projectBPM)
     
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect].loading', loading)
@@ -118,7 +120,27 @@ export default function ProjectEditor ({}) {
                 <PauseButton />
                 <StopButton />
               </div>
-              <CurrentTime playing={playing} />        
+              <CurrentTime playing={playing} />
+              <div className="bpm-container">
+                <input min={1} max={999} maxLength={3} value={inputBPMValue} 
+                  onChange={(e)=>{setInputBPMValue(e.target.value)}}
+                  onFocus={(e)=>{setInputBPMSavedValue(e.target.value)}}
+                  onBlur={(e)=>{
+                    if(e.target.value < 1 || e.target.value === ''){
+                      setInputBPMValue(inputBPMSavedValue)
+                      setProjectBPM(inputBPMSavedValue)
+                    }else{
+                      setProjectBPM(e.target.value)
+                    }
+                  }}
+                  onKeyDown={(e)=>{
+                    if(e.key === "Enter"){
+                      e.target.blur()
+                    }
+                  }}
+                  />
+                <span>BPM</span>
+              </div>
             </div>
         </>
         )

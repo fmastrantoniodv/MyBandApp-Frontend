@@ -421,3 +421,32 @@
 .project-info-btns{
   display: flex;
 }
+
+.bpm-container{
+  margin-left: 10px;
+  background-color: #D9D9D9;
+  border: none;
+  display: inline;
+  border-radius: 10px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 5px;
+  padding-right: 5px;
+  text-align: center;
+  color: #333;
+}
+
+.bpm-container input{
+  text-align: center;
+  background-color: transparent;
+  border: none;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 0px;
+  font-weight: 700;
+  font-size: 20px;
+}
