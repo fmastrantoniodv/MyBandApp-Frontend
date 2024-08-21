@@ -12,7 +12,7 @@ import { saveProjectServ } from '../../services/projectsServ'
 
 export default function ProjectEditor ({}) {
     const [playing, setPlaying] = useState('false')
-    const { exportWavFile, playBackTracks, getTracklist, setProjectBPM, projectBPM } = useContext(MasterAudioContext)
+    const { exportWavFile, playBackTracks, getTracklist, setProjectBPM, projectBPM, getPlayBackCurrentTime } = useContext(MasterAudioContext)
     const { loading, getProjectInfo, getSoundList } = useContext(ProjectContext)
     const [inputBPMSavedValue, setInputBPMSavedValue] = useState()
     const [inputBPMValue, setInputBPMValue] = useState(projectBPM)
@@ -51,6 +51,7 @@ export default function ProjectEditor ({}) {
     }
 
     const StopButton = () => {
+      console.log('getPlayBackCurrentTime', getPlayBackCurrentTime())
       return(
         <button className="btn-project-controls" onClick={() => stopProject()}>
           <img src={stopIcon} alt="icono de detener reproduccion" width="100%" />  

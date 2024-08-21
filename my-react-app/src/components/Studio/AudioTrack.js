@@ -13,7 +13,7 @@ export default function AudioTrack ({
   handleSoloChannel
 }){
   const containerRef = useRef()
-  const {getTrack, deleteTrack, onSoloChannel} = useContext(MasterAudioContext)
+  const {getTrack, deleteTrack} = useContext(MasterAudioContext)
   const { deleteChannel } = useContext(ProjectContext)
   const [loading, setLoading] = useState(true)
   
@@ -33,7 +33,6 @@ export default function AudioTrack ({
   }
 
   const onClickSolo = () => {
-    onSoloChannel(sample.id)
     handleSoloChannel(sample.id)
   }
 
@@ -78,8 +77,8 @@ export default function AudioTrack ({
                 </div>
                 <VolumeController sample={getTrack(sample.id)} />
                 <div className='audio-controls-output-router-buttons'>
-                  <Button faderID={sample.id} textButton='M' state={getTrack(sample.id).isMuted} onClickButton={() => onClickMute()}/>
-                  <Button faderID={sample.id} textButton='S' state={sample.id === soloChannelSelected} onClickButton={() => onClickSolo(getTrack(sample.id))}/>
+                  <Button fatherId={sample.id} textButton='M' state={getTrack(sample.id).waveformComponent.isMuted} onClickButton={() => onClickMute()}/>
+                  <Button fatherId={sample.id} textButton='S' state={getTrack(sample.id).channelConfig.states.solo} onClickButton={() => onClickSolo(getTrack(sample.id))}/>
                 </div>
               </div>
             </div>

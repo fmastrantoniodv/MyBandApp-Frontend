@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
-function Button({ textButton, onClickButton, state, faderID }) {
+function Button({ textButton, onClickButton, state, fatherId }) {
   const [pressState, setPressState] = useState(false)
 
   useEffect(()=>{
+    console.log(`Button.FatherId=${fatherId}.state=${state}.textButton=${textButton}`)
     setPressState(state)
   }, [state])
 
@@ -21,7 +22,7 @@ function Button({ textButton, onClickButton, state, faderID }) {
   }
   
     return (
-      <button key={faderID+textButton+"Button"} id={faderID+textButton+"Button"} className={textButton+'Button' + (pressState ? '-press':'') } onClick={() => handleClickButton()}>{textButton}</button>
+      <button key={fatherId+textButton+"Button"} id={fatherId+textButton+"Button"} className={textButton+'Button' + (pressState ? '-press':'') } onClick={() => handleClickButton()}>{textButton}</button>
     );
   }
 

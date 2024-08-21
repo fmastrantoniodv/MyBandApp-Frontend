@@ -57,7 +57,7 @@ export default function SampleSelector({handleCloseSamplesSelector, openModalSam
   }
 
   if(favouritesSamples === undefined || avaibleFavs === null) return
-  console.log('[SampleSelector.js].[linea46].avaibleFavs=', avaibleFavs)  
+  //console.log('[SampleSelector.js].[linea46].avaibleFavs=', avaibleFavs)  
 
     return (
       <>

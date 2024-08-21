@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import exportToWavFile from '../functions/exportToWavFile'
-import { useSampleList } from '../hooks/useSampleList';
 
 const Context = React.createContext({})
 
@@ -34,8 +33,10 @@ export function MasterAudioContextProvider({children, value}){
     }
 
     const getTrack = ( trackId ) => {
+        /*
         console.log('[MasterAudioContext.js].getTrack.trackid=', trackId)
         console.log('[MasterAudioContext.js].getTrack.trackList=', trackList)
+        */
         return trackList.find(value => value.id === trackId)
     }
 
@@ -44,7 +45,12 @@ export function MasterAudioContextProvider({children, value}){
     }
     
     const getPlayBackCurrentTime = () => {
-        setPlayBackCurrentTime(trackList[0].waveformComponent.backend.ac.currentTime)
+        console.log('getPlayBackCurrentTime')
+        return
+        if(trackList[0] === undefined) return
+        var waveform = trackList[0].waveformComponent
+        var currentTimeStamp = waveform.backend.ac.currentTime
+        setPlayBackCurrentTime(currentTimeStamp)
         return playBackCurrentTime
     }
 
@@ -134,22 +140,38 @@ export function MasterAudioContextProvider({children, value}){
     }
 
     const onSoloChannel = (trackId) => {
+        console.log(`[MasterAudioContext].[onSoloChannel].trackId=${trackId}.sampleName=${getTrack(trackId).sampleName}`,getTrack(trackId))
+        console.log(`[MasterAudioContext].[onSoloChannel].onSolo=${getTrack(trackId).waveformComponent.onSolo}`)
         if(getTrack(trackId).waveformComponent.onSolo){
+            console.log(`[MasterAudioContext].[onSoloChannel].onSolo=true`)
             trackList.map(value => {
                     value.waveformComponent.setMute(false)
+                    value.channelConfig.states.muted = false
                     value.waveformComponent.onSolo = false
+                    value.channelConfig.states.solo = false
             })
         }else{
+            console.log(`[MasterAudioContext].[onSoloChannel].onSolo=falseWay`)
             trackList.map(value => {
-                if(value.mediaContainer.id === trackId){
+                console.log(`[MasterAudioContext].[onSoloChannel].value.id=${value.id}, === trackId=${trackId}`)
+                console.log(`[MasterAudioContext].[onSoloChannel].value.waveformComponent.id === trackId`)
+                console.log(`[MasterAudioContext].[onSoloChannel].result=${value.id === trackId}`)
+                if(value.id === trackId){
                     value.waveformComponent.setMute(false)
+                    value.channelConfig.states.muted = false
                     value.waveformComponent.onSolo = true
+                    value.channelConfig.states.solo = true
+                    console.log(`[MasterAudioContext].[onSoloChannel].trueCaseValue=`,value)
                 }else{
                     value.waveformComponent.setMute(true)
+                    value.channelConfig.states.muted = true
                     value.waveformComponent.onSolo = false
+                    value.channelConfig.states.solo = false
+                    console.log(`[MasterAudioContext].[onSoloChannel].falseCaseValue=`,value)
                 }
             })
         }
+        console.log(`tracklist=`, trackList)
     }
 
     return  <Context.Provider value={{
