@@ -22,7 +22,10 @@ function Button({ textButton, onClickButton, state, fatherId }) {
   }
   
     return (
-      <button key={fatherId+textButton+"Button"} id={fatherId+textButton+"Button"} className={textButton+'Button' + (pressState ? '-press':'') } onClick={() => handleClickButton()}>{textButton}</button>
+      <button key={fatherId+textButton+"Button"} 
+        id={fatherId+textButton+"Button"} 
+        className={`button-output-channel ${textButton === 'M' ? 'mute' : 'solo'} ${pressState ? ' pressed' : ''}`}
+        onClick={() => handleClickButton()}>{textButton}</button>
     );
   }
 

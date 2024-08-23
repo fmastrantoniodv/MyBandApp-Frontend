@@ -41,7 +41,35 @@ export default function ProjectEditor ({}) {
         playBackTracks('pause')
         setPlaying('pause') 
     }
-  
+    
+    const ProjectBPM = () =>{
+      const focusInput = () =>{
+        document.getElementById('input-bpm').focus()
+      }
+      return(
+        <div className="bpm-container">
+          <input id='input-bpm' min={1} max={999} maxLength={3} value={inputBPMValue} 
+            onChange={(e)=>{setInputBPMValue(e.target.value)}}
+            onFocus={(e)=>{setInputBPMSavedValue(e.target.value)}}
+            onBlur={(e)=>{
+              if(e.target.value < 1 || e.target.value === ''){
+                setInputBPMValue(inputBPMSavedValue)
+                setProjectBPM(inputBPMSavedValue)
+              }else{
+                setProjectBPM(e.target.value)
+              }
+            }}
+            onKeyDown={(e)=>{
+              if(e.key === "Enter"){
+                e.target.blur()
+              }
+            }}
+            />
+          <span onClick={()=>{focusInput()}}>BPM</span>
+        </div>
+      )
+    }
+
     const PlayButton = () => {
       return(
         <button className="btn-project-controls" onClick={() => playProject()}>
@@ -122,26 +150,7 @@ export default function ProjectEditor ({}) {
                 <StopButton />
               </div>
               <CurrentTime playing={playing} />
-              <div className="bpm-container">
-                <input min={1} max={999} maxLength={3} value={inputBPMValue} 
-                  onChange={(e)=>{setInputBPMValue(e.target.value)}}
-                  onFocus={(e)=>{setInputBPMSavedValue(e.target.value)}}
-                  onBlur={(e)=>{
-                    if(e.target.value < 1 || e.target.value === ''){
-                      setInputBPMValue(inputBPMSavedValue)
-                      setProjectBPM(inputBPMSavedValue)
-                    }else{
-                      setProjectBPM(e.target.value)
-                    }
-                  }}
-                  onKeyDown={(e)=>{
-                    if(e.key === "Enter"){
-                      e.target.blur()
-                    }
-                  }}
-                  />
-                <span>BPM</span>
-              </div>
+              <ProjectBPM />
             </div>
         </>
         )

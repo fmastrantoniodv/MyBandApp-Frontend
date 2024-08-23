@@ -40,7 +40,6 @@ const ListOfChannels = ({ }) => {
                 return <AudioTrack
                     key={sample.id} 
                     sample={sample}
-                    soloChannelSelectedState={soloChannelSelected}
                     handleSoloChannel={handleSoloChannel}
                     />
             })

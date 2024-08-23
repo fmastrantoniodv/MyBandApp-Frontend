@@ -9,7 +9,6 @@ import ProjectContext from "../../contexts/ProjectContext";
 
 export default function AudioTrack ({ 
   sample,
-  soloChannelSelected,
   handleSoloChannel
 }){
   const containerRef = useRef()
