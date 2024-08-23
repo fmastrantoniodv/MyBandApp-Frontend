@@ -82,11 +82,11 @@ export function ProjectContextProvider({children, projectInfoEntry}){
                 projectName: projectData.projectName,
                 createdDate: projectData.createdDate,
                 savedDate: projectData.savedDate,
-                totalDuration: projectData.totalDuration
+                totalDuration: projectData.totalDuration,
+                tempo: projectData.tempo
             }
             setProjectInfo(projectInfoResp)
             setSoundList(projectData.channelList)
-            console.log('[ProjectContext.js].setInitValues.#####MEDIO#######.loading=', loading)
         }
         setLoading(false)
       }

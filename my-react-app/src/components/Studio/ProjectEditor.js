@@ -12,13 +12,12 @@ import { saveProjectServ } from '../../services/projectsServ'
 
 export default function ProjectEditor ({}) {
     const [playing, setPlaying] = useState('false')
-    const { exportWavFile, playBackTracks, getTracklist, setProjectBPM, projectBPM, getPlayBackCurrentTime } = useContext(MasterAudioContext)
+    const { exportWavFile, playBackTracks, getTracklist, setProjectBPM, projectBPM } = useContext(MasterAudioContext)
     const { loading, getProjectInfo, getSoundList } = useContext(ProjectContext)
-    const [inputBPMSavedValue, setInputBPMSavedValue] = useState()
-    const [inputBPMValue, setInputBPMValue] = useState(projectBPM)
-    
+
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect].loading', loading)
+      setProjectBPM(getProjectInfo().tempo)
     }, [loading]);
       
     const playProject = () => {
@@ -43,20 +42,23 @@ export default function ProjectEditor ({}) {
     }
     
     const ProjectBPM = () =>{
+      const [inputBPMSavedValue, setInputBPMSavedValue] = useState()
+      const [inputBPMValue, setInputBPMValue] = useState(projectBPM)
+
       const focusInput = () =>{
         document.getElementById('input-bpm').focus()
       }
       return(
         <div className="bpm-container">
           <input id='input-bpm' min={1} max={999} maxLength={3} value={inputBPMValue} 
-            onChange={(e)=>{setInputBPMValue(e.target.value)}}
-            onFocus={(e)=>{setInputBPMSavedValue(e.target.value)}}
+            onChange={(e)=>{setInputBPMValue(parseInt(e.target.value))}}
+            onFocus={(e)=>{setInputBPMSavedValue(parseInt(e.target.value))}}
             onBlur={(e)=>{
               if(e.target.value < 1 || e.target.value === ''){
                 setInputBPMValue(inputBPMSavedValue)
                 setProjectBPM(inputBPMSavedValue)
               }else{
-                setProjectBPM(e.target.value)
+                setProjectBPM(parseInt(e.target.value))
               }
             }}
             onKeyDown={(e)=>{
@@ -65,7 +67,8 @@ export default function ProjectEditor ({}) {
               }
             }}
             />
-          <span onClick={()=>{focusInput()}}>BPM</span>
+          <span 
+          onClick={()=>{focusInput()}}>BPM</span>
         </div>
       )
     }
@@ -79,7 +82,6 @@ export default function ProjectEditor ({}) {
     }
 
     const StopButton = () => {
-      console.log('getPlayBackCurrentTime', getPlayBackCurrentTime())
       return(
         <button className="btn-project-controls" onClick={() => stopProject()}>
           <img src={stopIcon} alt="icono de detener reproduccion" width="100%" />  
@@ -120,6 +122,7 @@ export default function ProjectEditor ({}) {
           "userId": projectInfo.userId,
           "projectName": projectInfo.projectName,
           "totalDuration": 0,
+          "tempo": projectBPM,
           "channelList": channelListReq
       }
       console.log('[ProjectContext.js].req=', req)
