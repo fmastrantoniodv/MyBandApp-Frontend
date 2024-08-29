@@ -12,6 +12,7 @@ const Studio = () => {
       if(projectInfo === undefined) return
 
       useEffect(()=>{
+        console.log(`[studio.jsx].[useEffect]`)
       }, [])
 
       return( 

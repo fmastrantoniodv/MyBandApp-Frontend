@@ -43,10 +43,3 @@ export const setTemplates = ( collections ) => {
 
   return templates
 }
-
-
-export default {
-    HolaMundo,
-    GuardarUser,
-    formatUpperFirstCase
-}

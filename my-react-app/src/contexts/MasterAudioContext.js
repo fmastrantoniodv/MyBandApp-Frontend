@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import exportToWavFile from '../functions/exportToWavFile'
 
 const Context = React.createContext({})
@@ -10,8 +10,8 @@ export function MasterAudioContextProvider({children, value}){
     const [masterAudioCtx, setMasterAudioCtx] = useState(audioCtx)
     const [mainGainNode, setMainGainNode] = useState(masterAudioCtx.createGain())
     const [trackList, setTrackList] = useState([])
-    const [playBackCurrentTime, setPlayBackCurrentTime] = useState(0)
     const [projectBPM, setProjectBPM] = useState(110)
+    const [playbackState, setPlaybackState] = useState('false')
 
     useEffect(()=>{
         console.log('[MasterAudioContextProvider].[useEffect].trackList', trackList)
@@ -39,28 +39,19 @@ export function MasterAudioContextProvider({children, value}){
     const deleteTrack = ( trackId ) => {
         setTrackList(trackList.filter(value => value.id !== trackId))
     }
-    
-    const getPlayBackCurrentTime = () => {
-        console.log('getPlayBackCurrentTime')
-        return
-        if(trackList[0] === undefined) return
-        var waveform = trackList[0].waveformComponent
-        var currentTimeStamp = waveform.backend.ac.currentTime
-        setPlayBackCurrentTime(currentTimeStamp)
-        return playBackCurrentTime
-    }
 
-    const playBackTracks = ( playBackAction ) => {
+    const playBackTracks = ( playbackAction ) => {
         if(trackList.length < 1) return
 
-        if(playBackAction === 'play'){
+        if(playbackAction === 'play'){
             trackList.map(track => track.waveformComponent.play())
             syncTempoTracks()
-        }else if(playBackAction === 'stop'){
+        }else if(playbackAction === 'stop'){
             trackList.map(track => track.waveformComponent.stop())
-        }else if(playBackAction === 'pause'){
+        }else if(playbackAction === 'pause'){
             trackList.map(track => track.waveformComponent.pause())
         }
+        setPlaybackState(playbackAction)
     }
 
     const getTracklist = () =>{
@@ -170,10 +161,10 @@ export function MasterAudioContextProvider({children, value}){
                 deleteTrack,
                 playBackTracks,
                 onSoloChannel,
-                getPlayBackCurrentTime,
                 getTracklist,
                 setProjectBPM,
-                projectBPM
+                projectBPM,
+                playbackState
             }}>{children}
             </Context.Provider>
 }

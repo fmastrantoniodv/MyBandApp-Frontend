@@ -14,12 +14,12 @@ export function ProjectContextProvider({children, projectInfoEntry}){
     const [modalMsg, setModalMsg] = useState(null)
 
     useEffect(()=>{
-        console.log('[ProjectContextProvider].[useEffect].soundList', soundList)
         console.log('[ProjectContextProvider].[useEffect].projectInfoEntry', projectInfoEntry)
         setInitValues(projectInfoEntry)
     }, [])
 
     const getSoundList = () => {
+        console.log('[ProjectContextProvider].[getSoundList].soundList', soundList)
         return soundList
     }
 

@@ -13,6 +13,7 @@ const ListOfChannels = ({ }) => {
     const { onSoloChannel } = useContext(MasterAudioContext)
 
     useEffect(() => {
+      console.log(`[ListOfChannels].[useEffect]`)
     }, []);
 
     const handleSoloChannel = (idChannel) => {
@@ -37,6 +38,7 @@ const ListOfChannels = ({ }) => {
         <div className="tracks-container">
           {
             getSoundList().map(sample => {
+              console.log(`[ListOfChannels].[getSoundList.map].sample=${sample}`)
                 return <AudioTrack
                     key={sample.id} 
                     sample={sample}

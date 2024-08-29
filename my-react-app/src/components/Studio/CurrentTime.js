@@ -5,7 +5,7 @@ const CurrentTime = ({ playing }) => {
     const intervalRef = useRef(null);
 
     useEffect(() => {
-      if(playing === 'true'){
+      if(playing === 'play'){
         intervalRef.current = setInterval(() => {
           setCurrentTime((prevTime) => prevTime + 97);
         }, 97);

@@ -13,7 +13,13 @@ export default function SampleSelector({handleCloseSamplesSelector, openModalSam
 
   useEffect(()=>{
     console.log('[SampleSelector.js].[useEffect]')
-    console.log('[SampleSelector.js].[availableFavs]', avaibleFavs)
+    if(!avaibleFavs){
+      console.log('[SampleSelector.js].[availableFavs]', avaibleFavs)
+    }
+
+    if(!openModalSampleSelector){
+      console.log('[SampleSelector.js].[openModalSampleSelector]', openModalSampleSelector)
+    }
     if(favouritesSamples !== undefined){
       setAvaibleFavs(getFavsAvailable(favouritesSamples))
       if(avaibleFavs === null || avaibleFavs.length === 0){
@@ -22,7 +28,7 @@ export default function SampleSelector({handleCloseSamplesSelector, openModalSam
         setTitleMsg("Selecciona una muestra para crear el canal")
       }
     }
-  },[favouritesSamples,openModalSampleSelector])
+  },[openModalSampleSelector])
 
   const handleCloseAction = () => {
     handleCloseSamplesSelector()

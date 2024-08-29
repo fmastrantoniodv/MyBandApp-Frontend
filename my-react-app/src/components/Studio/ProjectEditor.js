@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import 'react-range-slider-input/dist/style.css';
-import CurrentTime from "./CurrentTime";
 import playIcon from '../../img/playIcon.svg'
 import stopIcon from '../../img/stopIcon.svg'
 import pauseIcon from '../../img/pauseIcon.svg'
@@ -9,38 +8,18 @@ import saveIcon from '../../img/saveIcon.svg'
 import MasterAudioContext from '../../contexts/MasterAudioContext'
 import ProjectContext from '../../contexts/ProjectContext'
 import { saveProjectServ } from '../../services/projectsServ'
+import CurrentTime from "./CurrentTime";
 
 export default function ProjectEditor ({}) {
-    const [playing, setPlaying] = useState('false')
-    const { exportWavFile, playBackTracks, getTracklist, setProjectBPM, projectBPM } = useContext(MasterAudioContext)
-    const { loading, getProjectInfo, getSoundList } = useContext(ProjectContext)
+    const { exportWavFile, playBackTracks, getTracklist, setProjectBPM, projectBPM, playbackState } = useContext(MasterAudioContext)
+    const { loading, getProjectInfo } = useContext(ProjectContext)
 
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect].loading', loading)
+      console.log('[ProjectEditor].[useEffect].getProjectInfo=', getProjectInfo())
       setProjectBPM(getProjectInfo().tempo)
     }, [loading]);
       
-    const playProject = () => {
-      var soundList = getSoundList()
-      if(soundList === undefined || soundList < 1) return
-      console.log('Play',getSoundList().lenght)
-
-      setPlaying('true')
-      if(playing !== 'true'){
-        playBackTracks('play')
-      }
-     }
-
-    const stopProject = () => {
-      setPlaying('false')
-      playBackTracks('stop')
-    }
-
-    const pauseProject = () => {
-        playBackTracks('pause')
-        setPlaying('pause') 
-    }
-    
     const ProjectBPM = () =>{
       const [inputBPMSavedValue, setInputBPMSavedValue] = useState()
       const [inputBPMValue, setInputBPMValue] = useState(projectBPM)
@@ -75,7 +54,11 @@ export default function ProjectEditor ({}) {
 
     const PlayButton = () => {
       return(
-        <button className="btn-project-controls" onClick={() => playProject()}>
+        <button className="btn-project-controls" onClick={() =>{
+          if(playbackState !== 'play'){
+            playBackTracks('play')
+          }
+        }}>
           <img src={playIcon} alt="icono de reproducir" width="100%" />  
         </button>
       )
@@ -83,7 +66,7 @@ export default function ProjectEditor ({}) {
 
     const StopButton = () => {
       return(
-        <button className="btn-project-controls" onClick={() => stopProject()}>
+        <button className="btn-project-controls" onClick={() => playBackTracks('stop')}>
           <img src={stopIcon} alt="icono de detener reproduccion" width="100%" />  
         </button>
       )
@@ -91,7 +74,7 @@ export default function ProjectEditor ({}) {
 
     const PauseButton = () => {
       return(
-        <button className="btn-project-controls" onClick={() => pauseProject()}>
+        <button className="btn-project-controls" onClick={() => playBackTracks('pause')}>
           <img src={pauseIcon} alt="icono de pausar reproduccion" width="100%" />  
         </button>
       )
@@ -129,6 +112,7 @@ export default function ProjectEditor ({}) {
       const saveProjectResult = saveProjectServ(req)
       console.log('[ProjectContext.js].saveProjectResult=', saveProjectResult)
   }
+  
     const SaveProject = () =>{
       return(
         <button className="btn-save-project" onClick={() => saveProjectFunc()}>
@@ -152,7 +136,7 @@ export default function ProjectEditor ({}) {
                 <PauseButton />
                 <StopButton />
               </div>
-              <CurrentTime playing={playing} />
+              <CurrentTime playing={playbackState}/>
               <ProjectBPM />
             </div>
         </>
