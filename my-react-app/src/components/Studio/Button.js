@@ -22,8 +22,8 @@ function Button({ textButton, onClickButton, state, fatherId }) {
   }
   
     return (
-      <button key={fatherId+textButton+"Button"} 
-        id={fatherId+textButton+"Button"} 
+      <button key={fatherId+textButton} 
+        id={fatherId+textButton} 
         className={`button-output-channel ${textButton === 'M' ? 'mute' : 'solo'} ${pressState ? ' pressed' : ''}`}
         onClick={() => handleClickButton()}>{textButton}</button>
     );

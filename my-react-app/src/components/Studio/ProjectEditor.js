@@ -54,35 +54,32 @@ export default function ProjectEditor ({}) {
 
     const PlayButton = () => {
       return(
-        <button className="btn-project-controls" onClick={() =>{
+        <button className="svg-button btn-play" onClick={() =>{
           if(playbackState !== 'play'){
             playBackTracks('play')
           }
         }}>
-          <img src={playIcon} alt="icono de reproducir" width="100%" />  
         </button>
       )
     }
 
     const StopButton = () => {
       return(
-        <button className="btn-project-controls" onClick={() => playBackTracks('stop')}>
-          <img src={stopIcon} alt="icono de detener reproduccion" width="100%" />  
+        <button className="svg-button btn-stop" onClick={() => playBackTracks('stop')}>
         </button>
       )
     }
 
     const PauseButton = () => {
       return(
-        <button className="btn-project-controls" onClick={() => playBackTracks('pause')}>
-          <img src={pauseIcon} alt="icono de pausar reproduccion" width="100%" />  
+        <button className="svg-button btn-pause" onClick={() => playBackTracks('pause')}>
         </button>
       )
     }
 
     const ExportProject = () =>{
       return(
-        <button className="btn-export" onClick={() => exportWavFile()}>
+        <button className="btn-svg-container" onClick={() => exportWavFile()}>
           <img src={exportIcon} alt="icono de exportar archivo" width="100%" />
         </button>
       )
@@ -115,7 +112,7 @@ export default function ProjectEditor ({}) {
   
     const SaveProject = () =>{
       return(
-        <button className="btn-save-project" onClick={() => saveProjectFunc()}>
+        <button className="btn-svg-container" onClick={() => saveProjectFunc()}>
           <img src={saveIcon} alt="icono de guardar proyecto" width="100%"/>
         </button>
       )

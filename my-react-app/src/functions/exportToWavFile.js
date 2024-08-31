@@ -14,4 +14,5 @@ export default function exportWavToFile(audioBuffers){
     anchor.download = 'audio.wav'
     anchor.click()
     window.URL.revokeObjectURL(url)
+    anchor.remove()
 }

@@ -74,10 +74,12 @@ export default function SampleSelector({handleCloseSamplesSelector, openModalSam
             avaibleFavs === undefined || avaibleFavs === null ?
             'cargando' : 
             avaibleFavs.map(item => {
+              console.log(item)
               return  <li key={item.id} 
                 onClick={()=>handleSelectItem(item)} 
                 {... itemSelected && item.id === itemSelected.id ? {className: "selected"} : ""}
-                >{item.sampleName}
+                >
+                  {item.sampleName}<span>[{item.collectionName}]</span> 
                 </li>
                 })
                 }

@@ -50,10 +50,12 @@ const ListOfChannels = ({ }) => {
           <div>
             <button 
               onClick={() => openModalSampleSelector()}
+              className="btn-svg-container"
               style={{ 
                 width: '50px',
                 height: '50px',
-                margin: '20px'
+                margin: '20px',
+                fontSize: '30px'
             }}>+</button>
             </div>
           </>
