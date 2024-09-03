@@ -112,18 +112,19 @@ export function MasterAudioContextProvider({children, value}){
                 console.error('Failed to get audio offline buffer:', error);
             });
         })
-
         return Promise.all(promises).then(function() {
             return results;
         });
     }
     
-    const exportWavFile = () => {
-        processWaveSurfers(trackList).then((results) => {
-            exportToWavFile(results)
-        }).catch((e)=>{
-            console.error('Failed to process. error=', e)
-        })
+    const exportWavFile = async () => {
+        const resultProcessWaveSufers = await processWaveSurfers(trackList)
+        const resultExportToWavFile = await exportToWavFile(resultProcessWaveSufers)
+        if(resultExportToWavFile === 'success'){
+            return resultExportToWavFile
+        }else{
+            return 'ERROR'
+        }
     }
 
     const onSoloChannel = (trackId) => {

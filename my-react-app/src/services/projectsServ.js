@@ -78,6 +78,6 @@ export const saveProjectServ = async (projectData) => {
         return data
     }).catch((e) =>{
         console.log(e.response)
-        return e.response
+        return 'ERROR'
     })
 }

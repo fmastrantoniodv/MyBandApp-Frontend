@@ -5,10 +5,13 @@ import { ProjectContextProvider } from "../contexts/ProjectContext";
 import ProjectEditor from '../components/Studio/ProjectEditor';
 import ListOfChannels from "../components/Studio/ListOfChannels"
 import { useUser } from '../contexts/UserContext';
+import useToast from '../hooks/useToast';
+import ToastContainer from '../components/Modals/ToastContainer';
 
 const Studio = () => {
-  
       const { projectInfo } = useUser()
+      const [toast, showToast] = useToast()
+
       if(projectInfo === undefined) return
 
       useEffect(()=>{
@@ -19,6 +22,7 @@ const Studio = () => {
           <>
             <ProjectContextProvider projectInfoEntry={projectInfo}>
               <div className='studio-container'>
+              <ToastContainer toasts={toast}/>
                   <MasterAudioContextProvider value={{}}>    
                     <ProjectEditor />
                     <ListOfChannels />

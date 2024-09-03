@@ -1,6 +1,6 @@
 import Crunker from "crunker";
 
-export default function exportWavToFile(audioBuffers){
+export default async function exportWavToFile(audioBuffers){
     console.log('exportWavToFile.audioBuffers', audioBuffers)
     const crunker = new Crunker()
     crunker._sampleRate = 48000
@@ -15,4 +15,5 @@ export default function exportWavToFile(audioBuffers){
     anchor.click()
     window.URL.revokeObjectURL(url)
     anchor.remove()
+    return 'success'
 }

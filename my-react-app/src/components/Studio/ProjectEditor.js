@@ -1,18 +1,19 @@
 import React, { useEffect, useState, useContext } from "react";
 import 'react-range-slider-input/dist/style.css';
-import playIcon from '../../img/playIcon.svg'
-import stopIcon from '../../img/stopIcon.svg'
-import pauseIcon from '../../img/pauseIcon.svg'
 import exportIcon from '../../img/exportIcon.svg'
 import saveIcon from '../../img/saveIcon.svg'
 import MasterAudioContext from '../../contexts/MasterAudioContext'
 import ProjectContext from '../../contexts/ProjectContext'
 import { saveProjectServ } from '../../services/projectsServ'
 import CurrentTime from "./CurrentTime";
+import useToast from "../../hooks/useToast";
+import ToastContainer from "../Modals/ToastContainer";
+
 
 export default function ProjectEditor ({}) {
     const { exportWavFile, playBackTracks, getTracklist, setProjectBPM, projectBPM, playbackState } = useContext(MasterAudioContext)
     const { loading, getProjectInfo } = useContext(ProjectContext)
+    const [toast, showToast] = useToast()
 
     useEffect(() => {
       console.log('[ProjectEditor].[useEffect].loading', loading)
@@ -79,13 +80,21 @@ export default function ProjectEditor ({}) {
 
     const ExportProject = () =>{
       return(
-        <button className="btn-svg-container" onClick={() => exportWavFile()}>
+        <button className="btn-svg-container" onClick={async () => {
+          const resultExport = await exportWavFile()
+          console.log('resultExport=',resultExport)
+          if(resultExport === 'success'){
+            showToast('¡Proyecto descargado!', 'success')
+          }else{
+            showToast('No se pudo exportar', 'error')
+          }  
+          }}>
           <img src={exportIcon} alt="icono de exportar archivo" width="100%" />
         </button>
       )
     }
 
-    const saveProjectFunc = () => {
+    const saveProjectFunc = async () => {
       let trackList = getTracklist()
       let projectInfo = getProjectInfo()
       console.log('[ProjectEditor.js].saveProjectFunc.trackList', trackList)
@@ -106,8 +115,10 @@ export default function ProjectEditor ({}) {
           "channelList": channelListReq
       }
       console.log('[ProjectContext.js].req=', req)
-      const saveProjectResult = saveProjectServ(req)
+      const saveProjectResult = await saveProjectServ(req)
       console.log('[ProjectContext.js].saveProjectResult=', saveProjectResult)
+      if(saveProjectResult === 'ERROR') return showToast('No se pudo guardar el proyecto', 'error')
+      showToast('¡Proyecto guardado!', 'success')
   }
   
     const SaveProject = () =>{
@@ -120,6 +131,7 @@ export default function ProjectEditor ({}) {
 
     return (
         <>
+          <ToastContainer toasts={toast}/>
             <div className='project-controls' >
               <div className='project-info'>
                 <span>{getProjectInfo().projectName}</span>
