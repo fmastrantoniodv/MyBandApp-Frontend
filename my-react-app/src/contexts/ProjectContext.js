@@ -67,7 +67,8 @@ export function ProjectContextProvider({children, projectInfoEntry}){
                 userId: projectInfoEntryParam.userId,
                 projectName: projectInfoEntryParam.projectName,
                 createdDate: new Date(),
-                totalDuration: 1            
+                totalDuration: 1,
+                tempo: 100            
             }
             setProjectInfo(projectInfoResp)
             setSoundList([])

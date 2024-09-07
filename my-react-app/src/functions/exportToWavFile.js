@@ -1,6 +1,6 @@
 import Crunker from "crunker";
 
-export default async function exportWavToFile(audioBuffers){
+export default async function exportWavToFile(audioBuffers, fileName){
     console.log('exportWavToFile.audioBuffers', audioBuffers)
     const crunker = new Crunker()
     crunker._sampleRate = 48000
@@ -11,7 +11,7 @@ export default async function exportWavToFile(audioBuffers){
     document.body.appendChild(anchor)
     anchor.style = 'display: none'
     anchor.href = url
-    anchor.download = 'audio.wav'
+    anchor.download = `${fileName}.wav`
     anchor.click()
     window.URL.revokeObjectURL(url)
     anchor.remove()

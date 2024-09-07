@@ -72,6 +72,8 @@ const useWaveform = (sampleProps, containerRef) => {
         wavesurfer.backend.gainNode.gain.value = sampleProps.channelConfig.volume
         wavesurfer.savedVolume = sampleProps.channelConfig.volume
         //wavesurfer.backend.ac.sampleRate = '44100'
+        wavesurfer.setMute(sampleProps.channelConfig.states.muted)
+        
         const tracklistObj = {
           waveformComponent: wavesurfer,
           channelConfig: sampleProps.channelConfig,

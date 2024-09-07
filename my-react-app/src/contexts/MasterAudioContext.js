@@ -1,5 +1,6 @@
-import React, {useEffect, useState, useRef} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import exportToWavFile from '../functions/exportToWavFile'
+import ProjectContext from "./ProjectContext";
 
 const Context = React.createContext({})
 
@@ -12,6 +13,7 @@ export function MasterAudioContextProvider({children, value}){
     const [trackList, setTrackList] = useState([])
     const [projectBPM, setProjectBPM] = useState(110)
     const [playbackState, setPlaybackState] = useState('false')
+    const { getProjectInfo } = useContext(ProjectContext)
 
     useEffect(()=>{
         console.log('[MasterAudioContextProvider].[useEffect].trackList', trackList)
@@ -40,6 +42,16 @@ export function MasterAudioContextProvider({children, value}){
         setTrackList(trackList.filter(value => value.id !== trackId))
     }
 
+    const muteTrack = (sampleId) => {
+        console.log('muteTrack.init')
+        console.log('entra',getTrack(sampleId))
+        const stateToSave = !getTrack(sampleId).waveformComponent.isMuted
+        console.log('stateToSave',stateToSave)
+        getTrack(sampleId).waveformComponent.setMute(stateToSave)
+        getTrack(sampleId).channelConfig.states.muted = stateToSave
+        console.log('sale',getTrack(sampleId))
+      }
+
     const playBackTracks = ( playbackAction ) => {
         if(trackList.length < 1) return
 
@@ -59,13 +71,18 @@ export function MasterAudioContextProvider({children, value}){
     }
   
     function getAudioOfflineBuffer(sample) {
+        console.log(`[MasterAudioContext].getAudioOfflineBuffer.Init`)
+        console.log(`[MasterAudioContext].getAudioOfflineBuffer.sample=`, sample)
         const waveSurfer = sample.waveformComponent
-        var offlineContext = new OfflineAudioContext(waveSurfer.backend.source.channelCount, waveSurfer.backend.buffer.duration * waveSurfer.backend.ac.sampleRate, waveSurfer.backend.ac.sampleRate);
+        console.log(`[MasterAudioContext].getAudioOfflineBuffer.waveSurfer=`, waveSurfer)
+        const playbackRate = projectBPM / sample.tempo
+        const trackDuration = waveSurfer.backend.buffer.duration / playbackRate
+        var offlineContext = new OfflineAudioContext(waveSurfer.backend.source.channelCount, trackDuration * waveSurfer.backend.ac.sampleRate, waveSurfer.backend.ac.sampleRate);
         var buffer = waveSurfer.backend.buffer;
         var source = offlineContext.createBufferSource();
         source.buffer = buffer;
-        const playbackRate = projectBPM / sample.tempo
         source.playbackRate.value = playbackRate
+        console.log(`[MasterAudioContext].getAudioOfflineBuffer.waveSurfer=`, source.playbackRate)
         const gainNode = offlineContext.createGain();
         if(waveSurfer.isMuted){
             gainNode.gain.value = 0;
@@ -119,7 +136,7 @@ export function MasterAudioContextProvider({children, value}){
     
     const exportWavFile = async () => {
         const resultProcessWaveSufers = await processWaveSurfers(trackList)
-        const resultExportToWavFile = await exportToWavFile(resultProcessWaveSufers)
+        const resultExportToWavFile = await exportToWavFile(resultProcessWaveSufers, getProjectInfo().projectName)
         if(resultExportToWavFile === 'success'){
             return resultExportToWavFile
         }else{
@@ -165,7 +182,8 @@ export function MasterAudioContextProvider({children, value}){
                 getTracklist,
                 setProjectBPM,
                 projectBPM,
-                playbackState
+                playbackState,
+                muteTrack
             }}>{children}
             </Context.Provider>
 }

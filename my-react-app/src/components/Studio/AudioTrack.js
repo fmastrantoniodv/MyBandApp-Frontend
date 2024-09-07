@@ -12,7 +12,7 @@ export default function AudioTrack ({
   handleSoloChannel
 }){
   const containerRef = useRef()
-  const {getTrack, deleteTrack} = useContext(MasterAudioContext)
+  const {getTrack, deleteTrack, muteTrack} = useContext(MasterAudioContext)
   const { deleteChannel } = useContext(ProjectContext)
   const [loading, setLoading] = useState(true)
   
@@ -27,12 +27,12 @@ export default function AudioTrack ({
     }
   }, [waveformPlayer, containerRef]);
 
-  const onClickMute = () => {
-    getTrack(sample.id).waveformComponent.setMute(!getTrack(sample.id).isMuted)
-  }
-
   const onClickSolo = () => {
     handleSoloChannel(sample.id)
+  }
+
+  const onClickMute = () => {
+    muteTrack(sample.id)
   }
 
   const handleDeleteChannel = ( sampleID ) => {

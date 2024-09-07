@@ -11,6 +11,7 @@ export default function PlaySample({sampleInfo}){
     const audioComponent = useAudioComponent(sampleInfo, containerRef)
     
     useEffect(()=>{
+        if(!audioComponent) return
         if(playingSample !== null && playingSample !== sampleInfo.id){
             audioComponent.stop()
             setPlaying(false)
