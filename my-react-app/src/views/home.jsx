@@ -31,7 +31,7 @@ export const Home = () => {
     const { register, handleSubmit, formState: { errors }, watch, reset } = useForm()
 
     useEffect(() => {
-
+        console.log('[home.jsx].useEffect')
         setLoadingCollections(true)
 
         const fetchData = async () => {
@@ -46,6 +46,7 @@ export const Home = () => {
         }
 
         fetchData()
+        refreshUserProjects()
     }, [])
 
     const handleUnfav = async (sampleId) => {
@@ -98,6 +99,11 @@ export const Home = () => {
         }
     }
 
+    const refreshUserProjects = async () => {
+        const updatedProjects = await getProjects(user.id)
+        setUser({ ...user, projectList: updatedProjects })
+    }
+
     const handleDeleteProject = async (projectId) => {
         setLoadingProjects(true)
 
@@ -107,8 +113,7 @@ export const Home = () => {
             console.error('Error handleDeleteProject: ', error)
         }
 
-        const updatedProjects = await getProjects(user.id)
-        setUser({ ...user, projectList: updatedProjects })
+        await refreshUserProjects()
         setLoadingProjects(false)
     }
 
@@ -118,7 +123,7 @@ export const Home = () => {
             setProjectInfo({
                 projectId: projectId,
                 userId: user.id,
-                projectName: 'elproject',
+                projectName: 'default',
                 template: 'blank'
             })
             navigate(routes.studio)
@@ -137,10 +142,23 @@ export const Home = () => {
     return (
 
         <div className='collections-view-container'>
+            <Modal isOpen={isOpenModalNewProject} closeModal={closeModalNewProject}>
+                <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '30px 50px', gap: '25px' }} onSubmit={handleSubmit(handleNewProjectSubmit)}>
+                    <h3 className='favs-title'>Crear proyecto</h3>
+                    <div style={{ gap: '18px', display: 'flex', flexDirection: 'column', width: '100%' }}>
+                        <FormInput key='projectName' title='Nombre del proyecto' name='projectName' type='text' register={register} errors={errors} required={{ value: true, message: 'Por favor ingrese un nombre para el proyecto' }} watch={watch} />
+                        <InputDropdown key='template' title='Template' name='template' options={setTemplates(collections)} register={register} />
+                    </div>
+                    <div style={{ gap: '18px', display: 'flex' }}>
+                        <FormButton text='Cancelar' type='secondary' action={() => closeModalNewProject()} />
+                        <FormButton text='Crear proyecto' type='primary' />
+                    </div>
+                </form>
+            </Modal>
             <Header type='home' textPrimaryButton={`Hola ${user.usrName}`} textSecondaryButton={'Cerrar sesión'} action1={() => navigate(routes.home)} action2={handleLogout}/>
             <div className={'home-container'}>
-                <div className='home-left-section-container'>
-                    <div style={{ display: 'flex', flexDirection: 'column', paddingLeft: '20px' }}>
+                <section className='home-left-section-container'>
+                    <div className='collections-section'>
                         <h3 className='collections-title'>Últimas librerias</h3>
                         {loadingCollections &&
                             (<div className='loading-collections'>
@@ -159,7 +177,7 @@ export const Home = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='projects-background'>
+                    <div className='projects-section'>
                         <h3 className='projects-title'>Mis proyectos</h3>
                         {loadingProjects ?
                             (<div className='loading-collections'>
@@ -176,37 +194,26 @@ export const Home = () => {
                             </div>)
                         }
                     </div>
-                </div>
-                <Modal isOpen={isOpenModalNewProject} closeModal={closeModalNewProject}>
-                    <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '30px 50px', gap: '25px' }} onSubmit={handleSubmit(handleNewProjectSubmit)}>
-                        <h3 className='favs-title'>Crear proyecto</h3>
-                        <div style={{ gap: '18px', display: 'flex', flexDirection: 'column', width: '100%' }}>
-                            <FormInput key='projectName' title='Nombre del proyecto' name='projectName' type='text' register={register} errors={errors} required={{ value: true, message: 'Por favor ingrese un nombre para el proyecto' }} watch={watch} />
-                            <InputDropdown key='template' title='Template' name='template' options={setTemplates(collections)} register={register} />
+                </section>
+                <section className='home-right-section-container'>
+                    <div className='favs-card'>
+                        {loadingFavs &&
+                            (<div className='loading-favs'>
+                                <LottieAnimation width={200} height={200} />
+                            </div>)
+                        }
+                        <h3 className='favs-title'>Mis favoritos</h3>
+                        <div style={{ display: 'flex', margin: '7px 0px 9px 0px' }}>
+                            <span className='fav-item'>Nombre de muestra</span>
+                            <span className='fav-item'>Pack origen</span>
                         </div>
-                        <div style={{ gap: '18px', display: 'flex' }}>
-                            <FormButton text='Cancelar' type='secondary' action={() => closeModalNewProject()} />
-                            <FormButton text='Crear proyecto' type='primary' />
-                        </div>
-                    </form>
-                </Modal>
-                <div className='favs-card'>
-                    {loadingFavs &&
-                        (<div className='loading-favs'>
-                            <LottieAnimation width={200} height={200} />
-                        </div>)
-                    }
-                    <h3 className='favs-title'>Mis favoritos</h3>
-                    <div style={{ display: 'flex', margin: '7px 0px 9px 0px' }}>
-                        <span className='fav-item'>Nombre de muestra</span>
-                        <span className='fav-item'>Pack origen</span>
+                        {
+                            user.favList.map((fav) => (
+                                <FavItem key={fav.id} favInfo={fav} onUnfav={() => handleUnfav(fav.id)} />
+                            ))
+                        }
                     </div>
-                    {
-                        user.favList.map((fav) => (
-                            <FavItem key={fav.id} favInfo={fav} onUnfav={() => handleUnfav(fav.id)} />
-                        ))
-                    }
-                </div>
+                </section>
             </div>
         </div>
     )
