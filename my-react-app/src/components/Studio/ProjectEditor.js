@@ -31,7 +31,13 @@ export default function ProjectEditor ({}) {
       return(
         <div className="bpm-container">
           <input id='input-bpm' min={1} max={999} maxLength={3} value={inputBPMValue} 
-            onChange={(e)=>{setInputBPMValue(parseInt(e.target.value))}}
+            onChange={(e)=>{
+              if(e.target.value === ''){
+                setInputBPMValue(0)
+              }else{
+                setInputBPMValue(parseInt(e.target.value))
+              }
+              }}
             onFocus={(e)=>{setInputBPMSavedValue(parseInt(e.target.value))}}
             onBlur={(e)=>{
               if(e.target.value < 1 || e.target.value === ''){

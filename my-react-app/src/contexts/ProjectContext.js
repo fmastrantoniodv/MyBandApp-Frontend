@@ -62,16 +62,30 @@ export function ProjectContextProvider({children, projectInfoEntry}){
         if(loading) return
         setLoading(true)
         if(projectInfoEntryParam.projectId === null){
-            console.log('[ProjectContextProvider].[setInitValues].project en blanco')
-            var projectInfoResp = {
-                userId: projectInfoEntryParam.userId,
-                projectName: projectInfoEntryParam.projectName,
-                createdDate: new Date(),
-                totalDuration: 1,
-                tempo: 100            
+            if(projectInfoEntryParam.template === 'blank'){
+                console.log('[ProjectContextProvider].[setInitValues].project en blanco')
+                var projectInfoResp = {
+                    userId: projectInfoEntryParam.userId,
+                    projectName: projectInfoEntryParam.projectName,
+                    createdDate: new Date(),
+                    totalDuration: 1,
+                    tempo: 100            
+                }
+                setProjectInfo(projectInfoResp)
+                setSoundList([])
+            }else{
+                console.log('[ProjectContextProvider].[setInitValues].project template=', projectInfoEntryParam.template)
+                var projectInfoResp = {
+                    userId: projectInfoEntryParam.userId,
+                    projectName: projectInfoEntryParam.projectName,
+                    createdDate: new Date(),
+                    totalDuration: projectInfoEntryParam.totalDuration,
+                    tempo: projectInfoEntryParam.tempo,
+                    channelList: projectInfoEntryParam.channelList 
+                }
+                setProjectInfo(projectInfoResp)
+                setSoundList(projectInfoEntryParam.channelList)
             }
-            setProjectInfo(projectInfoResp)
-            setSoundList([])
             console.log('[ProjectContextProvider].[setInitValues].end')
         }else{
             const projectData = await getProjectServ(projectInfoEntryParam.projectId)

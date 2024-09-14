@@ -45,6 +45,7 @@ export const UserProvider = ({ children }) => {
             userId: '',
             projectName: '',
             template: '',
+            tempo: 100,
             channelList: []
         })
         window.localStorage.removeItem('project')

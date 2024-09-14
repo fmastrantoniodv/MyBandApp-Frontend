@@ -40,6 +40,5 @@ export const setTemplates = ( collections ) => {
       templates.push({ key: collection.templateId, value: collection.templateName })
     }
   }
-
   return templates
 }

@@ -78,6 +78,7 @@ export const Home = () => {
     }
 
     const handleNewProjectSubmit = async (data) => {
+        console.log('handleNewProjectSubmit.data',data)
         try {
             const resp = await getProjectServ(data.template)
             console.log('getProject: ', resp)
@@ -86,6 +87,7 @@ export const Home = () => {
                 userId: user.id,
                 projectName: data.projectName,
                 template: data.template,
+                tempo: resp.tempo,
                 channelList: resp.channelList
             })
             closeModalNewProject()
