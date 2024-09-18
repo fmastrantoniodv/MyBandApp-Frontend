@@ -164,7 +164,10 @@ export const Home = () => {
             <div className={'home-container'}>
                 <section className='home-left-section-container'>
                     <div className='collections-section'>
-                        <h3 className='collections-title'>Últimas librerias</h3>
+                        <div className='collections-section-header'>
+                            <h3 className='collections-title'>Últimas librerias</h3>
+                            <button className='seemore-btn' onClick={() => navigate(routes.collections)}>Ver más</button>
+                        </div>
                         {loadingCollections &&
                             (<div className='loading-collections'>
                                 <LottieAnimation width={200} height={200} />
@@ -176,10 +179,7 @@ export const Home = () => {
                                     <CollectionCard key={collection.id} collectionItem={collection} onFavCollection={() => handleFavCollection(collection)} />
                                 ))
                             }
-                            <div className='seemore-btn' onClick={() => navigate(routes.collections)}>
-                                <img src={seeMoreIcon} />
-                                <span style={{ fontFamily: 'Inter-Regular', fontSize: '16px' }}>Ver más</span>
-                            </div>
+
                         </div>
                     </div>
                     <div className='projects-section'>

@@ -37,13 +37,15 @@
     justify-content: center;
     margin-top: 68px;
     min-height: calc(100vh - 68px);
-    padding: 23px 20px 23px 0px;
+    padding: 24px 20px 24px 24px;
 }
 
 .home-left-section-container {
     display: flex;
     width: 60%;
     flex-direction: column;
+    min-width: 650px;
+    padding: 0px 24px 24px 24px;
 }
 
 .collections-section{
@@ -51,7 +53,6 @@
     flex-wrap: wrap;
     flex-direction: column;
     max-width: 100%;
-    width: 90%;
 }
 
 .collections-title {
@@ -89,19 +90,32 @@
 }
 
 .seemore-btn {
-    background-color: #FFFFFF;
-    border-radius: 10px;
+    background-color: transparent;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 11px 16px 11px 16px;
+    padding: 0px;
+    grid-gap: 5px;
     gap: 5px;
-    min-width: 70px;
+    font-family: Inter-Regular;
+    font-size: 20px;
+    height: 27px;
+    width: 82px;
+    color: #fff;
+    border: none;
+    border-bottom: solid 1px #fff;
 }
 
 .seemore-btn:hover {
-    background-color: #f2f2f2;
-    cursor: pointer;
+    font-weight: 700;
+    border-bottom: solid 2px #fff;
+}
+
+.collections-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
 }
 
 .collection-button {
@@ -124,7 +138,6 @@
     background-color: #FFFFFF;
     border-radius: 10px;
     height: 296px;
-    width: 90%;
     display: flex;
     flex-direction: column;
     padding-left: 20px;
@@ -357,7 +370,7 @@
     }
 
     .collection-cards-container {
-        display: grid;
+        display: flex;
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 16px;
         padding: 0px;
@@ -394,9 +407,10 @@
     }
 
     .projects-container {
-        flex-direction: column-reverse;
+        flex-direction: column;
         margin: 0;
         gap: 0px;
+        padding-right: 20px;
     }
 
     .project-card {
