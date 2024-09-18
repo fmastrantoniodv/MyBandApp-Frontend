@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom'
 import { deleteProject, getProjects, getProjectServ } from '../services/projectsServ'
 import { getCollections } from '../services/collectionsServ'
 import { updateFav, getUserFavsServ } from '../services/usersServ'
+const envCode = process.env.REACT_APP_ENV_CODE;
 
 export const Home = () => {
     const [loadingFavs, setLoadingFavs] = useState(false)
@@ -37,7 +38,11 @@ export const Home = () => {
         const fetchData = async () => {
             try {
                 const colls = await getCollections(user.plan)
-                setCollections(colls)
+                if(envCode !== 'DEV'){
+                    setCollections(colls.filter(value => value.collectionCode !== 'test'))
+                }else{
+                    setCollections(colls)
+                }
             }
             catch (error) {
                 console.log("Error al obtener collections")

@@ -1,8 +1,9 @@
 import axios from 'axios'
+const endpointBackend = process.env.REACT_APP_ENDPOINT_BACKEND;
 
 export const createNewUser = async (data) => {
     try {
-        const url = 'http://localhost:3001/api/users/register'
+        const url = `${endpointBackend}/api/users/register`
         const body = {
             "usrName": data.name,
             "email": data.email,
@@ -19,7 +20,7 @@ export const createNewUser = async (data) => {
 
 export const login = async (data) => {
     try {
-        const url = 'http://localhost:3001/api/users/login';
+        const url = `${endpointBackend}/api/users/login`
         const body = {
             "email": data.email,
             "password": data.password
@@ -34,7 +35,7 @@ export const login = async (data) => {
 
 export const getUserFavsServ = async (userId) => {
     return await axios.
-    get(`http://localhost:3001/api/users/getUserFavsList/${userId}`)
+    get(`${endpointBackend}/api/users/getUserFavsList/${userId}`)
     .then((response) => {
         const data = response
         return data
@@ -45,7 +46,7 @@ export const getUserFavsServ = async (userId) => {
 
 export const updateFav = async (userId, sampleId, action, callback) => {
     try {
-        const url = 'http://localhost:3001/api/users/updateFav'
+        const url = `${endpointBackend}/api/users/updateFav`
         const body = {
             "userId": userId,
             "sampleId": sampleId,

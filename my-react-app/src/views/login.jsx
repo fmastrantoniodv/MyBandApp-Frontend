@@ -10,7 +10,6 @@ import { useModal } from "../hooks/useModal"
 import { login } from '../services/usersServ'
 
 const Login = () => {
-
     const [isOpenModal, openModal, closeModal] = useModal(false)
     const [error, setError] = useState(false)
 

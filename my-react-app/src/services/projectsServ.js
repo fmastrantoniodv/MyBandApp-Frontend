@@ -1,8 +1,9 @@
 import axios from 'axios'
+const endpointBackend = process.env.REACT_APP_ENDPOINT_BACKEND;
 
 export const createNewProject = async (userId, projectName) => {
     try {
-        const url = 'http://localhost:3001/api/project/create'
+        const url = `${endpointBackend}/api/project/create`
         const body = {
             "userId": userId,
             "projectName": projectName
@@ -17,7 +18,7 @@ export const createNewProject = async (userId, projectName) => {
 
 export const deleteProject = async (userId, projectId) => {
     try {
-        const url = 'http://localhost:3001/api/project/delete'
+        const url = `${endpointBackend}/api/project/delete`
         const body = {
             "userId": userId,
             "projectId": projectId
@@ -32,7 +33,7 @@ export const deleteProject = async (userId, projectId) => {
 
 export const getProjects = async (userId) => {
     try {
-        const url = `http://localhost:3001/api/project/getUserProjects/${userId}`
+        const url = `${endpointBackend}/api/project/getUserProjects/${userId}`
         const response = await axios.get(url)
         console.log("getProjects: ", response.data)
         return response.data
@@ -44,7 +45,7 @@ export const getProjects = async (userId) => {
 
 export const getProjectServ = async (projectId) => {
     return axios.
-    get(`http://localhost:3001/api/project/${projectId}`)
+    get(`${endpointBackend}/api/project/${projectId}`)
     .then((response) => {
         const data = response.data
         console.log('[getProject.js].getProject.data=',data)
@@ -64,7 +65,7 @@ export const getProjectServ = async (projectId) => {
 
 export const saveProjectServ = async (projectData) => {
     return axios.
-    post(`http://localhost:3001/api/project/save`, projectData)
+    post(`${endpointBackend}/api/project/save`, projectData)
     .then((response) => {
         const data = response.data
         console.log('[saveProject.js].saveProject.data=',data)
