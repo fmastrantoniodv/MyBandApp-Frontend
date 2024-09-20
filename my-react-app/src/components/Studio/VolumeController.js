@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import '../../App.css';
 
 function VolumeController({sample}) {
     const [volumeValue, setVolumeValue] = useState(sample.channelConfig.volume);
