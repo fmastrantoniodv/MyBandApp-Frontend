@@ -8,7 +8,7 @@ export const CollectionCard = ({ collectionItem, onFavCollection }) => {
 
     return (
         <div className='collection-card'>
-            <img style={{ height: '180px', width: '180px', backgroundColor: '#00FF00' }} src={`http://localhost:3001/api/collections/src/${collectionCode}`} alt={`imagen de libreria ${collectionName}`} />
+            <img className='collection-cover' src={`http://localhost:3001/api/collections/src/${collectionCode}`} alt={`imagen de libreria ${collectionName}`} />
             <span className='collection-name'>{collectionName}</span>
             <div className='collection-btn-container'>
                 <div className='collection-button'>
