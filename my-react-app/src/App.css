@@ -1,9 +1,18 @@
 body{
   background-color: black;
+  height: 100%;
+}
+
+html{
+  height: 100%;
 }
 
 label{
   font-size: 13px;
+}
+
+#root{
+  height: 100%;
 }
 
 @keyframes App-logo-spin {

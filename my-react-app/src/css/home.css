@@ -18,6 +18,7 @@
     flex-direction: column;
     background-color: #262529;
     width: 100%;
+    height: 100%;
     overflow-x: hidden;
 }
 
@@ -35,7 +36,7 @@
     flex-direction: row;
     justify-content: center;
     margin-top: 68px;
-    min-height: calc(100vh - 68px);
+    height: 100%;
     padding: 24px 20px 24px 24px;
 }
 
@@ -174,10 +175,9 @@
 
 .favs-card {
     background-color: #FFFFFF;
-    min-height: calc(100vh - 68px);
-    min-width: 380px;
-    width: 90%;
-    padding: 6px 20px;
+    height: 100%;
+    width: 100%;
+    padding: 20px 20px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -334,6 +334,8 @@
 .home-right-section-container{
     display: flex;
     max-width: 40%;
+    min-width: 380px;
+    height: fit-content;
 }
 
 .settings-btns:hover {
@@ -359,6 +361,7 @@ breakpoints = {
 @media (width <= 768px) {
     .home-container {
         flex-direction: column;
+        justify-content: flex-start;
     }
 
     .home-left-section-container{
