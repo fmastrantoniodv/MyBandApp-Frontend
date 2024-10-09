@@ -40,7 +40,6 @@ export const Collection = ({ user, collectionItem, setUser }) => {
                 <button style={{ background: `url(${arrow})` }} className={`arrow-btn ${sampleListClass}`} onClick={() => setOpen(!isOpen)} />
             </div>
             <div className={`collection-samples-${sampleListClass}`}>
-                <span className='samples-title'>Samples</span>
                 {
                     sampleList.map((sample) => (
                         <Sample key={sample.id} user={user} sampleInfo={sample} setUser={setUser}/>

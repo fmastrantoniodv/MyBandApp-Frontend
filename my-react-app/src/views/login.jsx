@@ -43,10 +43,6 @@ const Login = () => {
                         <FormButton text={'Ingresar'} type={'primary'} />
                         <FormButton text={'Registrarse'} type={'secondary'} action={() => navigate(routes.register)} />
                     </div>
-                    <button className='form-btn secondary icon' type='button'>
-                        Iniciar con google
-                        <img alt='google icon' src={googleIcon} />
-                    </button>
                 </FormCard>
                 <Modal isOpen={isOpenModal} closeModal={closeModal}>
                     {error ? 

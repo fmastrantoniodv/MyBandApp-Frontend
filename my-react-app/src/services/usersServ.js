@@ -60,3 +60,18 @@ export const updateFav = async (userId, sampleId, action, callback) => {
         throw error
     }
 }
+
+export const updatePlan = async (userId, newPlan) => {
+    try {
+        const url = `${endpointBackend}/api/users/updatePlan`
+        const body = {
+            "userId": userId,
+            "newPlan": newPlan
+        }
+        const response = await axios.post(url, body)
+        return response
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+}

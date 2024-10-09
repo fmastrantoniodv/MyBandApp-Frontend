@@ -8,7 +8,7 @@ export const routes = {
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const passwordRegex = /^[a-zA-Z0-9]{8,}$/
-const suscriptions = [
+export const suscriptions = [
     { "key": "free", "value": "Free" },
     { "key": "trial", "value": "Trial" },
     { "key": "pro", "value": "Pro" }

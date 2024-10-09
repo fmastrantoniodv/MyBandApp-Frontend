@@ -38,6 +38,7 @@
     margin-top: 68px;
     height: auto;
     padding: 24px 20px 24px 24px;
+    width: 100%;
 }
 
 .home-left-section-container {
@@ -401,7 +402,6 @@ breakpoints = {
     .collection-cards-container {
         display: flex;
         justify-content: space-between;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         padding: 0px;
         padding-bottom: 10px;
         box-sizing: border-box;
@@ -418,10 +418,6 @@ breakpoints = {
 @media (width <= 480px) {
     .collections-view-container {
       overflow-x: auto;
-    }
-
-    .home-container {
-        flex-direction: column;
     }
 
     .collections-section{
@@ -448,7 +444,6 @@ breakpoints = {
 
     .collection-cards-container {
         display: flex;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         padding: 0px;
         padding-bottom: 10px;
         box-sizing: border-box;

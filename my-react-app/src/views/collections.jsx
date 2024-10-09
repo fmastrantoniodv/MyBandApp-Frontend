@@ -40,15 +40,11 @@ const Collections = () => {
             <Header type='home' textPrimaryButton={`Hola ${user.usrName}`} textSecondaryButton={'Cerrar sesión'} action1={() => navigate(routes.home)} action2={handleLogout}>
                 <button style={{ background: `url(${settingsIcon})` }} className='settings-btn' />
             </Header>
-            <div className={'container'}>
+            <div className='collections-view-container'>
                 <div className='collections-card'>
                     <div className='collections-card-header'>
                         <h3 className='favs-title'>Librerías</h3>
                         <ButtonText type={'secondary'} text='Volver a la home' action={() => navigate(routes.home)} />
-                    </div>
-                    <div className='collections-header'>
-                        <span style={{width: '170px'}}>Nombre de pack</span>
-                        <span>Tags</span>
                     </div>
                     {
                         collections.map((collection) =>

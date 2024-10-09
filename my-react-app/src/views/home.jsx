@@ -208,10 +208,13 @@ export const Home = () => {
                             </div>)
                         }
                         <h3 className='favs-title'>Mis favoritos</h3>
-                        <div style={{ display: 'flex', margin: '7px 0px 9px 0px' }}>
-                            <span className='fav-item'>Nombre de muestra</span>
-                            <span className='fav-item'>Pack origen</span>
-                        </div>
+                        { user.favList.length < 1 ?
+                            <span>Aun no agregaste favoritos</span> :
+                            <div style={{ display: 'flex', margin: '7px 0px 9px 0px' }}>
+                                <span className='fav-item'>Nombre de muestra</span>
+                                <span className='fav-item'>Pack origen</span>
+                            </div>
+                        }
                         {
                             user.favList.map((fav) => (
                                 <FavItem key={fav.id} favInfo={fav} onUnfav={() => handleUnfav(fav.id)} />

@@ -1,23 +1,74 @@
-import React from 'react'
+import React, { useState } from 'react'
 import logo from '../../img/logo.svg'
 import menuIcon from '../../img/menuIcon.svg'
 import settingsIcon from '../../img/settingsIcon.svg'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import { useModal } from "../../hooks/useModal"
+import Modal from '../Modals/Modal'
+import { suscriptions } from '../../const/constants'
+import LottieAnimation from './LoadingAnimation'
 
 export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, action2 }) => {
+    const { register, handleSubmit, formState: { errors }, watch, reset } = useForm()
+    const [isOpenModalChangePlan, openModalChangePlan, closeModalChangePlan] = useModal(false)
+    
+    const [isOpenModal, openModal, closeModal] = useModal(false)
+    const [error, setError] = useState(false)
+
+    const handleUpdatePlanSubmit = async (data) => {
+        setError(false)
+        closeModalChangePlan()
+        openModal()
+        try {
+            console.log(data)
+            closeModal()
+            /*
+            await createNewUser(data)
+            navigate(routes.login)
+            */
+        } catch (error) {
+            console.error('Error handleRegisterSubmit: ', error)
+            setError(true)
+        }
+    }
     return (
+        <>
+        <Modal isOpen={isOpenModalChangePlan} closeModal={closeModalChangePlan}>
+        <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '30px 50px', gap: '25px' }} onSubmit={handleUpdatePlanSubmit}>
+            <h3 className='favs-title'>Cambiar plan</h3>
+            <div style={{ gap: '18px', display: 'flex', flexDirection: 'column', width: '100%' }}>
+                <InputDropdown key='planType' title='Plan' name='Plan' options={suscriptions} register={register} />
+            </div>
+            <div style={{ gap: '18px', display: 'flex' }}>
+                <FormButton text='Cancelar' type='secondary' action={() => closeModalChangePlan()} />
+                <FormButton text='Cambiar plan' type='primary' />
+            </div>
+        </form>
+        </Modal>
+        <Modal isOpen={isOpenModal} closeModal={closeModal}>
+                    {error ? 
+                        (<div className='modal-error'>
+                            <b>No se pudo completar el cambio de plan</b>
+                            <FormButton text={'Volver'} type={'secondary'} action={() => closeModal()}/>
+                        </div>) : 
+                        (<div className='loading'>
+                            <LottieAnimation width={200} height={200} />
+                            Cargando...
+                        </div>)
+                    }
+                </Modal>
         <header className={'main-header'}>
             <img src={logo} alt='my band app logo' className='logo'></img>
             <div className='header-content'>
                 <ButtonText type={'secondary'} text={textSecondaryButton} action={action2} />
-                <ButtonText type={'primary'} text={textPrimaryButton} action={action1} />
+                <span className='text-btn primary'>{textPrimaryButton}</span>
                 {type == 'home' && (
                 <div className='settings-wrapper'>
                     <button style={{ background: `url(${settingsIcon})` }} className='settings-btn' />
                     <div className='settings-container'>
                         <button className='settings-btns'>Cambiar contraseña</button>
-                        <button className='settings-btns'>Cambiar plan</button>
+                        <button className='settings-btns' onClick={()=> openModalChangePlan()}>Cambiar plan</button>
                     </div>
                 </div>
                 )}
@@ -38,7 +89,9 @@ export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, 
                 }
             </div>
         </header>
+        </>
     )
+
 }
 
 export const ButtonText = ({ text, type, action }) => {
