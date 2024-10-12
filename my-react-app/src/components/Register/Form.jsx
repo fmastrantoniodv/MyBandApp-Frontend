@@ -11,6 +11,7 @@ import LottieAnimation from './LoadingAnimation'
 import { updatePlan } from '../../services/usersServ'
 import { useUser } from '../../contexts/UserContext'
 import { useLoader } from '../../hooks/useLoader'
+import GenericMsg from '../Modals/GenericMsg'
 
 export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, action2 }) => {
     const { register, handleSubmit, formState: { errors }, watch, reset } = useForm()
@@ -22,6 +23,10 @@ export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, 
     const location = useLocation();
     const [searchParams] = useSearchParams()
     const {showLoader, hideLoader, LoaderModal} = useLoader()
+    const btnRequestError = {
+        positiveAction: () => setError(false),
+        positiveTextBtn: 'Aceptar'
+    }
 
     useEffect(() => {
         if (searchParams.get('refresh')) {
@@ -32,21 +37,17 @@ export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, 
     const handleUpdatePlanSubmit = async (data) => {
         setError(false)
         closeModalChangePlan()
-        openModal()
         try {
-            closeModal()
-            //await updatePlan(user.id, data.Plan)
             showLoader()
-            await new Promise((resolve) => {
-                setTimeout(() => resolve({ message: '¡Todo salió bien!', data }), 2000);
-              });
+            await updatePlan(user.id, data.Plan)
             setUser({ ...user, plan: data.Plan })
             reset();
             hideLoader()
             navigate(`${location.pathname}?refresh=${Date.now()}`, { replace: true })
         } catch (error) {
-            console.error('Error handleRegisterSubmit: ', error)
+            hideLoader()
             setError(true)
+            console.error('Error handleRegisterSubmit: ', error)
         }
     }
     return (
@@ -64,18 +65,13 @@ export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, 
         </form>
         </Modal>
         <Modal isOpen={isOpenModal} closeModal={closeModal}>
-                    {error ? 
-                        (<div className='modal-error'>
-                            <b>No se pudo completar el cambio de plan</b>
-                            <FormButton text={'Volver'} type={'secondary'} action={() => closeModal()}/>
-                        </div>) : 
-                        (<div className='loading'>
-                            <LottieAnimation width={200} height={200} />
-                            Cargando...
-                        </div>)
-                    }
-                </Modal>
-                <LoaderModal />
+            <div className='modal-error'>
+                <b>No se pudo completar el cambio de plan</b>
+                <FormButton text={'Volver'} type={'secondary'} action={() => closeModal()}/>
+            </div>
+        </Modal>
+            <GenericMsg type='ERROR' msg='genericMsg' buttonsConfig={btnRequestError} open={error} />
+        <LoaderModal />
         <header className={'main-header'}>
             <img src={logo} alt='my band app logo' className='logo'></img>
             <div className='header-content'>
