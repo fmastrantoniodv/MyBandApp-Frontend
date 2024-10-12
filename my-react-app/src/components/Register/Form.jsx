@@ -1,32 +1,49 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import logo from '../../img/logo.svg'
 import menuIcon from '../../img/menuIcon.svg'
 import settingsIcon from '../../img/settingsIcon.svg'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import { useModal } from "../../hooks/useModal"
 import Modal from '../Modals/Modal'
-import { suscriptions } from '../../const/constants'
+import { routes, suscriptions } from '../../const/constants'
 import LottieAnimation from './LoadingAnimation'
+import { updatePlan } from '../../services/usersServ'
+import { useUser } from '../../contexts/UserContext'
+import { useLoader } from '../../hooks/useLoader'
 
 export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, action2 }) => {
     const { register, handleSubmit, formState: { errors }, watch, reset } = useForm()
     const [isOpenModalChangePlan, openModalChangePlan, closeModalChangePlan] = useModal(false)
-    
+    const { user, setUser } = useUser()
     const [isOpenModal, openModal, closeModal] = useModal(false)
     const [error, setError] = useState(false)
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [searchParams] = useSearchParams()
+    const {showLoader, hideLoader, LoaderModal} = useLoader()
+
+    useEffect(() => {
+        if (searchParams.get('refresh')) {
+            navigate(location.pathname, { replace: true });
+          }
+      }, [searchParams]);
 
     const handleUpdatePlanSubmit = async (data) => {
         setError(false)
         closeModalChangePlan()
         openModal()
         try {
-            console.log(data)
             closeModal()
-            /*
-            await createNewUser(data)
-            navigate(routes.login)
-            */
+            //await updatePlan(user.id, data.Plan)
+            showLoader()
+            await new Promise((resolve) => {
+                setTimeout(() => resolve({ message: '¡Todo salió bien!', data }), 2000);
+              });
+            setUser({ ...user, plan: data.Plan })
+            reset();
+            hideLoader()
+            navigate(`${location.pathname}?refresh=${Date.now()}`, { replace: true })
         } catch (error) {
             console.error('Error handleRegisterSubmit: ', error)
             setError(true)
@@ -35,7 +52,7 @@ export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, 
     return (
         <>
         <Modal isOpen={isOpenModalChangePlan} closeModal={closeModalChangePlan}>
-        <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '30px 50px', gap: '25px' }} onSubmit={handleUpdatePlanSubmit}>
+        <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '30px 50px', gap: '25px' }} onSubmit={handleSubmit(handleUpdatePlanSubmit)}>
             <h3 className='favs-title'>Cambiar plan</h3>
             <div style={{ gap: '18px', display: 'flex', flexDirection: 'column', width: '100%' }}>
                 <InputDropdown key='planType' title='Plan' name='Plan' options={suscriptions} register={register} />
@@ -58,6 +75,7 @@ export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, 
                         </div>)
                     }
                 </Modal>
+                <LoaderModal />
         <header className={'main-header'}>
             <img src={logo} alt='my band app logo' className='logo'></img>
             <div className='header-content'>
@@ -223,3 +241,4 @@ export const InputDropdown = ({ title, name, options, register }) => {
         </div>
     )
 }
+

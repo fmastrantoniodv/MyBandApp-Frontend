@@ -11,7 +11,7 @@ import { setTemplates } from '../functions/functions'
 import { useUser } from '../contexts/UserContext';
 import { useModal } from "../hooks/useModal";
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { deleteProject, getProjects, getProjectServ } from '../services/projectsServ'
 import { getCollections } from '../services/collectionsServ'
 import { updateFav, getUserFavsServ } from '../services/usersServ'
@@ -22,7 +22,7 @@ export const Home = () => {
     const [loadingCollections, setLoadingCollections] = useState(false)
     const [loadingProjects, setLoadingProjects] = useState(false)
     const [collections, setCollections] = useState([])
-
+    const [searchParams] = useSearchParams()
     const navigate = useNavigate()
 
     const { user, setUser, clearUser, setProjectInfo, clearProject } = useUser()
@@ -52,7 +52,7 @@ export const Home = () => {
 
         fetchData()
         refreshUserProjects()
-    }, [])
+    }, [searchParams])
 
     const handleUnfav = async (sampleId) => {
         setLoadingFavs(true)
