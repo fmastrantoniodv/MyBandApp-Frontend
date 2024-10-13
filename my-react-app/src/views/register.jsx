@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FormButton, FormCard, Header } from '../components/Register/Form'
+import { FormButton, FormCard } from '../components/Register/Form'
 import Modal from '../components/Modals/Modal'
 import LottieAnimation from '../components/Register/LoadingAnimation';
 import { routes, inputsRegister } from '../const/constants'
 import { useModal } from '../hooks/useModal'
 import { createNewUser } from '../services/usersServ';
+import { Header } from '../components/Header/Header';
 
 const Register = () => {
 

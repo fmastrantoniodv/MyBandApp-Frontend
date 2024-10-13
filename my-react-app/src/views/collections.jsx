@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import settingsIcon from '../img/settingsIcon.svg'
-import { Header, ButtonText } from '../components/Register/Form'
+import { ButtonText } from '../components/Register/Form'
 import { Collection } from '../components/Collections/Collection'
 import { routes } from '../const/constants'
 import { useUser } from '../contexts/UserContext'
 import { getCollections } from '../services/collectionsServ'
+import { Header } from '../components/Header/Header'
 
 const Collections = () => {
-    
     const [collections, setCollections] = useState([])
-
     const navigate = useNavigate()
-
+    const [searchParams] = useSearchParams()
     const { user, setUser, clearUser } = useUser()
 
     useEffect(() => {
@@ -28,7 +27,7 @@ const Collections = () => {
         }
 
         fetchData()
-    }, [])
+    }, [searchParams])
 
     const handleLogout = () => {
         clearUser()

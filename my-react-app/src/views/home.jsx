@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { CollectionCard } from '../components/Home/CollectionCard'
 import { ProjectCard } from '../components/Home/ProjectCard'
 import { FavItem } from '../components/Home/FavItem'
-import { Header, FormButton, FormInput, InputDropdown } from '../components/Register/Form'
+import { FormButton, FormInput, InputDropdown } from '../components/Register/Form'
 import LottieAnimation from '../components/Register/LoadingAnimation'
 import Modal from "../components/Modals/Modal"
 import seeMoreIcon from '../img/seeMoreIcon.svg'
@@ -15,6 +15,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { deleteProject, getProjects, getProjectServ } from '../services/projectsServ'
 import { getCollections } from '../services/collectionsServ'
 import { updateFav, getUserFavsServ } from '../services/usersServ'
+import { Header } from '../components/Header/Header'
 const envCode = process.env.REACT_APP_ENV_CODE;
 
 export const Home = () => {
@@ -148,7 +149,7 @@ export const Home = () => {
 
         <div className='collections-view-container'>
             <Modal isOpen={isOpenModalNewProject} closeModal={closeModalNewProject}>
-                <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '30px 50px', gap: '25px' }} onSubmit={handleSubmit(handleNewProjectSubmit)}>
+                <form className='form-card-new-project' onSubmit={handleSubmit(handleNewProjectSubmit)}>
                     <h3 className='favs-title'>Crear proyecto</h3>
                     <div style={{ gap: '18px', display: 'flex', flexDirection: 'column', width: '100%' }}>
                         <FormInput key='projectName' title='Nombre del proyecto' name='projectName' type='text' register={register} errors={errors} required={{ value: true, message: 'Por favor ingrese un nombre para el proyecto' }} watch={watch} />

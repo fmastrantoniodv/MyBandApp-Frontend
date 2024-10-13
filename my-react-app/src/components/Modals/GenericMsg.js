@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useModal } from '../../hooks/useModal';
 import Modal from './Modal';
+import { FormButton } from '../Register/Form';
 
 export default function GenericMsg({type, msg, buttonsConfig, open}) {
   const [titleMsg, setTitleMsg] = useState(null)
@@ -34,16 +35,16 @@ export default function GenericMsg({type, msg, buttonsConfig, open}) {
   const ButtonsGroup = ({type, buttonsConfig}) => {
     const {positiveAction, negativeAction, positiveTextBtn, negativeTextBtn} = buttonsConfig
     
-    const PositiveButton = ({actionToExec, textValue}) => <button className='msg-button btn-positive' onClick={() => {
+    const PositiveButton = ({actionToExec, textValue}) => <button className='form-btn primary' onClick={() => {
       closeGenericModal()
       actionToExec()
     }}>{textValue}</button>
     
-    const NegativeButton = ({actionToExec, textValue}) => <button className='msg-button btn-negative' onClick={() => {
+    const NegativeButton = ({actionToExec, textValue}) => <button className='form-btn secondary' onClick={() => {
       closeGenericModal()
       actionToExec()
     }}>{textValue}</button>
-  
+
     if(type === 'ERROR'){
       return(
         <div className='msg-buttons-container'>

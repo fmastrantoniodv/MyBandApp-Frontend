@@ -88,6 +88,7 @@ cursor: pointer;
   height: 50px;
   display: flex;
   justify-content: space-around;
+  gap: 10px;
 }
 
 .msg-button{
@@ -108,9 +109,7 @@ cursor: pointer;
    background-color: #fff;
 }
 
-.msg-button:disabled{
-  background-color: #cbcbcb;
-}
+
 
 .subtitle-text{
   color: #333;
@@ -158,3 +157,9 @@ cursor: pointer;
   transform: translateY(2px);
 }
 
+.form-card-update-plan {
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+  gap: 25px;
+}

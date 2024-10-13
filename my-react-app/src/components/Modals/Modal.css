@@ -25,6 +25,7 @@
     max-height: 600px;
     overflow-y: auto;
     border-radius: 10px;
+    padding: 20px;
 }
 
 .modal-close-button{

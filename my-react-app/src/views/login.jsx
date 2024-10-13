@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import googleIcon from '../img/googleIcon.svg'
-import { FormButton, FormCard, Header } from '../components/Register/Form'
+import { FormButton, FormCard } from '../components/Register/Form'
 import LottieAnimation from '../components/Register/LoadingAnimation'
 import Modal from "../components/Modals/Modal"
 import { routes, inputsLogin } from '../const/constants'
 import { useUser } from '../contexts/UserContext'
 import { useModal } from "../hooks/useModal"
 import { login } from '../services/usersServ'
+import { Header } from '../components/Header/Header'
 
 const Login = () => {
     const [isOpenModal, openModal, closeModal] = useModal(false)

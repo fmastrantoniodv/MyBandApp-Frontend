@@ -85,8 +85,8 @@ export default function SampleSelector({handleCloseSamplesSelector, openModalSam
                 }
             </ul>
           <div className='msg-buttons-container'>
-            <button className='msg-button btn-positive' onClick={() => handleApplySelection()} {... itemSelected === null ? {disabled: true} : '' }>Aceptar</button>
-            <button className='msg-button btn-negative' onClick={() => handleCloseAction()}>Cerrar</button>
+            <button className='form-btn primary' onClick={() => handleApplySelection()} {... itemSelected === null ? {disabled: true} : '' }>Aceptar</button>
+            <button className='form-btn secondary' onClick={() => handleCloseAction()}>Cerrar</button>
           </div>
         </div>
       </>
