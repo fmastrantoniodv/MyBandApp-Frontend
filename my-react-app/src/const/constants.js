@@ -3,7 +3,8 @@ export const routes = {
     register: '/register',
     home: '/home',
     studio: '/studio',
-    collections: '/collections'
+    collections: '/collections',
+    changePass: '/changePass'
 }
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -93,3 +94,36 @@ export const inputsRegister = [
         options: suscriptions
     }
 ]
+
+export const inputsChangePass = [
+    {
+        title: 'Contraseña actual',
+        name: 'currentPassword',
+        type: 'password',
+        required: {
+            value: true,
+            message: 'Por favor ingrese su contraseña actual'
+        },
+        validate: (value) => passwordRegex.test(value) || 'La contraseña no tiene un formato valido'
+    },
+    {
+        title: 'Ingrese contraseña',
+        name: 'firstPassword',
+        type: 'password',
+        required: {
+            value: true,
+            message: 'El campo no puede ser vacío'
+        },
+        validate: (value) => passwordRegex.test(value) || 'La contraseña debe ser alfanumérica de al menos 8 caracteres'
+    },
+    {
+        title: 'Repita su contraseña',
+        name: 'secondPassword',
+        type: 'password',
+        required: {
+            value: true,
+            message: 'El campo no puede ser vacío'
+        },
+        validate: (value) => passwordRegex.test(value) || 'La contraseña debe ser alfanumérica de al menos 8 caracteres'
+    }
+];

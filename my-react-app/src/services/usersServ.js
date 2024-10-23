@@ -75,3 +75,19 @@ export const updatePlan = async (userId, newPlan) => {
         throw error
     }
 }
+
+export const changePassService = async (userEmail, pass, newPass) => {
+    try {
+        const url = `${endpointBackend}/api/users/changePass`
+        const body = {
+            "email": userEmail,
+            "password": pass,
+            "newPass": newPass
+        }
+        const response = await axios.post(url, body)
+        return response
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+}

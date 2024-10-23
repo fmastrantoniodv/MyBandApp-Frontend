@@ -139,11 +139,7 @@ export const Home = () => {
 
     }
 
-    const handleLogout = () => {
-        clearUser()
-        clearProject()
-        navigate(routes.login)
-    }
+
 
     return (
 
@@ -161,7 +157,7 @@ export const Home = () => {
                     </div>
                 </form>
             </Modal>
-            <Header type='home' textPrimaryButton={`Hola ${user.usrName}`} textSecondaryButton={'Cerrar sesión'} action1={() => navigate(routes.home)} action2={handleLogout}/>
+            <Header type='home' textPrimaryButton={`Hola ${user.usrName}`} textSecondaryButton={'Cerrar sesión'} action1={() => navigate(routes.home)} action2={'logout'}/>
             <div className={'home-container'}>
                 <section className='home-left-section-container'>
                     <div className='collections-section'>

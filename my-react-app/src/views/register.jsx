@@ -30,7 +30,7 @@ const Register = () => {
 
     return (
         <div className='register-container'>
-            <Header textPrimaryButton={'Iniciar sesión'} textSecondaryButton={'Volver a la página principal'} action1={() => navigate(routes.login)} action2={() => navigate(routes.home)}/>
+            <Header textPrimaryButton={'Volver a la página principal'} action1={() => navigate(routes.login)} />
             <div className={'container'}>
                 <FormCard title={'Registrarse'} inputs={inputsRegister} onSubmit={handleRegisterSubmit}>
                     <div className='btns-container register'>

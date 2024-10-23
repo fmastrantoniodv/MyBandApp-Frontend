@@ -3,26 +3,34 @@ import { useNavigate } from 'react-router-dom'
 import { FormButton, FormCard } from '../components/Register/Form'
 import LottieAnimation from '../components/Register/LoadingAnimation'
 import Modal from "../components/Modals/Modal"
-import { routes, inputsLogin } from '../const/constants'
+import { routes, inputsChangePass } from '../const/constants'
 import { useUser } from '../contexts/UserContext'
 import { useModal } from "../hooks/useModal"
-import { login } from '../services/usersServ'
 import { Header } from '../components/Header/Header'
+import { changePassService } from '../services/usersServ'
 
-const Login = () => {
+export const ChangePassword = () => {
     const [isOpenModal, openModal, closeModal] = useModal(false)
     const [error, setError] = useState(false)
 
-    const { setUser } = useUser()
+    const { setUser, user } = useUser()
 
     const navigate = useNavigate()
 
-    const handleLoginSubmit = async (data) => {
+    const handleChangePass = async (data) => {
         setError(false)
         openModal()
+        console.log('handleChangePass.data=', data)
+        if(data.firstPassword !== data.secondPassword){
+            console.error('Error handleLoginSubmit: ', error)
+            setError(true)
+            return
+        }
+
         try {
-            const resp = await login(data)
-            setUser(resp)
+            const resp = await changePassService(user.email, data.currentPassword, data.firstPassword)
+            //setUser(resp)
+            console.log(resp)
             closeModal()
             navigate(routes.home)
         } catch (error) {
@@ -33,22 +41,22 @@ const Login = () => {
 
     return (
         <div className='register-container'>
-            <Header textPrimaryButton={'Registrarse'} action1={() => navigate(routes.register)}/>
+            <Header type='home' textPrimaryButton={`Hola ${user.usrName}`} textSecondaryButton={'Cerrar sesión'} action1={() => navigate(routes.home)} action2={'logout'}/>
             <div className={'container'}>
-                <FormCard title={'Iniciar sesión'} inputs={inputsLogin} onSubmit={handleLoginSubmit}>
+                <FormCard title={'Cambiar contraseña'} inputs={inputsChangePass} onSubmit={handleChangePass}>
                     <button className='forgot-pass-btn' onClick={() => navigate(routes.register)} type='button'>
                         Olvidé mi contraseña
                     </button>
                     <div className='btns-container login'>
-                        <FormButton text={'Ingresar'} type={'primary'} />
-                        <FormButton text={'Registrarse'} type={'secondary'} action={() => navigate(routes.register)} />
+                        <FormButton text={'Cambiar contraseña'} type={'primary'} />
+                        <FormButton text={'Volver'} type={'secondary'} action={() => navigate(routes.register)} />
                     </div>
                 </FormCard>
                 <Modal isOpen={isOpenModal} closeModal={closeModal}>
                     {error ? 
                         (<div className='modal-error'>
-                            <b>No se pudo iniciar sesión</b>
-                            Verifica tu correo electrónico y contraseña.
+                            <b>No se pudo cambiar la contraseña</b>
+                            Verificar los datos ingresados y volver a intentar
                             <FormButton text={'Volver'} type={'secondary'} action={() => closeModal()}/>
                         </div>) : 
                         (<div className='loading'>
@@ -61,5 +69,3 @@ const Login = () => {
         </div>
     )
 }
-
-export default Login
