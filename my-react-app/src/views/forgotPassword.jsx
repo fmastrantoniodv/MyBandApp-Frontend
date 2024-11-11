@@ -16,10 +16,10 @@ export const ForgotPassword = () => {
     const handleSubmit = async (e) => {
       const resSendCode = await sendVerifyCode(e.email)
       console.log(`[forgotPassword.jsx].ForgotPassword.handleSubmit.resSendCode=`,resSendCode)
-      console.log(`[forgotPassword.jsx].ForgotPassword.handleSubmit.resSendCode.data=`,resSendCode.response)
-      /**
-       * controlar el error para manejar el mensaje de que el mail no está registrado
-       */
+      if(resSendCode.errorCode === 'USR_NOT_FOUND'){
+        setError(true)
+        openModal()
+      }
     };
 
     const { user } = useUser()
@@ -39,7 +39,7 @@ export const ForgotPassword = () => {
                 <Modal isOpen={isOpenModal} closeModal={closeModal}>
                     {error ? 
                         (<div className='modal-error'>
-                            <b>No se pudo cambiar la contraseña</b>
+                            <b>Email inválido</b>
                             Verificar los datos ingresados y volver a intentar
                             <FormButton text={'Volver'} type={'secondary'} action={() => closeModal()}/>
                         </div>) : 
