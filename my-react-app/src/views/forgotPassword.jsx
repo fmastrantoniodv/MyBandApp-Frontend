@@ -3,51 +3,36 @@ import { useNavigate } from 'react-router-dom'
 import { FormButton, FormCard } from '../components/Register/Form'
 import LottieAnimation from '../components/Register/LoadingAnimation'
 import Modal from "../components/Modals/Modal"
-import { routes, inputsChangePass } from '../const/constants'
+import { routes, inputsForgotPass } from '../const/constants'
 import { useUser } from '../contexts/UserContext'
 import { useModal } from "../hooks/useModal"
 import { Header } from '../components/Header/Header'
-import { changePassService } from '../services/usersServ'
+import { sendVerifyCode } from '../services/usersServ'
 
-export const ChangePassword = () => {
+export const ForgotPassword = () => {
     const [isOpenModal, openModal, closeModal] = useModal(false)
     const [error, setError] = useState(false)
+
+    const handleSubmit = async (e) => {
+      const resSendCode = await sendVerifyCode(e.email)
+      console.log(`[forgotPassword.jsx].ForgotPassword.handleSubmit.resSendCode=`,resSendCode)
+      console.log(`[forgotPassword.jsx].ForgotPassword.handleSubmit.resSendCode.data=`,resSendCode.response)
+      /**
+       * controlar el error para manejar el mensaje de que el mail no está registrado
+       */
+    };
 
     const { user } = useUser()
 
     const navigate = useNavigate()
 
-    const handleChangePass = async (data) => {
-        setError(false)
-        openModal()
-        console.log('handleChangePass.data=', data)
-        if(data.firstPassword !== data.secondPassword){
-            console.error('Error handleLoginSubmit: ', error)
-            setError(true)
-            return
-        }
-
-        try {
-            const resp = await changePassService(user.email, data.currentPassword, data.firstPassword)
-            console.log(resp)
-            closeModal()
-            navigate(routes.home)
-        } catch (error) {
-            console.error('Error handleLoginSubmit: ', error)
-            setError(true)
-        }
-    }
-
     return (
         <div className='register-container'>
             <Header type='home' textPrimaryButton={`Hola ${user.usrName}`} textSecondaryButton={'Cerrar sesión'} action1={() => navigate(routes.home)} action2={'logout'}/>
             <div className={'container'}>
-                <FormCard title={'Cambiar contraseña'} inputs={inputsChangePass} onSubmit={handleChangePass}>
-                    <button className='forgot-pass-btn' onClick={() => navigate(routes.register)} type='button'>
-                        Olvidé mi contraseña
-                    </button>
+                <FormCard title={'Olvidé mi contraseña'} inputs={inputsForgotPass} onSubmit={handleSubmit}>
                     <div className='btns-container login'>
-                        <FormButton text={'Cambiar contraseña'} type={'primary'} />
+                        <FormButton text={'Enviar código'} type={'primary'} />
                         <FormButton text={'Volver'} type={'secondary'} action={() => navigate(-1)} />
                     </div>
                 </FormCard>

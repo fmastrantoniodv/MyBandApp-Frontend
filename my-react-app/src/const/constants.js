@@ -4,7 +4,8 @@ export const routes = {
     home: '/home',
     studio: '/studio',
     collections: '/collections',
-    changePass: '/changePass'
+    changePass: '/changePass',
+    forgotPass: '/forgotPass'
 }
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -127,3 +128,17 @@ export const inputsChangePass = [
         validate: (value) => passwordRegex.test(value) || 'La contraseña debe ser alfanumérica de al menos 8 caracteres'
     }
 ];
+
+export const inputsForgotPass = [
+    {
+        title: 'Correo electrónico',
+        name: 'email',
+        type: 'email',
+        required: {
+            value: true,
+            message: 'El campo correo electrónico no puede ser vacío'
+        },
+        validate: (value) => emailRegex.test(value) || 'El formato del correo electrónico no es válido'
+    }
+]
+    

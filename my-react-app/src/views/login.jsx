@@ -33,10 +33,10 @@ const Login = () => {
 
     return (
         <div className='register-container'>
-            <Header textPrimaryButton={'Registrarse'} action1={() => navigate(routes.register)}/>
+            <Header />
             <div className={'container'}>
                 <FormCard title={'Iniciar sesión'} inputs={inputsLogin} onSubmit={handleLoginSubmit}>
-                    <button className='forgot-pass-btn' onClick={() => navigate(routes.register)} type='button'>
+                    <button className='forgot-pass-btn' onClick={() => navigate(routes.forgotPass)} type='button'>
                         Olvidé mi contraseña
                     </button>
                     <div className='btns-container login'>

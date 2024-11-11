@@ -91,3 +91,17 @@ export const changePassService = async (userEmail, pass, newPass) => {
         throw error
     }
 }
+
+export const sendVerifyCode = async (userEmail) => {
+    try {
+        const url = `${endpointBackend}/api/users/sendCodeToMail`
+        const body = {
+            "email": userEmail
+        }
+        const response = await axios.post(url, body)
+        return response
+    } catch (error) {
+        console.log(error)
+        return error.response.data
+    }
+}
