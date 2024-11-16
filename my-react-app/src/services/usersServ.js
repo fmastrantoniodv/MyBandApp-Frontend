@@ -105,3 +105,18 @@ export const sendVerifyCode = async (userEmail) => {
         return error.response.data
     }
 }
+
+export const checkVerifyCode = async (userEmail, verificationCode) => {
+    try {
+        const url = `${endpointBackend}/api/users/validateCode`
+        const body = {
+            "email": userEmail,
+            "verificationCode": parseInt(verificationCode)
+        }
+        const response = await axios.post(url, body)
+        return response
+    } catch (error) {
+        console.log(error)
+        return error.response.data
+    }
+}

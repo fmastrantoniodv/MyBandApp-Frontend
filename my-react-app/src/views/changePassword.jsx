@@ -12,10 +12,13 @@ import { changePassService } from '../services/usersServ'
 export const ChangePassword = () => {
     const [isOpenModal, openModal, closeModal] = useModal(false)
     const [error, setError] = useState(false)
-
     const { user } = useUser()
-
     const navigate = useNavigate()
+    
+    console.log('ChangePassword.user.id', user.id)
+    if(!user.id){
+        console.log(inputsChangePass)
+    }
 
     const handleChangePass = async (data) => {
         setError(false)
@@ -40,12 +43,22 @@ export const ChangePassword = () => {
 
     return (
         <div className='register-container'>
-            <Header type='home' textPrimaryButton={`Hola ${user.usrName}`} textSecondaryButton={'Cerrar sesión'} action1={() => navigate(routes.home)} action2={'logout'}/>
+            <Header type={!user.id ? '' :'home'} textPrimaryButton={`Hola ${user.usrName}`} textSecondaryButton={'Cerrar sesión'} action1={() => navigate(routes.home)} action2={'logout'}/>
             <div className={'container'}>
-                <FormCard title={'Cambiar contraseña'} inputs={inputsChangePass} onSubmit={handleChangePass}>
-                    <button className='forgot-pass-btn' onClick={() => navigate(routes.register)} type='button'>
-                        Olvidé mi contraseña
-                    </button>
+                <FormCard 
+                    title={'Cambiar contraseña'} 
+                    inputs={!user.id? inputsChangePass.filter(item => item.name !== 'currentPassword') : inputsChangePass} 
+                    onSubmit={handleChangePass}
+                >
+                    {
+                        user.id ? 
+                        <button className='forgot-pass-btn' onClick={() => navigate(routes.register)} type='button'>
+                            Olvidé mi contraseña
+                        </button>
+                        :
+                        null
+                    }
+                    
                     <div className='btns-container login'>
                         <FormButton text={'Cambiar contraseña'} type={'primary'} />
                         <FormButton text={'Volver'} type={'secondary'} action={() => navigate(-1)} />

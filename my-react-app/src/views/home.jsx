@@ -125,7 +125,6 @@ export const Home = () => {
 
     const handleOpenProject = async (projectId) => {
         try {
-            //const resp = await getProject(projectId)
             setProjectInfo({
                 projectId: projectId,
                 userId: user.id,
@@ -139,10 +138,7 @@ export const Home = () => {
 
     }
 
-
-
     return (
-
         <div className='collections-view-container'>
             <Modal isOpen={isOpenModalNewProject} closeModal={closeModalNewProject}>
                 <form className='form-card-new-project' onSubmit={handleSubmit(handleNewProjectSubmit)}>

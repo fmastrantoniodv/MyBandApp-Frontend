@@ -5,11 +5,13 @@ export const routes = {
     studio: '/studio',
     collections: '/collections',
     changePass: '/changePass',
-    forgotPass: '/forgotPass'
+    forgotPass: '/forgotPass',
+    validateOtc: '/validateOtc'
 }
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const passwordRegex = /^[a-zA-Z0-9]{8,}$/
+const numberRegex = /^[0-9]{8}$/
 export const suscriptions = [
     { "key": "free", "value": "Free" },
     { "key": "trial", "value": "Trial" },
@@ -141,4 +143,16 @@ export const inputsForgotPass = [
         validate: (value) => emailRegex.test(value) || 'El formato del correo electrónico no es válido'
     }
 ]
-    
+
+export const inputValidateOtc = [
+    {
+        title: 'Código de verificación recibido',
+        name: 'verify_code',
+        type: 'number',
+        required: {
+            value: true,
+            message: 'El campo no puede estar vacío'
+        },
+        validate: (value) => numberRegex.test(value) || 'El código no tiene un formato válido'
+    }
+]
