@@ -107,7 +107,8 @@ export const inputsChangePass = [
             value: true,
             message: 'Por favor ingrese su contraseña actual'
         },
-        validate: (value) => passwordRegex.test(value) || 'La contraseña no tiene un formato valido'
+        validate: (value) => passwordRegex.test(value) || 'La contraseña no tiene un formato valido',
+        autoComplete: 'new-password'
     },
     {
         title: 'Ingrese contraseña',
@@ -117,7 +118,8 @@ export const inputsChangePass = [
             value: true,
             message: 'El campo no puede ser vacío'
         },
-        validate: (value) => passwordRegex.test(value) || 'La contraseña debe ser alfanumérica de al menos 8 caracteres'
+        validate: (value) => passwordRegex.test(value) || 'La contraseña debe ser alfanumérica de al menos 8 caracteres',
+        autoComplete: 'new-password'
     },
     {
         title: 'Repita su contraseña',
@@ -127,7 +129,8 @@ export const inputsChangePass = [
             value: true,
             message: 'El campo no puede ser vacío'
         },
-        validate: (value) => passwordRegex.test(value) || 'La contraseña debe ser alfanumérica de al menos 8 caracteres'
+        validate: (value) => passwordRegex.test(value) || 'La contraseña debe ser alfanumérica de al menos 8 caracteres',
+        autoComplete: 'new-password'
     }
 ];
 
@@ -153,6 +156,7 @@ export const inputValidateOtc = [
             value: true,
             message: 'El campo no puede estar vacío'
         },
-        validate: (value) => numberRegex.test(value) || 'El código no tiene un formato válido'
+        validate: (value) => numberRegex.test(value) || 'El código no tiene un formato válido',
+        autocomplete: 'off'
     }
 ]

@@ -52,7 +52,7 @@ export const ChangePassword = () => {
                 >
                     {
                         user.id ? 
-                        <button className='forgot-pass-btn' onClick={() => navigate(routes.register)} type='button'>
+                        <button className='forgot-pass-btn' onClick={() => navigate(routes.forgotPass)} type='button'>
                             Olvidé mi contraseña
                         </button>
                         :

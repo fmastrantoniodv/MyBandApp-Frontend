@@ -8,11 +8,11 @@ export const ButtonText = ({ text, type, action }) => {
     )
 }
 
-export const FormCard = ({ title, children, inputs, onSubmit }) => {
+export const FormCard = ({ title, children, inputs, onSubmit, autoComplete = 'on'}) => {
     const { register, handleSubmit, formState: { errors }, watch } = useForm()
 
     return (
-        <form className={'card scale-up-center'} onSubmit={handleSubmit(onSubmit)}>
+        <form className={'card scale-up-center'} onSubmit={handleSubmit(onSubmit)} autoComplete={autoComplete}>
             <h1 className={'title'}>{title}</h1>
             <div style={{
                 width: '100%',
@@ -21,7 +21,7 @@ export const FormCard = ({ title, children, inputs, onSubmit }) => {
                 flexDirection: 'column'
             }}>
                 {
-                    inputs.map(({ title, options, name, type, required, validate }) => (
+                    inputs.map(({ title, options, name, type, required, validate, autoComplete}) => (
                         type === 'dropdown' ? (
                             <InputDropdown
                                 key={name}
@@ -40,6 +40,7 @@ export const FormCard = ({ title, children, inputs, onSubmit }) => {
                             required={required}
                             validate={validate}
                             watch={watch}
+                            autoComplete={autoComplete}
                         />
                     ))
                 }
