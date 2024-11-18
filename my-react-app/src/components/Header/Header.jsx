@@ -82,10 +82,10 @@ export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, 
         <LoaderModal />
         <header className={'main-header'}>
             <img src={logo} alt='my band app logo' className='logo'></img>
+                {type == 'home' && (
             <div className='header-content'>
                 <ButtonText type={'secondary'} text={textSecondaryButton} action={action2} />
                 <span className='text-btn primary'>{textPrimaryButton}</span>
-                {type == 'home' && (
                 <div className='settings-wrapper'>
                     <button style={{ background: `url(${settingsIcon})` }} className='settings-btn' />
                     <div className='settings-container'>
@@ -93,8 +93,8 @@ export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, 
                         <button className='settings-btns' onClick={()=> openModalChangePlan()}>Cambiar plan</button>
                     </div>
                 </div>
-                )}
             </div>
+                )}
             <div className='menu-wrapper'>
                 <button style={{ background: `url(${menuIcon})` }} className='menu-icon' />
                 {type == 'home' ? 

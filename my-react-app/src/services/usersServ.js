@@ -117,7 +117,7 @@ export const sendVerifyCode = async (userEmail) => {
         return response
     } catch (error) {
         console.log(error)
-        return error.response.data
+        return error.response
     }
 }
 
@@ -132,6 +132,6 @@ export const checkVerifyCode = async (userEmail, verificationCode) => {
         return response
     } catch (error) {
         console.log(error)
-        return error.response.data
+        return error.response
     }
 }
