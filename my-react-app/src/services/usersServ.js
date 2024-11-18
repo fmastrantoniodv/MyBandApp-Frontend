@@ -92,6 +92,21 @@ export const changePassService = async (userEmail, pass, newPass) => {
     }
 }
 
+export const updatePassService = async (userEmail, newPass) => {
+    try {
+        const url = `${endpointBackend}/api/users/updatePass`
+        const body = {
+            "email": userEmail,
+            "newPass": newPass
+        }
+        const response = await axios.post(url, body)
+        return response
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+}
+
 export const sendVerifyCode = async (userEmail) => {
     try {
         const url = `${endpointBackend}/api/users/sendCodeToMail`

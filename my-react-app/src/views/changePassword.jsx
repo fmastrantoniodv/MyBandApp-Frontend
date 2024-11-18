@@ -7,15 +7,16 @@ import { routes, inputsChangePass } from '../const/constants'
 import { useUser } from '../contexts/UserContext'
 import { useModal } from "../hooks/useModal"
 import { Header } from '../components/Header/Header'
-import { changePassService } from '../services/usersServ'
+import { changePassService, updatePassService } from '../services/usersServ'
 
 export const ChangePassword = () => {
     const [isOpenModal, openModal, closeModal] = useModal(false)
     const [error, setError] = useState(false)
-    const { user } = useUser()
+    const { user, sessionState } = useUser()
     const navigate = useNavigate()
     
-    console.log('ChangePassword.user.id', user.id)
+    console.log('ChangePassword.user.id=', user.id)
+    console.log('ChangePassword.sessionState=', sessionState)
     if(!user.id){
         console.log(inputsChangePass)
     }
@@ -41,6 +42,27 @@ export const ChangePassword = () => {
         }
     }
 
+    const handleUpdatePass = async (data) => {
+        setError(false)
+        openModal()
+        console.log('handleUpdatePass.data=', data)
+        if(data.firstPassword !== data.secondPassword){
+            console.error('Error handleUpdatePass: ', error)
+            setError(true)
+            return
+        }
+
+        try {
+            const resp = await updatePassService(user.email, data.firstPassword)
+            console.log(resp)
+            closeModal()
+            navigate(routes.login)
+        } catch (error) {
+            console.error('Error handleLoginSubmit: ', error)
+            setError(true)
+        }
+    }
+
     return (
         <div className='register-container'>
             <Header type={!user.id ? '' :'home'} textPrimaryButton={`Hola ${user.usrName}`} textSecondaryButton={'Cerrar sesión'} action1={() => navigate(routes.home)} action2={'logout'}/>
@@ -48,7 +70,7 @@ export const ChangePassword = () => {
                 <FormCard 
                     title={'Cambiar contraseña'} 
                     inputs={!user.id? inputsChangePass.filter(item => item.name !== 'currentPassword') : inputsChangePass} 
-                    onSubmit={handleChangePass}
+                    onSubmit={!user.id? handleUpdatePass : handleChangePass}
                 >
                     {
                         user.id ? 

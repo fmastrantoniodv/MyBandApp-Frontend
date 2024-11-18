@@ -1,9 +1,10 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
+    const [sessionState, setSessionState] = useState(false)
     const [user, setUser] = useLocalStorage('user', {
         usrName: '',
         plan: '',
@@ -15,6 +16,20 @@ export const UserProvider = ({ children }) => {
         expirationPlanDate: '',
         favList: []
     })
+    const [projectInfo, setProjectInfo] = useLocalStorage('project', {
+        projectId: '',
+        userId: '',
+        projectName: '',
+        template: '',
+        channelList: []
+    })
+
+    useEffect(()=>{
+        console.log('UserProvider.useEffect.user.id=', user.id)
+        if(user.id){
+            setSessionState(true)
+        }
+    }, [user])
 
     const clearUser = () => {
         setUser({
@@ -29,15 +44,8 @@ export const UserProvider = ({ children }) => {
             favList: []
         })
         window.localStorage.removeItem('user')
+        setSessionState(false)
     }
-
-    const [projectInfo, setProjectInfo] = useLocalStorage('project', {
-        projectId: '',
-        userId: '',
-        projectName: '',
-        template: '',
-        channelList: []
-    })
 
     const clearProject = () => {
         setProjectInfo({
@@ -54,7 +62,7 @@ export const UserProvider = ({ children }) => {
     const [playingSample, setPlayingSample] = useState(null)
 
     return (
-        <UserContext.Provider value={{ user, setUser, clearUser, projectInfo, setProjectInfo, clearProject, setPlayingSample, playingSample }}>
+        <UserContext.Provider value={{ user, setUser, clearUser, projectInfo, setProjectInfo, clearProject, setPlayingSample, playingSample, sessionState }}>
             {children}
         </UserContext.Provider>
     );
