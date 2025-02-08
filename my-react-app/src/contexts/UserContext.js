@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { getCollections } from '../services/collectionsServ';
+import { envCode } from '../const/constants';
 
 export const UserContext = createContext();
 
@@ -61,8 +63,38 @@ export const UserProvider = ({ children }) => {
 
     const [playingSample, setPlayingSample] = useState(null)
 
+    const [collections, setCollections] = useState([])
+    const [availableTemplates, setAvailableTemplates] = useState([])
+
+    const setCollecToCxt = async () => {
+        try {
+            const colls = await getCollections('pro')
+            if(envCode !== 'DEV'){
+                setCollections(colls.filter(value => value.collectionCode !== 'test'))
+            }else{
+                setCollections(colls)
+            }
+            setTemplates()
+        } catch (error) {
+            console.log("[UserContext].setCollecToCxt.catch=Error al obtener collections")
+            return []
+        }
+    }
+    
+    const setTemplates = async () => {
+        const templates = [
+        { key: "blank", value: "En blanco" }
+        ]
+        for (const collection of collections) {
+            if ('templateId' in collection) {
+                templates.push({ key: collection.templateId, value: collection.templateName })
+            }
+        }
+        setAvailableTemplates(templates)
+    }
+
     return (
-        <UserContext.Provider value={{ user, setUser, clearUser, projectInfo, setProjectInfo, clearProject, setPlayingSample, playingSample, sessionState }}>
+        <UserContext.Provider value={{ user, setUser, clearUser, projectInfo, setProjectInfo, clearProject, setPlayingSample, playingSample, sessionState, availableTemplates, setCollecToCxt, collections }}>
             {children}
         </UserContext.Provider>
     );

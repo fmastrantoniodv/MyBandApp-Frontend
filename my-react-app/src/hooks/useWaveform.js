@@ -1,11 +1,13 @@
 import { useEffect, useState, useContext } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import MasterAudioContext from '../contexts/MasterAudioContext'
+import { endpointBackend } from '../const/constants';
 
 const useWaveform = (sampleProps, containerRef) => {
     const [waveformComponent, setWaveformComponent] = useState(null)
     const {masterAudioCtx, mainGainNode, addArrayBuffers, addTrackToList, playBackTracks} = useContext(MasterAudioContext)
-    const src = `http://localhost:3001/api/samples/${sampleProps.collectionCode}/${sampleProps.sampleName}`
+    const src = `${endpointBackend}/api/samples/${sampleProps.collectionCode}/${sampleProps.sampleName}`
+    console.log('[DBG].endpointSrc=', src)
 
     const soundID = sampleProps.id
 
