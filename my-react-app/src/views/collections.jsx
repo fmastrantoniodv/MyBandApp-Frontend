@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import settingsIcon from '../img/settingsIcon.svg'
 import { ButtonText } from '../components/Register/Form'
 import { Collection } from '../components/Collections/Collection'
 import { routes } from '../const/constants'
 import { useUser } from '../contexts/UserContext'
-import { getCollections } from '../services/collectionsServ'
 import { Header } from '../components/Header/Header'
 
 const Collections = () => {
@@ -15,8 +14,7 @@ const Collections = () => {
     const { user, setUser, clearUser, collections } = useUser()
 
     useEffect(() => {
-        console.log('[collections.jsx].useEffect.codeSelect=',codeSelect)
-        //navigate(routes.collections, { replace: true });
+        navigate(routes.collections, { replace: true });
     }, [searchParams])
 
     const handleLogout = () => {
@@ -37,7 +35,7 @@ const Collections = () => {
                     </div>
                     {
                         collections.map((collection) =>
-                            <Collection key={collection.id} user={user} collectionItem={collection} setUser={setUser}/>
+                            <Collection key={collection.id} user={user} collectionItem={collection} setUser={setUser} initialState={codeSelect === collection.collectionCode ? true : false}/>
                         )
                     }
                 </div>

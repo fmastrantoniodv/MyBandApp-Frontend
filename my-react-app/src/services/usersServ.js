@@ -44,7 +44,7 @@ export const getUserFavsServ = async (userId) => {
     })
 }
 
-export const updateFav = async (userId, sampleId, action, callback) => {
+export const updateFav = async (userId, sampleId, action) => {
     try {
         const url = `${endpointBackend}/api/users/updateFav`
         const body = {
@@ -53,7 +53,6 @@ export const updateFav = async (userId, sampleId, action, callback) => {
             "actionCode": action
         }
         const response = await axios.post(url, body)
-        callback()
         return response
     } catch (error) {
         console.log(error)

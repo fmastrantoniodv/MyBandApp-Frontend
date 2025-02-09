@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
-import useFavouritesSamples from "../../hooks/useFavouritesSamples";
 import ProjectContext from "../../contexts/ProjectContext"
 import MasterAudioContext from '../../contexts/MasterAudioContext'
+import { useUser } from '../../contexts/UserContext';
 
 export default function SampleSelector({handleCloseSamplesSelector, openModalSampleSelector}) {
   const [itemSelected, setItemSelected] = useState(null)
@@ -9,7 +9,7 @@ export default function SampleSelector({handleCloseSamplesSelector, openModalSam
   const [avaibleFavs, setAvaibleFavs] = useState(null)
   const {addChannelToList, getSoundList} = useContext(ProjectContext)
   const {playBackTracks} = useContext(MasterAudioContext)
-  const favouritesSamples = useFavouritesSamples({})
+  const { user, collections } = useUser()
 
   useEffect(()=>{
     console.log('[SampleSelector.js].[useEffect]')
@@ -20,8 +20,8 @@ export default function SampleSelector({handleCloseSamplesSelector, openModalSam
     if(!openModalSampleSelector){
       console.log('[SampleSelector.js].[openModalSampleSelector]', openModalSampleSelector)
     }
-    if(favouritesSamples !== undefined){
-      setAvaibleFavs(getFavsAvailable(favouritesSamples))
+    if(user.favList !== undefined){
+      setAvaibleFavs(getFavsAvailable(user.favList))
       if(avaibleFavs === null || avaibleFavs.length === 0){
         setTitleMsg("No hay muestras disponibles")
       }else{
@@ -50,6 +50,10 @@ export default function SampleSelector({handleCloseSamplesSelector, openModalSam
     handleCloseAction()
   }
 
+  const getCollectionsNameByCode = (collectionCode) => {
+    return collections.find((collect)=> collect.collectionCode === collectionCode).collectionName
+  }
+
   const getFavsAvailable = (favouritesSamples) => {
     var listFilteredFavs = new Array;
     console.log('getFavsAvailable.favouritesSamples',favouritesSamples)
@@ -62,8 +66,7 @@ export default function SampleSelector({handleCloseSamplesSelector, openModalSam
     return listFilteredFavs
   }
 
-  if(favouritesSamples === undefined || avaibleFavs === null) return
-  //console.log('[SampleSelector.js].[linea46].avaibleFavs=', avaibleFavs)  
+  if(user.favList === undefined || avaibleFavs === null) return
 
     return (
       <>
@@ -79,7 +82,7 @@ export default function SampleSelector({handleCloseSamplesSelector, openModalSam
                 onClick={()=>handleSelectItem(item)} 
                 {... itemSelected && item.id === itemSelected.id ? {className: "selected"} : ""}
                 >
-                  {item.sampleName}<span>[{item.collectionName}]</span> 
+                  {item.sampleName}<span>[{getCollectionsNameByCode(item.collectionCode)}]</span> 
                 </li>
                 })
                 }

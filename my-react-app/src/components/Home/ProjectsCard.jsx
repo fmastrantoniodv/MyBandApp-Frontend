@@ -18,7 +18,7 @@ export const ProjectsCard = () => {
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
     const [isOpenModalNewProject, openModalNewProject, closeModalNewProject] = useModal(false)
-    const { user, setUser, availableTemplates, setTemplates } = useUser()
+    const { user, setUser, availableTemplates, setTemplates, setProjectInfo } = useUser()
     const { register, handleSubmit, formState: { errors }, watch, reset } = useForm()
 
     useEffect(() => {

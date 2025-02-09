@@ -45,6 +45,7 @@
     display: flex; 
     align-items: center; 
     justify-content: space-between;
+    margin-bottom: 10px;
 }
 
 .collections-header {
@@ -158,5 +159,7 @@
 
 /*##########BREAKPOINT MOBILE##########*/
 @media (width <= 480px) {
-    
+    .tags-container {
+        width: 150px;
+    }
 }

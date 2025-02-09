@@ -15,11 +15,9 @@ export const FavsList = () => {
 
     const handleUnfav = async (sampleId) => {
         setLoadingFavs(true)
-        await updateFav(user.id, sampleId, 'UNFAV', async () => {
-            const updatedFavs = await getUserFavsServ(user.id)
-            setUser({ ...user, favList: updatedFavs.data })
-            setLoadingFavs(false)
-        })
+        await updateFav(user.id, sampleId, 'UNFAV')
+        setUser({ ...user, favList: user.favList.filter(fav => fav.id !== sampleId) })
+        setLoadingFavs(false)
     }
 
     return (
