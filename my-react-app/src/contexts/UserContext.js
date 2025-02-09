@@ -1,12 +1,14 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { getCollections } from '../services/collectionsServ';
-import { envCode } from '../const/constants';
+import { envCode, routes } from '../const/constants';
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-    const [sessionState, setSessionState] = useState(false)
+    const [playingSample, setPlayingSample] = useState(null)
+    const [availableTemplates, setAvailableTemplates] = useState([])
+    const [sessionState, setSessionState] = useLocalStorage('session',false)
     const [user, setUser] = useLocalStorage('user', {
         usrName: '',
         plan: '',
@@ -28,10 +30,26 @@ export const UserProvider = ({ children }) => {
 
     useEffect(()=>{
         console.log('UserProvider.useEffect.user.id=', user.id)
-        if(user.id){
-            setSessionState(true)
+        if(!sessionState){
+            clearLocalStorage()
         }
-    }, [user])
+    }, [sessionState])
+
+    const clearLocalStorage = () => {
+        clearUser()
+        clearCollections()
+        clearProject()
+    }
+
+    const initSession = async (userData) => {
+        await setUser(userData)
+        await setCollecToCxt()
+        setSessionState(true)
+    }
+
+    const closeSession = () => {
+        setSessionState(false)
+    }
 
     const clearUser = () => {
         setUser({
@@ -61,12 +79,17 @@ export const UserProvider = ({ children }) => {
         window.localStorage.removeItem('project')
     }
 
-    const [playingSample, setPlayingSample] = useState(null)
+    const [collections, setCollections] = useLocalStorage('collections', {
+        collections: []
+    })
 
-    const [collections, setCollections] = useState([])
-    const [availableTemplates, setAvailableTemplates] = useState([])
+    const clearCollections = () => {
+        setCollections({collections: []})
+        window.localStorage.removeItem('collections')
+    }
 
     const setCollecToCxt = async () => {
+        console.log("[UserContext].setCollecToCxt.init")
         try {
             const colls = await getCollections('pro')
             if(envCode !== 'DEV'){
@@ -74,7 +97,6 @@ export const UserProvider = ({ children }) => {
             }else{
                 setCollections(colls)
             }
-            setTemplates()
         } catch (error) {
             console.log("[UserContext].setCollecToCxt.catch=Error al obtener collections")
             return []
@@ -82,10 +104,13 @@ export const UserProvider = ({ children }) => {
     }
     
     const setTemplates = async () => {
+        console.log('[UserContext].setTemplates.init')
         const templates = [
         { key: "blank", value: "En blanco" }
         ]
+        console.log('[UserContext].setTemplates.collections=',collections)
         for (const collection of collections) {
+            console.log('[UserContext].setTemplates.collection=', collection)
             if ('templateId' in collection) {
                 templates.push({ key: collection.templateId, value: collection.templateName })
             }
@@ -94,7 +119,7 @@ export const UserProvider = ({ children }) => {
     }
 
     return (
-        <UserContext.Provider value={{ user, setUser, clearUser, projectInfo, setProjectInfo, clearProject, setPlayingSample, playingSample, sessionState, availableTemplates, setCollecToCxt, collections }}>
+        <UserContext.Provider value={{ user, setUser, clearUser, projectInfo, setProjectInfo, clearProject, setPlayingSample, playingSample, sessionState, availableTemplates, collections, setTemplates, initSession, closeSession }}>
             {children}
         </UserContext.Provider>
     );

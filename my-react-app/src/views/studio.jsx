@@ -9,7 +9,7 @@ import useToast from '../hooks/useToast';
 import ToastContainer from '../components/Modals/ToastContainer';
 
 const Studio = () => {
-      const { projectInfo } = useUser()
+      const { projectInfo, sessionState } = useUser()
       const [toast, showToast] = useToast()
 
       if(projectInfo === undefined) return

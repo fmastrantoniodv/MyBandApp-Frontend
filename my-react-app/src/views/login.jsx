@@ -12,7 +12,7 @@ import { Header } from '../components/Header/Header'
 const Login = () => {
     const [isOpenModal, openModal, closeModal] = useModal(false)
     const [error, setError] = useState(false)
-    const { setUser, clearUser, setCollecToCxt } = useUser()
+    const { clearUser, initSession } = useUser()
     const navigate = useNavigate()
 
     useEffect(()=>{
@@ -24,8 +24,7 @@ const Login = () => {
         openModal()
         try {
             const resp = await login(data)
-            setUser(resp)
-            setCollecToCxt()
+            await initSession(resp)
             closeModal()
             navigate(routes.home)
         } catch (error) {

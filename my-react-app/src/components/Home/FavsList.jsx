@@ -7,7 +7,12 @@ import PlaySample from './PlaySample'
 
 export const FavsList = () => {
     const [loadingFavs, setLoadingFavs] = useState(false)
-    const { user, setUser } = useUser()
+    const { user, setUser, collections } = useUser()
+
+    const getCollectionsNameByCode = (collectionCode) => {
+        return collections.find((collect)=> collect.collectionCode === collectionCode).collectionName
+    }
+
     const handleUnfav = async (sampleId) => {
         setLoadingFavs(true)
         await updateFav(user.id, sampleId, 'UNFAV', async () => {
@@ -34,18 +39,20 @@ export const FavsList = () => {
             }
             {
                 user.favList.map((fav) => (
-                    <FavItem key={fav.id} favInfo={fav} onUnfav={() => handleUnfav(fav.id)} />
+                    <FavItem key={fav.id} favInfo={fav} onUnfav={() => handleUnfav(fav.id)} collectionName={getCollectionsNameByCode(fav.collectionCode)} />
                 ))
             }
         </div>
     )
 }
 
-export const FavItem = ({ favInfo, onUnfav }) => {
+export const FavItem = ({ favInfo, onUnfav, collectionName }) => {
+    console.log('[FavItem].favInfo', favInfo)
+
     return (
         <div className='fav-item-container'>
             <span className='fav-item'>{favInfo.sampleName}</span>
-            <span className='fav-item'>{favInfo.collectionCode}</span>
+            <span className='fav-item'>{collectionName}</span>
             <div style={{ display: 'flex', gap: '5px' }}>
                 <PlaySample sampleInfo={favInfo}/>
                 <img className='fav-play-icon' src={favButtonIcon} onClick={onUnfav} />

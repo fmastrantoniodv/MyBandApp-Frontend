@@ -14,6 +14,11 @@ export const CollectionsCard = () => {
     
     useEffect(()=>{
         console.log('[CollectionsCard].useEffect.collections', collections)
+        if(collections !== undefined && collections.length <= 0){
+            setLoadingCollections(true)
+        }else{
+            setLoadingCollections(false)
+        }
     }, [collections])
 
     const handleFavCollection = async (collectionItem) => {
@@ -41,7 +46,11 @@ export const CollectionsCard = () => {
             <div className='collection-cards-container'>
                 {
                     collections.map((collection) => (
-                        <CollectionCard key={collection.id} collectionItem={collection} onFavCollection={() => handleFavCollection(collection)} />
+                        <CollectionCard 
+                            key={collection.id} 
+                            collectionItem={collection} 
+                            onSelect={() => navigate(`${routes.collections}?code=${collection.collectionCode}`)}
+                        />
                     ))
                 }
 
@@ -50,7 +59,7 @@ export const CollectionsCard = () => {
     )
 }
 
-export const CollectionCard = ({ collectionItem, onFavCollection }) => {
+export const CollectionCard = ({ collectionItem, onSelect }) => {
     const { collectionName, collectionCode } = collectionItem
 
     return (
@@ -62,13 +71,9 @@ export const CollectionCard = ({ collectionItem, onFavCollection }) => {
             />
             <span className='collection-name'>{collectionName}</span>
             <div className='collection-btn-container'>
-                <div className='collection-button'>
+                <div className='collection-button' onClick={() => onSelect()}>
                     <img className='fav-play-icon' src={playIcon} />
-                    Escuchar muestra
-                </div>
-                <div className='collection-button' onClick={onFavCollection}>
-                    <img className='fav-play-icon' src={favButtonIcon} />
-                    Marcar Favorito
+                    Escuchar muestras
                 </div>
             </div>
         </div>

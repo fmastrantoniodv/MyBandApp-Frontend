@@ -13,6 +13,7 @@ import { ForgotPassword } from './views/forgotPassword';
 import { ValidateOtc } from './views/validateOtc';
 import Collections from './views/collections.jsx';
 import { UserProvider } from './contexts/UserContext';
+import { PrivateViews } from './views/PrivateViews';
 
 function App() {   
       return (
@@ -21,12 +22,14 @@ function App() {
                         <Routes>
                               <Route path='/' element={<Login />}/>
                               <Route path='/register' element={<Register />}/>
-                              <Route path='/studio' element={<Studio />}/>
-                              <Route path='/home' element={<Home />}/>
-                              <Route path='/changePass' element={<ChangePassword />}/>
                               <Route path='/forgotPass' element={<ForgotPassword />}/>
                               <Route path='/validateOtc' element={<ValidateOtc />}/>
-                              <Route path='/collections' element={<Collections />}/>
+                              <Route element={<PrivateViews />}>
+                                    <Route path='/home' element={<Home />}/>
+                                    <Route path='/studio' element={<Studio />}/>
+                                    <Route path='/changePass' element={<ChangePassword />}/>
+                                    <Route path='/collections' element={<Collections />}/>
+                              </Route>
                         </Routes>
                   </BrowserRouter>
             </UserProvider>

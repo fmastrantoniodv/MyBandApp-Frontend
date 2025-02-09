@@ -17,7 +17,7 @@ import { routes } from '../../const/constants'
 export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, action2 }) => {
     const { register, handleSubmit, formState: { errors }, watch, reset } = useForm()
     const [isOpenModalChangePlan, openModalChangePlan, closeModalChangePlan] = useModal(false)
-    const { user, setUser, clearUser, clearProject } = useUser()
+    const { user, setUser, closeSession } = useUser()
     const [error, setError] = useState(false)
     const navigate = useNavigate();
     const location = useLocation();
@@ -36,8 +36,7 @@ export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, 
       }, [searchParams]);
 
     const handleLogout = () => {
-        clearUser()
-        clearProject()
+        closeSession()
         navigate(routes.login)
     }
 

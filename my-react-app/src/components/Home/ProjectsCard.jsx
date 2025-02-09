@@ -18,12 +18,13 @@ export const ProjectsCard = () => {
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
     const [isOpenModalNewProject, openModalNewProject, closeModalNewProject] = useModal(false)
-    const { user, setUser, availableTemplates } = useUser()
+    const { user, setUser, availableTemplates, setTemplates } = useUser()
     const { register, handleSubmit, formState: { errors }, watch, reset } = useForm()
 
     useEffect(() => {
         console.log('[home.jsx].useEffect')
         refreshUserProjects()
+        setTemplates()
     }, [searchParams])
 
     const handleOpenModalNewProject = () => {
@@ -58,13 +59,11 @@ export const ProjectsCard = () => {
 
     const handleDeleteProject = async (projectId) => {
         setLoadingProjects(true)
-
         try {
             await deleteProject(user.id, projectId)
         } catch (error) {
             console.error('Error handleDeleteProject: ', error)
         }
-
         await refreshUserProjects()
         setLoadingProjects(false)
     }
@@ -81,7 +80,6 @@ export const ProjectsCard = () => {
         } catch (error) {
             console.error('Error handleDeleteProject: ', error)
         }
-
     }
     
     return (

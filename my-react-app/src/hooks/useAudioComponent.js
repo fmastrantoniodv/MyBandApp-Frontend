@@ -1,5 +1,6 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
+import { endpointBackend } from '../const/constants';
 
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 var masterAudioCtx = new AudioContext
@@ -7,7 +8,7 @@ const mainGainNode = masterAudioCtx.createGain()
 
 const useAudioComponent = (sampleInfo, containerRef) => {
     const [waveformComponent, setWaveformComponent] = useState(null)
-    const src = `http://localhost:3001/api/samples/${sampleInfo.collectionCode}/${sampleInfo.sampleName}`
+    const src = `${endpointBackend}/api/samples/${sampleInfo.collectionCode}/${sampleInfo.sampleName}`
     const soundID = sampleInfo.id
 
     const audio = new Audio()

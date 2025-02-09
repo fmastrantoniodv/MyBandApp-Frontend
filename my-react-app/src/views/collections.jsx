@@ -9,24 +9,14 @@ import { getCollections } from '../services/collectionsServ'
 import { Header } from '../components/Header/Header'
 
 const Collections = () => {
-    const [collections, setCollections] = useState([])
     const navigate = useNavigate()
     const [searchParams] = useSearchParams()
-    const { user, setUser, clearUser } = useUser()
+    const codeSelect = searchParams.get("code");
+    const { user, setUser, clearUser, collections } = useUser()
 
     useEffect(() => {
-
-        const fetchData = async () => {
-            try {
-                const colls = await getCollections(user.plan)
-                setCollections(colls)
-            }
-            catch (error) {
-                console.log("Error al obtener collections")
-            }
-        }
-
-        fetchData()
+        console.log('[collections.jsx].useEffect.codeSelect=',codeSelect)
+        //navigate(routes.collections, { replace: true });
     }, [searchParams])
 
     const handleLogout = () => {
