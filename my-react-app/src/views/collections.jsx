@@ -7,7 +7,7 @@ import { routes } from '../const/constants'
 import { useUser } from '../contexts/UserContext'
 import { Header } from '../components/Header/Header'
 
-const Collections = () => {
+export const Collections = () => {
     const navigate = useNavigate()
     const [searchParams] = useSearchParams()
     const codeSelect = searchParams.get("code");
@@ -43,5 +43,3 @@ const Collections = () => {
         </div>
     )
 }
-
-export default Collections

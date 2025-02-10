@@ -1,30 +1,35 @@
 // Settings Context - src/context/Settings
-import React, { useState } from "react";
+import React, { createContext, useContext, useEffect } from "react";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { getPlanList } from "../services/appConfigServ";
 
-const SettingsContext = React.createContext();
+export const SettingsContext = createContext();
 
 const defaultSettings = {
-  theme: "light",
+  planList: [],
 };
 
-export const SettingsProvider = ({ children, settings }) => {
-  const [currentSettings, setCurrentSettings] = useState(
-    settings || defaultSettings
+export const SettingsProvider = ({ children }) => {
+  const [currentSettings, setCurrentSettings] = useLocalStorage('settings',
+    defaultSettings
   );
 
-  const saveSettings = (values) => {
-   setCurrentSettings(values)
-  };
+  useEffect(() => {
+    initSettings()
+  },[])
 
+  const initSettings = async () => {
+    const resultPlanList = await getPlanList()
+    setCurrentSettings({ planList: resultPlanList.data})
+}
+  
   return (
     <SettingsContext.Provider
-      value={{ settings: currentSettings, saveSettings }}
+      value={{ currentSettings }}
     >
       {children}
     </SettingsContext.Provider>
   );
 };
 
-export const SettingsConsumer = SettingsContext.Consumer;
-
-export default SettingsContext;
+export const useSettings = () => useContext(SettingsContext)

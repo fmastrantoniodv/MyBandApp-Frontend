@@ -96,8 +96,7 @@ export const inputsRegister = [
     {
         title: 'Suscripción',
         name: 'suscription',
-        type: 'dropdown',
-        options: suscriptions
+        type: 'dropdown'
     }
 ]
 
@@ -163,3 +162,14 @@ export const inputValidateOtc = [
         autocomplete: 'off'
     }
 ]
+
+export const isAvailableWithUserPlan = (userPlan, libPlan, planList) => {
+    var userPlanOrder = planList.find((item) => item.value === userPlan).order
+    var libPlanOrder = planList.find((item) => item.value === libPlan).order
+    return userPlanOrder >= libPlanOrder ? true : false
+}
+
+export function capitalizeFirstLetter(word) {
+    if (!word) return ''
+    return word.charAt(0).toUpperCase() + word.slice(1)
+}

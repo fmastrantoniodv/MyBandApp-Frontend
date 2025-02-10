@@ -4,7 +4,7 @@ import PlaySample from '../Home/PlaySample'
 import unFavButtonIcon from '../../img/unFavButtonIcon.svg'
 import favButtonIcon from '../../img/favButtonIcon.svg'
 
-export const Sample = ({ user, sampleInfo, setUser }) => {
+export const Sample = ({ user, sampleInfo, setUser, libAvailable }) => {
     
     const { favList } = user
     const [isFav, setIsFav] = useState(favList.some(fav => fav.id === sampleInfo.id))
@@ -20,7 +20,7 @@ export const Sample = ({ user, sampleInfo, setUser }) => {
             <span className='sample-name'>{sampleInfo.sampleName}</span>
             <div style={{ display: 'flex', gap: '5px' }}>
                 <PlaySample sampleInfo={sampleInfo}/>
-                <img className='fav-play-icon' src={isFav ? favButtonIcon : unFavButtonIcon} onClick={() => handleUpdateFav(sampleInfo.id)} alt='boton de agregar sample a favoritos'/>
+                {libAvailable && <img className='fav-play-icon' src={isFav ? favButtonIcon : unFavButtonIcon} onClick={() => handleUpdateFav(sampleInfo.id)} alt='boton de agregar sample a favoritos'/>}
             </div>
         </div>
     )

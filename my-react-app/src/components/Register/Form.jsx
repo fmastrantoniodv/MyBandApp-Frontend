@@ -10,6 +10,7 @@ export const ButtonText = ({ text, type, action }) => {
 
 export const FormCard = ({ title, children, inputs, onSubmit, autoComplete = 'on'}) => {
     const { register, handleSubmit, formState: { errors }, watch } = useForm()
+    console.log('[Form.jsx].FormCard.inputs', inputs)
 
     return (
         <form className={'card scale-up-center'} onSubmit={handleSubmit(onSubmit)} autoComplete={autoComplete}>
@@ -23,6 +24,15 @@ export const FormCard = ({ title, children, inputs, onSubmit, autoComplete = 'on
                 {
                     inputs.map(({ title, options, name, type, required, validate, autoComplete}) => (
                         type === 'dropdown' ? (
+                            name === 'suscription' ?
+                            <PlanDropdown
+                                key={name}
+                                title={title}
+                                name={name}
+                                options={options}
+                                register={register}
+                            />
+                            :
                             <InputDropdown
                                 key={name}
                                 title={title}
@@ -126,4 +136,35 @@ export const InputDropdown = ({ title, name, options, register }) => {
             </select>
         </div>
     )
+}
+
+export const PlanDropdown = ({ title, name, options, register }) => {
+    return (
+        <div>
+            <h3 style={{
+                color: '#000000',
+                margin: '0px 0px 5px 0px',
+                fontSize: '14px',
+                fontFamily: 'Inter-SemiBold , sans-serif'
+            }}>
+                {title}
+            </h3>
+            <select className={'form-input dropdown'}  {...register(name)}>
+                {options.map(option => (
+                    <option key={option.value} value={option.value}>{option.label} ${formatNumberAndSplit(option.price)[0]},{formatNumberAndSplit(option.price)[1]}{option.description !== null && ` (${option.description})`}</option>
+                ))}
+            </select>
+        </div>
+    )
+}
+
+function formatNumberAndSplit(number) {
+    const formatted = number
+        .toFixed(2)
+        .replace('.', ',')
+        .replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+
+    const [integers, decimals] = formatted.split(',');
+
+    return [integers, decimals]
 }

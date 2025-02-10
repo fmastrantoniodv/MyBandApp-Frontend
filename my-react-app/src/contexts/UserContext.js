@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { getCollections } from '../services/collectionsServ';
-import { envCode, routes } from '../const/constants';
+import { envCode } from '../const/constants';
 
 export const UserContext = createContext();
 

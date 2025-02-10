@@ -11,8 +11,9 @@ import { useLoader } from '../../hooks/useLoader'
 import GenericMsg from '../Modals/GenericMsg'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
-import { InputDropdown, FormButton, ButtonText } from '../Register/Form'
+import { FormButton, ButtonText, PlanDropdown } from '../Register/Form'
 import { routes } from '../../const/constants'
+import { useSettings } from '../../contexts/SettingsContext'
 
 export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, action2 }) => {
     const { register, handleSubmit, formState: { errors }, watch, reset } = useForm()
@@ -23,6 +24,7 @@ export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, 
     const location = useLocation();
     const [searchParams] = useSearchParams()
     const {showLoader, hideLoader, LoaderModal} = useLoader()
+    const { currentSettings } = useSettings()
     
     const btnRequestError = {
         positiveAction: () => setError(false),
@@ -69,7 +71,7 @@ export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, 
             <form className='form-card-update-plan' onSubmit={handleSubmit(handleUpdatePlanSubmit)}>
                 <h3 className='favs-title'>Cambiar plan</h3>
                 <div style={{ gap: '18px', display: 'flex', flexDirection: 'column', width: '100%' }}>
-                    <InputDropdown key='planType' title='Plan' name='Plan' options={suscriptions} register={register} />
+                    <PlanDropdown key='planType' title='Plan' name='Plan' options={currentSettings.planList} register={register} />
                 </div>
                 <div style={{ gap: '18px', display: 'flex' }}>
                     <FormButton text='Cancelar' type='secondary' action={() => closeModalChangePlan()} />

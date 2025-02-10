@@ -1,5 +1,5 @@
 import axios from 'axios'
-const endpointBackend = process.env.REACT_APP_ENDPOINT_BACKEND;
+import { endpointBackend } from '../const/constants'
 
 export const getCollections = async (plan) => {
     try {

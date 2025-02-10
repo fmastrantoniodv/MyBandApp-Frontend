@@ -86,6 +86,24 @@
     width: 170px;
 }
 
+.collection-item-name {
+    font-family: 'Inter-Medium', sans-serif;
+    font-size: 16px;
+    color: #000;
+}
+
+.collection-item-plan {
+    font-family: 'Inter-Bold', sans-serif;
+    font-size: 14px;
+    color: #000;
+}
+
+.collection-item-error-msg {
+    font-family: 'Inter-Regular', sans-serif;
+    font-size: 12px;
+    color: red;
+}
+
 .collection-img {
     width: 41px; 
     height: 41px; 
