@@ -4,6 +4,7 @@ import { useUser } from '../../contexts/UserContext';
 import { updateFav, getUserFavsServ } from '../../services/usersServ'
 import favButtonIcon from '../../img/favButtonIcon.svg'
 import PlaySample from './PlaySample'
+import playIcon from '../../img/playIcon.svg'
 
 export const FavsList = () => {
     const [loadingFavs, setLoadingFavs] = useState(false)
@@ -46,13 +47,26 @@ export const FavsList = () => {
 
 export const FavItem = ({ favInfo, onUnfav, collectionName }) => {
     console.log('[FavItem].favInfo', favInfo)
+    const [playPressed, setPlayPressed] = useState(false)
+    const { setPlayingSample } = useUser()
+
+    const playBeforeLoad = () => {
+        setPlayPressed(true)
+        setPlayingSample(favInfo.id)
+    }
 
     return (
         <div className='fav-item-container'>
             <span className='fav-item'>{favInfo.sampleName}</span>
             <span className='fav-item'>{collectionName}</span>
             <div style={{ display: 'flex', gap: '5px' }}>
-                <PlaySample sampleInfo={favInfo}/>
+                {!playPressed ?
+                    <button className="btn-project-controls" onClick={() => playBeforeLoad()}>
+                        <img src={playIcon} alt="icono de reproducir" width="25px" />
+                    </button>
+                    :
+                    <PlaySample sampleInfo={favInfo}/>
+                }
                 <img className='fav-play-icon' src={favButtonIcon} onClick={onUnfav} />
             </div>
         </div>
