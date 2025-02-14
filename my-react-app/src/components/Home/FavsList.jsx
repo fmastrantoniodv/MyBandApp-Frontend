@@ -11,8 +11,10 @@ export const FavsList = () => {
     const { user, setUser, collections } = useUser()
 
     const getCollectionsNameByCode = (collectionCode) => {
-        if(collections === undefined) return
-        return collections.find((collect)=> collect.collectionCode === collectionCode).collectionName
+        if(collections !== undefined){
+            return collections.find((collect)=> collect.collectionCode === collectionCode).collectionName
+        }
+        return
     }
 
     const handleUnfav = async (sampleId) => {
