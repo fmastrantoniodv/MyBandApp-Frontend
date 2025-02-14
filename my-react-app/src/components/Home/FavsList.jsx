@@ -38,6 +38,7 @@ export const FavsList = () => {
                 </div>
             }
             {
+            user.favList &&
                 user.favList.map((fav) => (
                     <FavItem key={fav.id} favInfo={fav} onUnfav={() => handleUnfav(fav.id)} collectionName={getCollectionsNameByCode(fav.collectionCode)} />
                 ))
