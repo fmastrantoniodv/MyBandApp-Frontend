@@ -14,7 +14,11 @@ export const FavsList = () => {
         console.log('[FavList.jsx].FavsList.getCollectionsNameByCode.collectionCode=', collectionCode)
         var collectionsName = '';
         if(collections !== undefined){
-            collectionsName = collections.find((collect)=> collect.collectionCode === collectionCode).collectionName
+            var collectionsItem = collections.find((collect)=> collect.collectionCode === collectionCode)
+            console.log('[FavList.jsx].FavsList.getCollectionsNameByCode.collectionsItem=', collectionsItem)
+            if(collectionsItem !== undefined){
+                collectionsName = collectionsItem.collectionName
+            }
         }
         return collectionsName
     }
