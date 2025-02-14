@@ -51,7 +51,16 @@ export default function SampleSelector({handleCloseSamplesSelector, openModalSam
   }
 
   const getCollectionsNameByCode = (collectionCode) => {
-    return collections.find((collect)=> collect.collectionCode === collectionCode).collectionName
+    console.log('[SampleSelector.jsx].SampleSelector.getCollectionsNameByCode.collectionCode=', collectionCode)
+    var collectionsName = '';
+    if(collections !== undefined){
+        var collectionsItem = collections.find((collect)=> collect.collectionCode === collectionCode)
+        console.log('[SampleSelector.jsx].SampleSelector.getCollectionsNameByCode.collectionsItem=', collectionsItem)
+        if(collectionsItem !== undefined){
+            collectionsName = collectionsItem.collectionName
+        }
+    }
+    return collectionsName
   }
 
   const getFavsAvailable = (favouritesSamples) => {
