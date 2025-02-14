@@ -2,7 +2,7 @@ import './App.css';
 import './css/register.css';
 import './css/home.css';
 import './css/collections.css';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Studio from './views/studio.jsx'
 import Login from './views/login.jsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
@@ -14,7 +14,6 @@ import { ValidateOtc } from './views/validateOtc';
 import { Collections } from './views/collections.jsx';
 import { UserProvider } from './contexts/UserContext';
 import { PrivateViews } from './views/PrivateViews';
-import { getPlanList } from './services/appConfigServ';
 import { SettingsProvider } from './contexts/SettingsContext';
 
 function App() {
