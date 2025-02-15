@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import LottieAnimation from '../Register/LoadingAnimation'
 import { useUser } from '../../contexts/UserContext';
 import { updateFav, getUserFavsServ } from '../../services/usersServ'
@@ -10,12 +10,16 @@ export const FavsList = () => {
     const [loadingFavs, setLoadingFavs] = useState(false)
     const { user, setUser, collections } = useUser()
 
+    useEffect(()=> {
+        if(user){
+            console.log('[FavList.jsx].FavList.user.favList', user.favsList)
+        }
+    },[user])
+
     const getCollectionsNameByCode = (collectionCode) => {
-        console.log('[FavList.jsx].FavsList.getCollectionsNameByCode.collectionCode=', collectionCode)
         var collectionsName = '';
         if(collections !== undefined){
             var collectionsItem = collections.find((collect)=> collect.collectionCode === collectionCode)
-            console.log('[FavList.jsx].FavsList.getCollectionsNameByCode.collectionsItem=', collectionsItem)
             if(collectionsItem !== undefined){
                 collectionsName = collectionsItem.collectionName
             }
