@@ -5,10 +5,9 @@ export const getCollections = async (plan) => {
     try {
         const url = `${endpointBackend}/api/collections/plan/${plan}`
         const response = await axios.get(url)
-        console.log("getCollections: ", response.data)
         return response.data
     } catch (error) {
-        console.log(error)
+        console.error(error)
         throw error
     }
 }

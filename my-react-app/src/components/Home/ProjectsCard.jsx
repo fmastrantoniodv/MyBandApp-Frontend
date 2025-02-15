@@ -22,7 +22,6 @@ export const ProjectsCard = () => {
     const { register, handleSubmit, formState: { errors }, watch, reset } = useForm()
 
     useEffect(() => {
-        console.log('[home.jsx].useEffect')
         refreshUserProjects()
         setTemplates()
     }, [searchParams])
@@ -32,10 +31,8 @@ export const ProjectsCard = () => {
     }
 
     const handleNewProjectSubmit = async (data) => {
-        console.log('handleNewProjectSubmit.data',data)
         try {
             const resp = await getProjectServ(data.template)
-            console.log('getProject: ', resp)
             setProjectInfo({
                 projectId: null,
                 userId: user.id,

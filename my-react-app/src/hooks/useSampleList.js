@@ -4,12 +4,10 @@ export const useSampleList = () => {
     const [projectChannelList, setProjectChannelList] = useState(null)
 
     const initProjectChannelList = (projectSampleList) => {
-        console.log('[useSampleList.js].initProjectChannelList.projectSampleList=', projectSampleList)
         setProjectChannelList(projectSampleList)
     }
 
     const addChannelToList = (item) => {
-        console.log('Nueva pista', item)
         var updatedChannelList = projectChannelList
         var newChannel = {
           id: item.id,

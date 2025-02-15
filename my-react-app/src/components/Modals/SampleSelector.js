@@ -12,14 +12,6 @@ export default function SampleSelector({handleCloseSamplesSelector, openModalSam
   const { user, collections } = useUser()
 
   useEffect(()=>{
-    console.log('[SampleSelector.js].[useEffect]')
-    if(!avaibleFavs){
-      console.log('[SampleSelector.js].[availableFavs]', avaibleFavs)
-    }
-
-    if(!openModalSampleSelector){
-      console.log('[SampleSelector.js].[openModalSampleSelector]', openModalSampleSelector)
-    }
     if(user.favList !== undefined){
       setAvaibleFavs(getFavsAvailable(user.favList))
       if(avaibleFavs === null || avaibleFavs.length === 0){
@@ -35,7 +27,6 @@ export default function SampleSelector({handleCloseSamplesSelector, openModalSam
   }
 
   const handleSelectItem = (item) => {
-    console.log('[handleSelectItem]',item)
     if(itemSelected === null || item !== itemSelected){
       setItemSelected(item)
     }else{
@@ -51,11 +42,9 @@ export default function SampleSelector({handleCloseSamplesSelector, openModalSam
   }
 
   const getCollectionsNameByCode = (collectionCode) => {
-    console.log('[SampleSelector.jsx].SampleSelector.getCollectionsNameByCode.collectionCode=', collectionCode)
     var collectionsName = '';
     if(collections !== undefined){
         var collectionsItem = collections.find((collect)=> collect.collectionCode === collectionCode)
-        console.log('[SampleSelector.jsx].SampleSelector.getCollectionsNameByCode.collectionsItem=', collectionsItem)
         if(collectionsItem !== undefined){
             collectionsName = collectionsItem.collectionName
         }
@@ -65,9 +54,7 @@ export default function SampleSelector({handleCloseSamplesSelector, openModalSam
 
   const getFavsAvailable = (favouritesSamples) => {
     var listFilteredFavs = new Array;
-    console.log('getFavsAvailable.favouritesSamples',favouritesSamples)
     var channelList = getSoundList()
-    console.log('getFavsAvailable.channelList',channelList)
     if(!favouritesSamples || channelList === null || channelList === undefined ) return
     favouritesSamples.map(fav => {
       if(channelList.find(value => value.id === fav.id) === undefined) listFilteredFavs.push(fav)
@@ -86,7 +73,6 @@ export default function SampleSelector({handleCloseSamplesSelector, openModalSam
             avaibleFavs === undefined || avaibleFavs === null ?
             'cargando' : 
             avaibleFavs.map(item => {
-              console.log(item)
               return  <li key={item.id} 
                 onClick={()=>handleSelectItem(item)} 
                 {... itemSelected && item.id === itemSelected.id ? {className: "selected"} : ""}

@@ -4,7 +4,6 @@ import menuIcon from '../../img/menuIcon.svg'
 import settingsIcon from '../../img/settingsIcon.svg'
 import { useModal } from "../../hooks/useModal"
 import Modal from '../Modals/Modal'
-import { suscriptions } from '../../const/constants'
 import { updatePlan } from '../../services/usersServ'
 import { useUser } from '../../contexts/UserContext'
 import { useLoader } from '../../hooks/useLoader'
@@ -25,7 +24,7 @@ export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, 
     const [searchParams] = useSearchParams()
     const {showLoader, hideLoader, LoaderModal} = useLoader()
     const { currentSettings } = useSettings()
-    const hideMenu = location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/forgotPass" || location.pathname === "/validateOtc";
+    const hideMenu = location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/forgotPass" || location.pathname === "/validateOtc" || location.pathname === "/";
     
     const btnRequestError = {
         positiveAction: () => setError(false),

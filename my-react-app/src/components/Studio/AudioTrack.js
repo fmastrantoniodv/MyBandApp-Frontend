@@ -19,7 +19,6 @@ export default function AudioTrack ({
   const waveformPlayer = useWaveform(sample, containerRef)
   
   useEffect(() => {
-    console.log('[AudioTrack.js].useEffect.waveformPlayer', waveformPlayer)
     if(waveformPlayer !== null){
       setLoading(false)
     }else{

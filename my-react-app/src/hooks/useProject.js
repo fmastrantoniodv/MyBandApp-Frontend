@@ -16,7 +16,6 @@ const useProject = ( idProject ) => {
       }
     }
     useEffect(() => {
-        console.log(`[useProject].[useEffect]`)
         fetchProject()
     }, []);
     

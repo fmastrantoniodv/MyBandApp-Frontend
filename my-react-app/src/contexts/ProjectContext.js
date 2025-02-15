@@ -14,12 +14,10 @@ export function ProjectContextProvider({children, projectInfoEntry}){
     const [modalMsg, setModalMsg] = useState(null)
 
     useEffect(()=>{
-        console.log('[ProjectContextProvider].[useEffect].projectInfoEntry', projectInfoEntry)
         setInitValues(projectInfoEntry)
     }, [])
 
     const getSoundList = () => {
-        console.log('[ProjectContextProvider].[getSoundList].soundList', soundList)
         return soundList
     }
 
@@ -28,7 +26,6 @@ export function ProjectContextProvider({children, projectInfoEntry}){
     }
 
     const addChannelToList = (sampleInfo) => {
-        console.log('Nueva pista', sampleInfo)
         var updatedChannelList = soundList
         var newChannel = {
           id: sampleInfo.id,
@@ -57,13 +54,10 @@ export function ProjectContextProvider({children, projectInfoEntry}){
     }
 
     const setInitValues = async (projectInfoEntryParam) => {
-        console.log('[ProjectContextProvider].[setInitValues].loading', loading)
-        console.log('[ProjectContextProvider].[setInitValues].projectInfoEntryParam', projectInfoEntryParam)
         if(loading) return
         setLoading(true)
         if(projectInfoEntryParam.projectId === null){
             if(projectInfoEntryParam.template === 'blank'){
-                console.log('[ProjectContextProvider].[setInitValues].project en blanco')
                 var projectInfoResp = {
                     userId: projectInfoEntryParam.userId,
                     projectName: projectInfoEntryParam.projectName,
@@ -74,7 +68,6 @@ export function ProjectContextProvider({children, projectInfoEntry}){
                 setProjectInfo(projectInfoResp)
                 setSoundList([])
             }else{
-                console.log('[ProjectContextProvider].[setInitValues].project template=', projectInfoEntryParam.template)
                 var projectInfoResp = {
                     userId: projectInfoEntryParam.userId,
                     projectName: projectInfoEntryParam.projectName,
@@ -86,11 +79,9 @@ export function ProjectContextProvider({children, projectInfoEntry}){
                 setProjectInfo(projectInfoResp)
                 setSoundList(projectInfoEntryParam.channelList)
             }
-            console.log('[ProjectContextProvider].[setInitValues].end')
         }else{
             const projectData = await getProjectServ(projectInfoEntryParam.projectId)
             if(projectData === undefined) return
-            console.log('projectDatita', projectData)
             var projectInfoResp = {
                 id: projectData.id,
                 userId: projectData.userId,
@@ -105,7 +96,7 @@ export function ProjectContextProvider({children, projectInfoEntry}){
         }
         setLoading(false)
       }
-      console.log('[ProjectContext.js].loading=', loading)
+      
       if(loading === true || loading === null) return 'Loading..'
       
     return  <>

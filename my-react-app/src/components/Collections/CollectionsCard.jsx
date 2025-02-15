@@ -11,7 +11,6 @@ export const CollectionsCard = () => {
     const navigate = useNavigate()
     
     useEffect(()=>{
-        console.log('[CollectionsCard].useEffect.collections', collections)
         if(collections !== undefined && collections.length <= 0){
             setLoadingCollections(true)
         }else{

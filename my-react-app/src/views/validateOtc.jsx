@@ -19,7 +19,6 @@ export const ValidateOtc = () => {
     const handleSubmit = async (e) => {
       openModal()
       const resSendCode = await checkVerifyCode(user.email, e.verify_code)
-      console.log(`[ValidateOtc.jsx].ValidateOtc.handleSubmit.resSendCode=`,resSendCode)
       if(resSendCode.errorCode === 'CODE_ERROR'){
         setError(true)
         setErrorMsg('El código ingresado es incorrecto')

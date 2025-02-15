@@ -10,7 +10,6 @@ export const useLoader = () => {
     const hideLoader = () => closeLoadingModal()
 
     useEffect(() => {
-        console.log(`[useLoader].[useEffect].isOpenLoadingModal=${isOpenLoadingModal}`)
     }, [])
 
     const LoaderModal = () => (

@@ -1,7 +1,6 @@
 import Crunker from "crunker";
 
 export default async function exportWavToFile(audioBuffers, fileName){
-    console.log('exportWavToFile.audioBuffers', audioBuffers)
     const crunker = new Crunker()
     crunker._sampleRate = 48000
     const mergeBuffer = crunker.mergeAudio(audioBuffers)

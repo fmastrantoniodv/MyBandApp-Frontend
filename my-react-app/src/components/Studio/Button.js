@@ -4,7 +4,6 @@ function Button({ textButton, onClickButton, state, fatherId }) {
   const [pressState, setPressState] = useState(false)
 
   useEffect(()=>{
-    console.log(`Button.FatherId=${fatherId}.state=${state}.textButton=${textButton}`)
     setPressState(state)
   }, [state])
 

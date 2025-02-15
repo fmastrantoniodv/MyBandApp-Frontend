@@ -13,7 +13,7 @@ export const createNewUser = async (data) => {
         const response = await axios.post(url, body)
         return response.data
     } catch (error) {
-        console.log(error)
+        console.error(error)
         throw error
     }
 }
@@ -28,7 +28,7 @@ export const login = async (data) => {
         const response = await axios.post(url, body)
         return response.data
     } catch (error) {
-        console.log(error)
+        console.error(error)
         throw error
     }
 }
@@ -55,7 +55,7 @@ export const updateFav = async (userId, sampleId, action) => {
         const response = await axios.post(url, body)
         return response
     } catch (error) {
-        console.log(error)
+        console.error(error)
         throw error
     }
 }
@@ -70,7 +70,7 @@ export const updatePlan = async (userId, newPlan) => {
         const response = await axios.post(url, body)
         return response
     } catch (error) {
-        console.log(error)
+        console.error(error)
         throw error
     }
 }
@@ -86,7 +86,7 @@ export const changePassService = async (userEmail, pass, newPass) => {
         const response = await axios.post(url, body)
         return response
     } catch (error) {
-        console.log(error)
+        console.error(error)
         throw error
     }
 }
@@ -101,7 +101,7 @@ export const updatePassService = async (userEmail, newPass) => {
         const response = await axios.post(url, body)
         return response
     } catch (error) {
-        console.log(error)
+        console.error(error)
         throw error
     }
 }
@@ -115,7 +115,7 @@ export const sendVerifyCode = async (userEmail) => {
         const response = await axios.post(url, body)
         return response
     } catch (error) {
-        console.log(error)
+        console.error(error)
         return error.response
     }
 }
@@ -130,7 +130,7 @@ export const checkVerifyCode = async (userEmail, verificationCode) => {
         const response = await axios.post(url, body)
         return response
     } catch (error) {
-        console.log(error)
+        console.error(error)
         return error.response
     }
 }

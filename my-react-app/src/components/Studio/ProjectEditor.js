@@ -16,8 +16,6 @@ export default function ProjectEditor ({}) {
     const [toast, showToast] = useToast()
 
     useEffect(() => {
-      console.log('[ProjectEditor].[useEffect].loading', loading)
-      console.log('[ProjectEditor].[useEffect].getProjectInfo=', getProjectInfo())
       setProjectBPM(getProjectInfo().tempo)
     }, [loading]);
       
@@ -88,7 +86,6 @@ export default function ProjectEditor ({}) {
       return(
         <button className="btn-svg-container" onClick={async () => {
           const resultExport = await exportWavFile()
-          console.log('resultExport=',resultExport)
           if(resultExport === 'success'){
             showToast('¡Proyecto descargado!', 'success')
           }else{
@@ -103,7 +100,6 @@ export default function ProjectEditor ({}) {
     const saveProjectFunc = async () => {
       let trackList = getTracklist()
       let projectInfo = getProjectInfo()
-      console.log('[ProjectEditor.js].saveProjectFunc.trackList', trackList)
       var channelListReq = new Array;
       trackList.map(track => {
           var channelItem = {
@@ -120,9 +116,7 @@ export default function ProjectEditor ({}) {
           "tempo": projectBPM,
           "channelList": channelListReq
       }
-      console.log('[ProjectContext.js].req=', req)
       const saveProjectResult = await saveProjectServ(req)
-      console.log('[ProjectContext.js].saveProjectResult=', saveProjectResult)
       if(saveProjectResult === 'ERROR') return showToast('No se pudo guardar el proyecto', 'error')
       showToast('¡Proyecto guardado!', 'success')
   }

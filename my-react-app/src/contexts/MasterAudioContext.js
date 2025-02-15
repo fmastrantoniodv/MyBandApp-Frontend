@@ -16,7 +16,6 @@ export function MasterAudioContextProvider({children, value}){
     const { getProjectInfo } = useContext(ProjectContext)
 
     useEffect(()=>{
-        console.log('[MasterAudioContextProvider].[useEffect].trackList', trackList)
         syncTempoTracks()
     },[projectBPM])
 
@@ -30,7 +29,6 @@ export function MasterAudioContextProvider({children, value}){
     }
 
     const addTrackToList = ( newTrack ) => {
-        console.log('[MasterAudioContextProvider].[addTrackToList].newTrack', newTrack)
         setTrackList(prevState => [...prevState, newTrack])
     }
 
@@ -43,13 +41,9 @@ export function MasterAudioContextProvider({children, value}){
     }
 
     const muteTrack = (sampleId) => {
-        console.log('muteTrack.init')
-        console.log('entra',getTrack(sampleId))
         const stateToSave = !getTrack(sampleId).waveformComponent.isMuted
-        console.log('stateToSave',stateToSave)
         getTrack(sampleId).waveformComponent.setMute(stateToSave)
         getTrack(sampleId).channelConfig.states.muted = stateToSave
-        console.log('sale',getTrack(sampleId))
       }
 
     const playBackTracks = ( playbackAction ) => {

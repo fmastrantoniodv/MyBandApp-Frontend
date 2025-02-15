@@ -20,7 +20,6 @@ export const Register = () => {
         var inputsRegisterWithPlanList = inputsRegister
         inputsRegisterWithPlanList[5].options = currentSettings.planList
         setInputsRegisterComplete(inputsRegisterWithPlanList)
-        console.log('[Register].inputsRegisterWithPlanList',inputsRegisterWithPlanList[5])
     },[currentSettings])
 
     const handleRegisterSubmit = async (data) => {

@@ -9,9 +9,6 @@ export default function GenericMsg({type, msg, buttonsConfig, open}) {
   const [isOpenGenericModal, openGenericModal, closeGenericModal] = useModal(false)
 
   useEffect(()=>{
-    console.log('[GenericMsg.js].[useEffect]')
-    console.log('[GenericMsg.js].[useEffect].msg',msg)
-    console.log('[GenericMsg.js].[useEffect].type',type)
     initGenericModal(type, msg)
     if(open){
       openGenericModal()

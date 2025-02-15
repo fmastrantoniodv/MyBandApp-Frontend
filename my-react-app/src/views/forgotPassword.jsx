@@ -19,7 +19,6 @@ export const ForgotPassword = () => {
     const handleSubmit = async (e) => {
       openModal()
       const resSendCode = await sendVerifyCode(e.email)
-      console.log(`[forgotPassword.jsx].ForgotPassword.handleSubmit.resSendCode=`,resSendCode)
       if(resSendCode.errorCode === 'USR_NOT_FOUND'){
         setError(true)
       }else{

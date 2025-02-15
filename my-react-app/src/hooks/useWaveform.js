@@ -7,7 +7,6 @@ const useWaveform = (sampleProps, containerRef) => {
     const [waveformComponent, setWaveformComponent] = useState(null)
     const {masterAudioCtx, mainGainNode, addArrayBuffers, addTrackToList, playBackTracks} = useContext(MasterAudioContext)
     const src = `${endpointBackend}/api/samples/${sampleProps.collectionCode}/${sampleProps.sampleName}`
-    console.log('[DBG].endpointSrc=', src)
 
     const soundID = sampleProps.id
 
@@ -24,8 +23,6 @@ const useWaveform = (sampleProps, containerRef) => {
     gain.connect(mainGainNode)
 
     useEffect(() => {
-      console.log('[useWaveform].[useEffect].[sampleProps=',sampleProps)
-      
       if (!containerRef.current) return 
 
       const wavesurfer = WaveSurfer.create({

@@ -29,7 +29,6 @@ export const UserProvider = ({ children }) => {
     })
 
     useEffect(()=>{
-        console.log('UserProvider.useEffect.user.id=', user.id)
         if(!sessionState){
             clearLocalStorage()
         }
@@ -89,7 +88,6 @@ export const UserProvider = ({ children }) => {
     }
 
     const setCollecToCxt = async () => {
-        console.log("[UserContext].setCollecToCxt.init")
         try {
             const colls = await getCollections('pro')
             if(envCode !== 'DEV'){
@@ -98,19 +96,16 @@ export const UserProvider = ({ children }) => {
                 setCollections(colls)
             }
         } catch (error) {
-            console.log("[UserContext].setCollecToCxt.catch=Error al obtener collections")
+            console.error("[UserContext].setCollecToCxt.catch=Error al obtener collections")
             return []
         }
     }
     
     const setTemplates = async () => {
-        console.log('[UserContext].setTemplates.init')
         const templates = [
         { key: "blank", value: "En blanco" }
         ]
-        console.log('[UserContext].setTemplates.collections=',collections)
         for (const collection of collections) {
-            console.log('[UserContext].setTemplates.collection=', collection)
             if ('templateId' in collection) {
                 templates.push({ key: collection.templateId, value: collection.templateName })
             }

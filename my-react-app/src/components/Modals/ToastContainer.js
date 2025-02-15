@@ -2,7 +2,6 @@ import React from 'react'
 import './Modal.css'
 
 const ToastContainer = ({ toasts }) => {
-    console.log(`ToastContainer.toasts=`, toasts)
   return (
     <div className="toast-container">
     {(toasts || []).map((toast) => (

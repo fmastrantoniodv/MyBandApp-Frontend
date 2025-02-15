@@ -13,8 +13,6 @@ export default function PlaySample({sampleInfo}){
     const audioComponent = useAudioComponent(sampleInfo, containerRef)
     
     useEffect(()=>{
-        console.log('[PlaySample.js].useEffect.sampleInfo=', sampleInfo)
-        console.log('[PlaySample.js].useEffect.audioComponent=', audioComponent)
         if(!audioComponent) return
         setLoading(false)
         if(playing && playingSample === sampleInfo.id){

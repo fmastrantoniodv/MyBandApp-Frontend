@@ -15,16 +15,9 @@ export const ChangePassword = () => {
     const { user, sessionState } = useUser()
     const navigate = useNavigate()
     
-    console.log('ChangePassword.user.id=', user.id)
-    console.log('ChangePassword.sessionState=', sessionState)
-    if(!user.id){
-        console.log(inputsChangePass)
-    }
-
     const handleChangePass = async (data) => {
         setError(false)
         openModal()
-        console.log('handleChangePass.data=', data)
         if(data.firstPassword !== data.secondPassword){
             console.error('Error handleLoginSubmit: ', error)
             setError(true)
@@ -33,7 +26,6 @@ export const ChangePassword = () => {
 
         try {
             const resp = await changePassService(user.email, data.currentPassword, data.firstPassword)
-            console.log(resp)
             closeModal()
             navigate(routes.home)
         } catch (error) {
@@ -45,7 +37,6 @@ export const ChangePassword = () => {
     const handleUpdatePass = async (data) => {
         setError(false)
         openModal()
-        console.log('handleUpdatePass.data=', data)
         if(data.firstPassword !== data.secondPassword){
             console.error('Error handleUpdatePass: ', error)
             setError(true)
@@ -53,8 +44,7 @@ export const ChangePassword = () => {
         }
 
         try {
-            const resp = await updatePassService(user.email, data.firstPassword)
-            console.log(resp)
+            const resp = await updatePassService(user.email, data.firstPassword)            
             closeModal()
             navigate(routes.login)
         } catch (error) {

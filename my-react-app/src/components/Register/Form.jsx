@@ -10,7 +10,6 @@ export const ButtonText = ({ text, type, action }) => {
 
 export const FormCard = ({ title, children, inputs, onSubmit, autoComplete = 'on'}) => {
     const { register, handleSubmit, formState: { errors }, watch } = useForm()
-    console.log('[Form.jsx].FormCard.inputs', inputs)
 
     return (
         <form className={'card scale-up-center'} onSubmit={handleSubmit(onSubmit)} autoComplete={autoComplete}>
