@@ -11,9 +11,7 @@ export const FavsList = () => {
     const { user, setUser, collections } = useUser()
 
     useEffect(()=> {
-        if(user){
-            console.log('[FavList.jsx].FavList.user.favList', user.favsList)
-        }
+
     },[user])
 
     const getCollectionsNameByCode = (collectionCode) => {
@@ -59,8 +57,7 @@ export const FavsList = () => {
     )
 }
 
-export const FavItem = ({ favInfo, onUnfav, collectionName }) => {
-    console.log('[FavItem].favInfo', favInfo)
+export const FavItem = ({ favInfo, onUnfav, collectionName }) => {    
     const [playPressed, setPlayPressed] = useState(false)
     const { setPlayingSample } = useUser()
 

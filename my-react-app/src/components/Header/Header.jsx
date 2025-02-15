@@ -25,6 +25,7 @@ export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, 
     const [searchParams] = useSearchParams()
     const {showLoader, hideLoader, LoaderModal} = useLoader()
     const { currentSettings } = useSettings()
+    const hideMenu = location.pathname === "/login" || location.pathname === "/register";
     
     const btnRequestError = {
         positiveAction: () => setError(false),
@@ -83,10 +84,11 @@ export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, 
         <LoaderModal />
         <header className={'main-header'}>
             <img src={logo} alt='my band app logo' className='logo'></img>
-                {type == 'home' && (
+                {(type == 'home' && !hideMenu) && (
             <div className='header-content'>
                 <ButtonText type={'secondary'} text={textSecondaryButton} action={action2} />
                 <span className='text-btn primary'>{textPrimaryButton}</span>
+
                 <div className='settings-wrapper'>
                     <button style={{ background: `url(${settingsIcon})` }} className='settings-btn' />
                     <div className='settings-container'>
@@ -96,21 +98,27 @@ export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, 
                 </div>
             </div>
                 )}
-            <div className='menu-wrapper'>
-                <button style={{ background: `url(${menuIcon})` }} className='menu-icon' />
-                {type == 'home' ? 
-                (<div className='menu-container'>
-                    <span className='menu-title'>{textPrimaryButton}</span>
-                    <button className='settings-btns'>Cambiar contraseña</button>
-                    <button className='settings-btns' onClick={()=> openModalChangePlan()}>Cambiar plan</button>
-                    <button className='logout-menu-btn' onClick={action2}>{textSecondaryButton}</button>
-                </div>) : 
-                (<div className='menu-container'>
-                    <button className='settings-btns' onClick={action1}>{textPrimaryButton}</button>
-                    <button className='logout-menu-btn' onClick={action2}>{textSecondaryButton}</button>
-                </div>)
+                {
+                    !hideMenu && 
+                    (
+                    <div className='menu-wrapper'>
+                        <button style={{ background: `url(${menuIcon})` }} className='menu-icon' />
+                        {type == 'home' ? 
+                        (<div className='menu-container'>
+                            <span className='menu-title'>{textPrimaryButton}</span>
+                            <button className='settings-btns'>Cambiar contraseña</button>
+                            <button className='settings-btns' onClick={()=> openModalChangePlan()}>Cambiar plan</button>
+                            <button className='logout-menu-btn' onClick={action2}>{textSecondaryButton}</button>
+                        </div>) : 
+                        (<div className='menu-container'>
+                            <button className='settings-btns' onClick={action1}>{textPrimaryButton}</button>
+                            <button className='logout-menu-btn' onClick={action2}>{textSecondaryButton}</button>
+                        </div>)
+                        }
+                    </div>
+                    )
                 }
-            </div>
+            
         </header>
         </>
     )
