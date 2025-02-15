@@ -27,10 +27,10 @@ function App() {
                                     <Route path='/register' element={<Register />}/>
                                     <Route path='/forgotPass' element={<ForgotPassword />}/>
                                     <Route path='/validateOtc' element={<ValidateOtc />}/>
+                                    <Route path='/changePass' element={<ChangePassword />}/>
                                     <Route element={<PrivateViews />}>
                                           <Route path='/home' element={<Home />}/>
                                           <Route path='/studio' element={<Studio />}/>
-                                          <Route path='/changePass' element={<ChangePassword />}/>
                                           <Route path='/collections' element={<Collections />}/>
                                     </Route>
                               </Routes>

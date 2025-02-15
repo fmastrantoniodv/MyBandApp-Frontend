@@ -25,7 +25,7 @@ export const Header = ({ type, textPrimaryButton, textSecondaryButton, action1, 
     const [searchParams] = useSearchParams()
     const {showLoader, hideLoader, LoaderModal} = useLoader()
     const { currentSettings } = useSettings()
-    const hideMenu = location.pathname === "/login" || location.pathname === "/register";
+    const hideMenu = location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/forgotPass" || || location.pathname === "/validateOtc";
     
     const btnRequestError = {
         positiveAction: () => setError(false),

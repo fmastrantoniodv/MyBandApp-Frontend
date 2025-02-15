@@ -410,7 +410,7 @@ breakpoints = {
 
     .collection-cards-container {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         padding: 0px;
         padding-bottom: 10px;
         box-sizing: border-box;
