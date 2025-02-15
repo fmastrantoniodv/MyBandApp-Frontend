@@ -27,6 +27,7 @@ export default function PlaySample({sampleInfo}){
     }, [playingSample, audioComponent])
 
     const handlePlaySample = () => {
+        if(loading) return
         if(!playing){
             audioComponent.play()
             setPlayingSample(sampleInfo.id)

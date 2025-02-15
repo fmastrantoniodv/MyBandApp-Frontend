@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { getUserFavsServ, updateFav } from '../../services/usersServ'
+import { updateFav } from '../../services/usersServ'
 import PlaySample from '../Home/PlaySample'
 import unFavButtonIcon from '../../img/unFavButtonIcon.svg'
 import favButtonIcon from '../../img/favButtonIcon.svg'
@@ -8,14 +8,21 @@ import playIcon from '../../img/playIcon.svg'
 
 export const Sample = ({ user, sampleInfo, setUser, libAvailable }) => {
     
-    const { favList, } = user
+    const { favList } = user
     const [isFav, setIsFav] = useState(favList.some(fav => fav.id === sampleInfo.id))
     const [playPressed, setPlayPressed] = useState(false)
     const { setPlayingSample } = useUser()
 
-    const handleUpdateFav = async (sampleId) => {
-        updateFav(user.id, sampleId, isFav ? 'UNFAV' : 'FAV')
-        setUser({ ...user, favList: favList.filter(fav => fav.id !== sampleId) })
+    const handleUpdateFav = async (sampleInfo) => {
+        updateFav(user.id, sampleInfo.id, isFav ? 'UNFAV' : 'FAV')
+        if(isFav){
+            console.log('[Sample.jsx].handleUpdateFav.isFav=true')
+            setUser({ ...user, favList: favList.filter(fav => fav.id !== sampleInfo.id) })
+        }else{
+            console.log('[Sample.jsx].handleUpdateFav.isFav=false')
+            console.log('[Sample.jsx].handleUpdateFav.sampleInfo=', sampleInfo)
+            console.log('[Sample.jsx].handleUpdateFav.favList=', favList)
+        }
         setIsFav(!isFav)
     }
 
@@ -35,7 +42,7 @@ export const Sample = ({ user, sampleInfo, setUser, libAvailable }) => {
                     :
                 <PlaySample sampleInfo={sampleInfo}/>
                 }
-                {libAvailable && <img className='fav-play-icon' src={isFav ? favButtonIcon : unFavButtonIcon} onClick={() => handleUpdateFav(sampleInfo.id)} alt='boton de agregar sample a favoritos'/>}
+                {libAvailable && <img className='fav-play-icon' src={isFav ? favButtonIcon : unFavButtonIcon} onClick={() => handleUpdateFav(sampleInfo)} alt='boton de agregar sample a favoritos'/>}
             </div>
         </div>
     )

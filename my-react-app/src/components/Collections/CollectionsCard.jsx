@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import LottieAnimation from '../Register/LoadingAnimation'
-import { endpointBackend, routes, envCode } from '../../const/constants';
-import favButtonIcon from '../../img/favButtonIcon.svg'
+import { endpointBackend, routes } from '../../const/constants';
 import playIcon from '../../img/playIcon.svg'
 import { useUser } from '../../contexts/UserContext';
-import { updateFav, getUserFavsServ } from '../../services/usersServ'
 import { useNavigate } from 'react-router-dom';
 
 export const CollectionsCard = () => {
     const [loadingCollections, setLoadingCollections] = useState(false)
-    const { user, setUser, collections } = useUser()
+    const { collections } = useUser()
     const navigate = useNavigate()
     
     useEffect(()=>{
@@ -20,17 +18,6 @@ export const CollectionsCard = () => {
             setLoadingCollections(false)
         }
     }, [collections])
-
-    const handleFavCollection = async (collectionItem) => {
-        const { sampleList } = collectionItem
-        for (const sample of sampleList) {
-            await updateFav(user.id, sample.id, 'FAV', () => {
-                return
-            })
-        }
-        const updatedFavs = await getUserFavsServ(user.id)
-        setUser({ ...user, favList: updatedFavs.data })
-    }
 
     return (
         <div className='collections-section'>
