@@ -19,9 +19,9 @@ export const Sample = ({ user, sampleInfo, setUser, libAvailable }) => {
             console.log('[Sample.jsx].handleUpdateFav.isFav=true')
             setUser({ ...user, favList: favList.filter(fav => fav.id !== sampleInfo.id) })
         }else{
-            console.log('[Sample.jsx].handleUpdateFav.isFav=false')
-            console.log('[Sample.jsx].handleUpdateFav.sampleInfo=', sampleInfo)
-            console.log('[Sample.jsx].handleUpdateFav.favList=', favList)
+            var favListAux = favList
+            favListAux.push(sampleInfo)
+            setUser({ ...user, favList: favListAux })
         }
         setIsFav(!isFav)
     }
