@@ -32,15 +32,26 @@ export const ProjectsCard = () => {
 
     const handleNewProjectSubmit = async (data) => {
         try {
-            const resp = await getProjectServ(data.template)
-            setProjectInfo({
-                projectId: null,
-                userId: user.id,
-                projectName: data.projectName,
-                template: data.template,
-                tempo: resp.tempo,
-                channelList: resp.channelList
-            })
+            if(data.template === 'blank' || !data.template){
+                setProjectInfo({
+                    projectId: null,
+                    userId: user.id,
+                    projectName: data.projectName,
+                    template: 'blank',
+                    tempo: 100,
+                    channelList: []
+                })
+            }else{
+                const resp = await getProjectServ(data.template)
+                setProjectInfo({
+                    projectId: null,
+                    userId: user.id,
+                    projectName: data.projectName,
+                    template: data.template,
+                    tempo: resp.tempo,
+                    channelList: resp.channelList
+                })
+            }
             closeModalNewProject()
             reset()
             navigate(routes.studio)

@@ -81,6 +81,7 @@ cursor: pointer;
 .msg-card-container ul{
   padding-left: 0%;
   width: 90%;
+  overflow-y: auto;
 }
 
 .msg-buttons-container{
