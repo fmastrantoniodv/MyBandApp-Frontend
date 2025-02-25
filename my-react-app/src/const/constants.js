@@ -2,7 +2,8 @@ export const envCode = process.env.REACT_APP_ENV_CODE;
 export const endpointBackend = process.env.REACT_APP_ENDPOINT_BACKEND;
 
 export const routes = {
-    login: '/',
+    landing: '/',
+    login: '/login',
     register: '/register',
     home: '/home',
     studio: '/studio',

@@ -9,7 +9,7 @@ import { useModal } from "../hooks/useModal"
 import { login } from '../services/usersServ'
 import { Header } from '../components/Header/Header'
 
-const Login = () => {
+export const Login = () => {
     const [isOpenModal, openModal, closeModal] = useModal(false)
     const [error, setError] = useState(false)
     const { clearUser, initSession } = useUser()
@@ -63,5 +63,3 @@ const Login = () => {
         </div>
     )
 }
-
-export default Login

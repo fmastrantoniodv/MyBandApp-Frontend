@@ -2,9 +2,11 @@ import './App.css';
 import './css/register.css';
 import './css/home.css';
 import './css/collections.css';
+import './css/landing.css';
 import React from 'react';
 import Studio from './views/studio.jsx'
-import Login from './views/login.jsx';
+import { Login } from './views/login.jsx';
+import { Landing } from './views/landing';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Register } from './views/register.jsx';
 import { Home } from './views/home.jsx';
@@ -23,7 +25,8 @@ function App() {
                   <UserProvider>
                         <BrowserRouter>
                               <Routes>
-                                    <Route path='/' element={<Login />}/>
+                                    <Route path='/' element={<Landing />}/>
+                                    <Route path='/login' element={<Login />}/>
                                     <Route path='/register' element={<Register />}/>
                                     <Route path='/forgotPass' element={<ForgotPassword />}/>
                                     <Route path='/validateOtc' element={<ValidateOtc />}/>
